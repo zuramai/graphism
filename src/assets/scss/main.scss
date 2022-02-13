@@ -1,0 +1,51 @@
+@use "./components/button";
+@use "./utilities";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lora';
+    color: rgb(49, 47, 47);
+}
+
+p, span {
+    color:rgb(88, 87, 87)
+}
+
+.container {
+    width: clamp(320px, 90%, 1400px);
+    padding: 0 1rem;
+    margin: 0 auto;
+}
+
+
+.page-title {
+    text-align: center;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .title {
+        letter-spacing: 3px;
+        font-size: clamp(2rem, 5vw, 4rem);
+        margin-bottom: 1rem;
+    }
+
+    .subtitle {
+        width: 80%;
+        line-height: 1.6rem;
+        letter-spacing: .7px;
+        margin-bottom: 2.3rem;
+    }
+
+    .btn {
+        margin-bottom: 2rem;
+    }
+}
+
