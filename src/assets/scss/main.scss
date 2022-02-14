@@ -6,7 +6,9 @@
     padding: 0;
     box-sizing: border-box;
 }
-
+a {
+    text-decoration: none;
+}
 body {
     font-family: 'Lora';
     color: rgb(49, 47, 47);
@@ -48,4 +50,31 @@ p, span {
         margin-bottom: 2rem;
     }
 }
+.playground {
+    position: relative;
 
+    .menu {
+        width: 80%;
+        position: absolute;
+        background-color: white;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 1rem;
+        border-radius: 1rem;
+        padding: 1rem;
+        box-shadow: 0 10px 30px rgba(155, 154, 154, 0.3);
+
+        .menu-item {
+            display: flex;
+            color: #555;
+            align-items: center;
+            gap: .3rem;
+        }
+
+    }
+}
+
+#canvas {
+    width: 100%;
+    height: 100vh;
+}
