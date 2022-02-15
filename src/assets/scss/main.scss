@@ -1,3 +1,5 @@
+@use "./variables" as *;
+@use "./animation";
 @use "./components/button";
 @use "./components/input";
 @use "./components/modal";
@@ -8,28 +10,46 @@
     padding: 0;
     box-sizing: border-box;
 }
+p {
+    color:rgb(88, 87, 87)
+}
 a {
     text-decoration: none;
+    transition: all .2s;
+    color: $primary;
+
+    &:hover {
+        color: darken($primary, 10%);
+    }
+
+    &.link-icon {
+        
+        svg {
+            margin-right: .3rem;
+        }
+    }
 }
 body {
     font-family: 'Lora';
     color: rgb(49, 47, 47);
 }
 
-p, span {
-    color:rgb(88, 87, 87)
-}
 
 .container {
     width: clamp(320px, 90%, 1400px);
     padding: 0 1rem;
     margin: 0 auto;
 }
-
-
 .page-title {
     text-align: center;
     height: 500px;
+    position: absolute;
+    z-index: 5;
+    
+    background: rgba(255, 255, 255, 0.95);
+
+    height: 100vh;
+    inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,9 +58,15 @@ p, span {
     .title {
         letter-spacing: 3px;
         font-size: clamp(2rem, 5vw, 4rem);
-        margin-bottom: 1rem;
+        margin: 1rem 0;
     }
-
+    .icon-wrapper {
+        animation: bounceHard 1s infinite alternate cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .title-icon {
+        color: #555;
+        animation: rotate 2s infinite  cubic-bezier(0.22, 1, 0.36, 1);
+    }
     .subtitle {
         width: 80%;
         line-height: 1.6rem;

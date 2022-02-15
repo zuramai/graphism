@@ -1,4 +1,4 @@
-$primary: rgb(86, 84, 230);
+@use "../variables" as *;
 
 .btn {
     padding: .3rem .5rem;
@@ -34,14 +34,5 @@ $primary: rgb(86, 84, 230);
         &:active {
             background-color: lighten($primary, 5%);
         }
-    }
-}
-
-@keyframes bounce {
-    0% {
-        transform: translateY(0)
-    }
-    0% {
-        transform: translateY(20px)
     }
 }

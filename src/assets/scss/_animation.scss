@@ -1,0 +1,27 @@
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0)
+    }
+    0% {
+        transform: translateY(20px)
+    }
+}
+
+@keyframes bounceHard {
+    0% {
+        transform: translateY(0);
+    } 
+    100% {
+        transform: translateY(-100px);
+    }
+}
+
+@keyframes rotate {
+    0% {
+        rotate: 0;
+    }
+    100% {
+        rotate: 360deg
+    }
+}
