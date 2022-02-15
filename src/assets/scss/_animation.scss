@@ -25,3 +25,12 @@
         rotate: 360deg
     }
 }
+
+@keyframes blink {
+    0% {
+        opacity: .2;
+    }
+    100% {
+        opacity: 1;
+    }
+}

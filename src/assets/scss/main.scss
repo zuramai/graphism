@@ -54,6 +54,14 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: all .2s ease-out;
+
+    &.show {
+       visibility: visible; 
+       opacity: 1;
+    }
 
     .title {
         letter-spacing: 3px;
@@ -106,6 +114,23 @@ body {
             }
         }
 
+    }
+
+    #helper-text {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 100px;
+        display: none;
+        text-shadow: 1px 10px 30px rgba(100,100,100,1);
+
+        &.show {
+            display: block;
+        }
+
+        &.blinking {
+            animation: blink 1s ease-in-out alternate infinite;
+        }
     }
 }
 

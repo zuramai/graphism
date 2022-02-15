@@ -7,3 +7,11 @@ modals.forEach(modal => {
         modal.classList.remove('modal-open')
     })
 })
+
+
+const addModal = document.querySelector('.modal-add')
+const openAddModal = document.getElementById('openAddModal')
+openAddModal.addEventListener('click', e => {
+    addModal.classList.toggle('modal-open')
+    console.log('open')
+})

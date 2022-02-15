@@ -1,19 +1,21 @@
 import { Nodee } from "./node"
-import { CanvasConfig, CanvasInterface, Coordinate } from "./../types/canvas"
+import { CanvasConfig, Coordinate } from "./../types/canvas"
 
 const defaultConfig: CanvasConfig = {
     lineColor: "#555",
     nodeBackground: "white",
     nodeTextColor: "#555",
-    canvasBackground: "#ccc"
+    canvasBackground: "#fafafa"
 }
 
-export class Canvas implements CanvasInterface {
+export class Canvas {
     canvas: HTMLCanvasElement
     nodes: Nodee[]
     ctx: CanvasRenderingContext2D;
     dragFrom: Coordinate
     config: CanvasConfig
+    private runningBorder: boolean = false
+    private runningBorderOffset: number = 0
     
     
     /**
@@ -30,40 +32,53 @@ export class Canvas implements CanvasInterface {
         this.init()
     }
 
-    generateNodes() {
-
-    }
-
-    init() {
+    private init() {
         // Set canvas size
         this.canvas.width = this.canvas.clientWidth
         this.canvas.height = this.canvas.clientHeight
 
-
-        this.generateNodes()
         this.listener()
 
         requestAnimationFrame(() => this.render())
     }
 
-    draw() {
+    private draw() {
         this.drawBackground()
         this.drawLines()
         this.drawNodes()
     }
 
-    drawNodes() {
+    private drawNodes() {
         for(let i = 0; i < this.nodes.length; i++) {
             this.nodes[i].draw(this.ctx)
         }
     }
 
-    drawBackground() {
-        this.ctx.fillStyle = "#eee"
+    private drawBackground() {
+        // Background
+        this.ctx.fillStyle = this.config.canvasBackground
         this.ctx.fillRect(0,0,this.canvas.width, this.canvas.height)
+
+        if(this.runningBorder) {
+            // Running border
+
+            this.ctx.save()
+            this.ctx.beginPath()
+
+            this.ctx.strokeStyle = "rgb(120, 118, 240)"
+            this.ctx.rect(0, 0, this.canvas.width, this.canvas.height)
+            this.ctx.lineWidth = 10
+            this.ctx.setLineDash([0, 25, 50])
+            this.ctx.lineDashOffset = this.runningBorderOffset
+            this.ctx.stroke()
+
+            this.ctx.closePath()
+
+            this.ctx.restore()
+        }
     }
 
-    drawLines() {
+    private drawLines() {
         this.ctx.strokeStyle = "#777"
         
         for(let i = 0; i < this.nodes.length; i++) {
@@ -81,11 +96,35 @@ export class Canvas implements CanvasInterface {
         }
     }
 
-    update() {
+    waitingForClick(): Promise<Coordinate> {
+        return new Promise((resolve, reject) => {
+            this.runningBorder = true
+            this.canvas.addEventListener('click', e => {
+                let position = this.getCursorPosition(e)
+                this.runningBorder = false
+                resolve(position)
+            })
+        })
+    }
 
+    createNode(coordinate: Coordinate, name: string): Nodee {
+        let node = new Nodee(name)
+        node.position = coordinate
+
+        this.nodes.push(node)
+
+        console.log("creating new node ", name," at ", coordinate)
+
+        return node
+    }
+
+    private update() {
+        if(this.runningBorder) {
+            this.runningBorderOffset++
+        }
     }
     
-    listener() {
+    private listener() {
         this.canvas.addEventListener('mousedown', e => {
             let position = this.getCursorPosition(e)
 
