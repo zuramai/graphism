@@ -3,9 +3,8 @@ import { Coordinate } from "./canvas";
 export interface NodeInterface {
     neighbors?: NeighborInterface[]
     name: string
-    x: number
-    y: number
-    size: 50
+    position: Coordinate
+    size: number
     movable: boolean
     moveFrom: Coordinate
     

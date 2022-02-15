@@ -25,7 +25,13 @@ export class Canvas implements CanvasInterface {
     }
 
     init() {
+        // Set canvas size
+        this.canvas.width = this.canvas.clientWidth
+        this.canvas.height = this.canvas.clientHeight
+
+
         this.generateNodes()
+        this.listener()
 
         requestAnimationFrame(() => this.render())
     }
@@ -51,31 +57,62 @@ export class Canvas implements CanvasInterface {
     }
     
     listener() {
-        this.canvas.addEventListener('dragstart', e => {
+        this.canvas.addEventListener('mousedown', e => {
             let position = this.getCursorPosition(e)
+
+            this.dragFrom = position
 
             for(let i = 0; i < this.nodes.length; i++) {
                 let node = this.nodes[i]
 
                 // if the node is clicked
-                if(position.x > node.x - node.size &&
-                    position.x < node.x + node.size &&
-                    position.y < node.y + node.size &&
-                    position.y > node.y - node.size ) {
+                if(position.x > node.position.x - node.size &&
+                    position.x < node.position.x + node.size &&
+                    position.y < node.position.y + node.size &&
+                    position.y > node.position.y - node.size ) {
+                        console.log('dragging ', node.name)
                         node.movable = true
                         node.moveFrom = {
-                            x: node.x,
-                            y: node.y,
+                            x: node.position.x,
+                            y: node.position.y,
                         }
                     }
             }
         })
+        
 
-        this.canvas.addEventListener('dragover', e => {
+        this.canvas.addEventListener('mousemove', e => {
+            let position = this.getCursorPosition(e)
+
             for(let i = 0; i < this.nodes.length; i++) {
+                let node = this.nodes[i]
+                
+                // if the node is clicked
+                if(position.x > node.position.x - node.size &&
+                    position.x < node.position.x + node.size &&
+                    position.y < node.position.y + node.size &&
+                    position.y > node.position.y - node.size ) {
+
+                }
+
+                // Move the node if movable
                 if(!this.nodes[i].movable) continue
+
+                let dx = position.x - this.dragFrom.x
+                let dy = position.y - this.dragFrom.y
+
+                let node = this.nodes[i]
                 
+                node.position.x = node.moveFrom.x + dx
+                node.position.y = node.moveFrom.x + dy
                 
+            }
+        })
+        
+
+        this.canvas.addEventListener('mouseup', e => {
+            for(let i = 0; i < this.nodes.length; i++) {
+                this.nodes[i].movable = false
             }
         })
     }
@@ -89,6 +126,7 @@ export class Canvas implements CanvasInterface {
     }
 
     render() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.draw()
         this.update()
         setTimeout(() => requestAnimationFrame(() => this.render()), 100)

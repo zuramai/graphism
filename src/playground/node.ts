@@ -2,11 +2,10 @@ import { Coordinate } from "../types/canvas";
 import { NeighborInterface, NodeInterface } from "../types/node";
 
 export class Nodee implements NodeInterface {
-    neighbors?: NeighborInterface[];
+    neighbors?: NeighborInterface[] = [];
     name: string;
-    x: number
-    y: number
-    size: 50
+    position: Coordinate
+    size: number = 50
     movable: boolean = false;
     moveFrom: Coordinate;
 
@@ -24,7 +23,12 @@ export class Nodee implements NodeInterface {
     draw(ctx: CanvasRenderingContext2D) {
         ctx.fillStyle = "transparent"       
         ctx.beginPath()
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
+        ctx.fillStyle = "white"
+        ctx.arc(this.position.x, this.position.y, this.size, 0, Math.PI * 2)
+        ctx.strokeStyle = "#aaa"
+
+        ctx.lineWidth = 3
+        ctx.stroke()
         ctx.fill()
         ctx.closePath()
     }
