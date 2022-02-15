@@ -1,0 +1,54 @@
+.modal {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    visibility: hidden;
+    opacity: 0;
+
+    .modal-content {
+        transition: all .5s cubic-bezier(0.33, 1, 0.68, 1);
+        width: min(100%, 400px);
+        background-color: white;
+        height: auto;
+        border-radius: .5rem;
+        box-shadow: 5px 5px 30px rgba(116, 116, 116, 0.555);
+        margin: 0 auto;
+        margin-top: 6rem;
+        
+        .modal-header, .modal-body, .modal-footer {
+            padding: 1rem;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: .6rem;
+        }
+    }
+}
+
+.modal-open {
+    visibility: visible;
+    opacity: 1;
+    display: block;
+
+    .modal-content {
+        margin-top: 7rem;
+    }
+    
+    & + .modal-backdrop {
+        background-color: rgba(0,0,0,.8);
+        width: 100%;
+        height: 100vh;
+        position: absolute;
+        transition: all .2s;
+        inset: 0;
+        z-index: 1;
+    }
+}

@@ -1,0 +1,17 @@
+label + .form-control {
+    margin-top: .4rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: .4rem .5rem;
+    border-radius: .3rem;
+    box-shadow: 1px 1px 5px rgba(175, 180, 194, 0.151);
+    border: 1px solid rgba(204, 204, 204, 0.63);
+    transition: all .2s;
+    outline: 1px;
+
+    &:focus {
+        outline: 1px solid rgb(147, 135, 240);
+    }
+}

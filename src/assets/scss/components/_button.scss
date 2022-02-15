@@ -1,7 +1,12 @@
+$primary: rgb(86, 84, 230);
+
 .btn {
     padding: .3rem .5rem;
-
+    transition: all .2s;
+    border-radius: .3rem;
     cursor: pointer;
+    border: none;
+
     &.btn-circle {
         border-radius: 50%;
         border: 1px solid #ccc;
@@ -19,6 +24,16 @@
     }
     &.btn-shadow {
         box-shadow: 0px 7px 20px rgba(179, 170, 170, 0.295);
+    }
+    &.btn-primary {
+        background-color: $primary;
+        color: white;
+        &:hover {
+            background-color: darken($primary, 30%);
+        }
+        &:active {
+            background-color: lighten($primary, 5%);
+        }
     }
 }
 

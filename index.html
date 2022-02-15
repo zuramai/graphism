@@ -12,6 +12,7 @@
   <body>
     <div id="app">
       <div class="container">
+        <!-- The page title and description -->
         <!-- <div class="page-title">
           <h1 class="title">Travelling Salesman</h1>
           <p class="subtitle">Given a list of cities and the distances between each pair of cities, what is the shortest possible route that visits each city exactly once and returns to the origin city?</p>
@@ -24,16 +25,41 @@
 
         </div> -->
       </div>
+
+      <!-- Canvas Playground -->
       <div class="playground">
         <div class="menu">
-          <a href="#" class="menu-item">
+          <a href="#" class="menu-item" id="openAddModal">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
             <span>Add node</span>
           </a>
         </div>
         <canvas id="canvas"></canvas>
       </div>
+
+      <!-- Add node modal -->
+      <div class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Add Node</h3>
+            <button class="btn btn-transparent btn-circle">x</button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <label for="name">Name</label>
+              <input type="text" id="name" class="form-control">
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" id="node-add">Add and choose location</button>
+            <button class="btn btn-danger modal-close">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-backdrop"></div>
+
     </div>
     <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/ui.ts"></script>
   </body>
 </html>

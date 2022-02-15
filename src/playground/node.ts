@@ -31,6 +31,12 @@ export class Nodee implements NodeInterface {
         ctx.stroke()
         ctx.fill()
         ctx.closePath()
+
+        // Draw text
+        ctx.fillStyle = "#444"
+        ctx.font = "14px Lora"
+        ctx.fillText(this.name, this.position.x, this.position.y)
+        ctx.textAlign = "center"
     }
 
     

@@ -1,22 +1,32 @@
 import { Nodee } from "./node"
-import { CanvasInterface, Coordinate } from "./../types/canvas"
+import { CanvasConfig, CanvasInterface, Coordinate } from "./../types/canvas"
 
+const defaultConfig: CanvasConfig = {
+    lineColor: "#555",
+    nodeBackground: "white",
+    nodeTextColor: "#555",
+    canvasBackground: "#ccc"
+}
 
 export class Canvas implements CanvasInterface {
     canvas: HTMLCanvasElement
     nodes: Nodee[]
     ctx: CanvasRenderingContext2D;
     dragFrom: Coordinate
+    config: CanvasConfig
     
     
     /**
      * Rendering canvas to visualize algorithms
+     * @param el Canvas element
      * @param nodes Initial nodes
+     * @param config Canvas configuration
      */
-    constructor(el: HTMLCanvasElement|string, nodes: Nodee[] = []) {
+    constructor(el: HTMLCanvasElement|string, nodes: Nodee[] = [], config?: CanvasConfig) {
         this.canvas = typeof el == "string" ? document.querySelector<HTMLCanvasElement>("el") : el
         this.ctx = this.canvas.getContext('2d')
         this.nodes = nodes
+        this.config = Object.assign(defaultConfig, config)
         this.init()
     }
 
@@ -38,6 +48,7 @@ export class Canvas implements CanvasInterface {
 
     draw() {
         this.drawBackground()
+        this.drawLines()
         this.drawNodes()
     }
 
@@ -50,6 +61,24 @@ export class Canvas implements CanvasInterface {
     drawBackground() {
         this.ctx.fillStyle = "#eee"
         this.ctx.fillRect(0,0,this.canvas.width, this.canvas.height)
+    }
+
+    drawLines() {
+        this.ctx.strokeStyle = "#777"
+        
+        for(let i = 0; i < this.nodes.length; i++) {
+            let node = this.nodes[i]
+
+            for(let j = 0; j < node.neighbors.length; j++) {
+                let neighbor = node.neighbors[j]
+
+                this.ctx.beginPath()
+                this.ctx.moveTo(node.position.x, node.position.y)
+                this.ctx.lineTo(neighbor.node.position.x, neighbor.node.position.y)
+                this.ctx.stroke()
+                this.ctx.closePath()
+            }
+        }
     }
 
     update() {
@@ -76,6 +105,9 @@ export class Canvas implements CanvasInterface {
                             x: node.position.x,
                             y: node.position.y,
                         }
+
+                        console.log('drag from: ', this.dragFrom)
+                        console.log('move from: ', node.moveFrom)
                     }
             }
         })
@@ -83,16 +115,20 @@ export class Canvas implements CanvasInterface {
 
         this.canvas.addEventListener('mousemove', e => {
             let position = this.getCursorPosition(e)
+            let node;
 
             for(let i = 0; i < this.nodes.length; i++) {
-                let node = this.nodes[i]
+                node = this.nodes[i]
                 
                 // if the node is clicked
                 if(position.x > node.position.x - node.size &&
                     position.x < node.position.x + node.size &&
                     position.y < node.position.y + node.size &&
                     position.y > node.position.y - node.size ) {
-
+                        this.canvas.style.cursor = 'pointer'
+                } else {
+                    this.canvas.style.cursor = 'default'
+                    
                 }
 
                 // Move the node if movable
@@ -100,19 +136,24 @@ export class Canvas implements CanvasInterface {
 
                 let dx = position.x - this.dragFrom.x
                 let dy = position.y - this.dragFrom.y
-
-                let node = this.nodes[i]
                 
                 node.position.x = node.moveFrom.x + dx
-                node.position.y = node.moveFrom.x + dy
+                node.position.y = node.moveFrom.y + dy
                 
             }
         })
         
 
         this.canvas.addEventListener('mouseup', e => {
+            let position = this.getCursorPosition(e)
+
             for(let i = 0; i < this.nodes.length; i++) {
+                if(this.nodes[i].movable) {
+                    console.log('stop at', position)
+                    console.log('node stop at', this.nodes[i].position)
+                }
                 this.nodes[i].movable = false
+                
             }
         })
     }
@@ -129,7 +170,7 @@ export class Canvas implements CanvasInterface {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.draw()
         this.update()
-        setTimeout(() => requestAnimationFrame(() => this.render()), 100)
+        requestAnimationFrame(() => this.render())
     }
 
     solve() {

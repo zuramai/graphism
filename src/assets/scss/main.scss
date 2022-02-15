@@ -1,4 +1,6 @@
 @use "./components/button";
+@use "./components/input";
+@use "./components/modal";
 @use "./utilities";
 
 * {
@@ -61,14 +63,21 @@ p, span {
         transform: translateX(-50%);
         top: 1rem;
         border-radius: 1rem;
-        padding: 1rem;
+        padding: .6rem;
         box-shadow: 0 10px 30px rgba(155, 154, 154, 0.3);
+        display: flex;
 
         .menu-item {
             display: flex;
             color: #555;
             align-items: center;
             gap: .3rem;
+            padding: .4rem;
+            border-radius: .5rem;
+
+            &:hover {
+                background-color: rgba(165, 163, 163, 0.1);
+            }
         }
 
     }
