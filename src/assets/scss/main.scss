@@ -67,6 +67,8 @@ body {
         letter-spacing: 3px;
         font-size: clamp(2rem, 5vw, 4rem);
         margin: 1rem 0;
+        opacity: 0;
+        animation: fadeUp 1s cubic-bezier(0, 0.55, 0.45, 1) forwards;
     }
     .icon-wrapper {
         animation: bounceHard 1s infinite alternate cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -78,12 +80,22 @@ body {
     .subtitle {
         width: 80%;
         line-height: 1.6rem;
+        animation: fadeUp 1s cubic-bezier(0, 0.55, 0.45, 1) .3s forwards;
         letter-spacing: .7px;
+        opacity: 0;
         margin-bottom: 2.3rem;
     }
 
     .btn {
         margin-bottom: 2rem;
+    }
+
+    .cta  {
+        animation: fadeUp 1s cubic-bezier(0, 0.55, 0.45, 1) .5s forwards;
+        opacity: 0;
+        .link-icon {
+            justify-content: center;
+        }
     }
 }
 .playground {

@@ -1,11 +1,12 @@
 import { Nodee } from "./node"
 import { CanvasConfig, Coordinate } from "./../types/canvas"
+import { NodeConfig } from "../types/node"
 
 const defaultConfig: CanvasConfig = {
     lineColor: "#555",
     nodeBackground: "white",
     nodeTextColor: "#555",
-    canvasBackground: "#fafafa"
+    canvasBackground: "#eee"
 }
 
 export class Canvas {
@@ -48,6 +49,14 @@ export class Canvas {
         this.drawNodes()
     }
 
+    private drawLines() {
+        for(let i = 0; i < this.nodes.length; i++) {
+            for(let j = 0; j < this.nodes[i].neighbors.length; j++) {
+                this.nodes[i].neighbors[j].line.draw(this.ctx)
+            }
+        }
+    }
+
     private drawNodes() {
         for(let i = 0; i < this.nodes.length; i++) {
             this.nodes[i].draw(this.ctx)
@@ -78,23 +87,7 @@ export class Canvas {
         }
     }
 
-    private drawLines() {
-        this.ctx.strokeStyle = "#777"
-        
-        for(let i = 0; i < this.nodes.length; i++) {
-            let node = this.nodes[i]
-
-            for(let j = 0; j < node.neighbors.length; j++) {
-                let neighbor = node.neighbors[j]
-
-                this.ctx.beginPath()
-                this.ctx.moveTo(node.position.x, node.position.y)
-                this.ctx.lineTo(neighbor.node.position.x, neighbor.node.position.y)
-                this.ctx.stroke()
-                this.ctx.closePath()
-            }
-        }
-    }
+    
 
     waitingForClick(): Promise<Coordinate> {
         return new Promise((resolve, reject) => {
@@ -107,10 +100,8 @@ export class Canvas {
         })
     }
 
-    createNode(coordinate: Coordinate, name: string): Nodee {
-        let node = new Nodee(name)
-        node.position = coordinate
-
+    createNode(coordinate: Coordinate, name: string, config?: NodeConfig): Nodee {
+        let node = new Nodee(name, coordinate, config)
         this.nodes.push(node)
 
         console.log("creating new node ", name," at ", coordinate)
@@ -154,7 +145,7 @@ export class Canvas {
 
         this.canvas.addEventListener('mousemove', e => {
             let position = this.getCursorPosition(e)
-            let node;
+            let node: Nodee;
 
             for(let i = 0; i < this.nodes.length; i++) {
                 node = this.nodes[i]
@@ -167,7 +158,6 @@ export class Canvas {
                         this.canvas.style.cursor = 'pointer'
                 } else {
                     this.canvas.style.cursor = 'default'
-                    
                 }
 
                 // Move the node if movable
@@ -176,8 +166,7 @@ export class Canvas {
                 let dx = position.x - this.dragFrom.x
                 let dy = position.y - this.dragFrom.y
                 
-                node.position.x = node.moveFrom.x + dx
-                node.position.y = node.moveFrom.y + dy
+                node.move(node.moveFrom.x + dx, node.moveFrom.y + dy)
                 
             }
         })

@@ -50,14 +50,10 @@ function hideHelperText() {
 function generateGraph(): Nodee[] {
 
     // Create new node
-    const nodeJakarta: Nodee = new Nodee("Jakarta")
-    const nodeBandung: Nodee = new Nodee("Bandung")
-
-    nodeJakarta.position = { x: 130, y: 274 }
-    nodeBandung.position = { x: 390, y: 200 }
+    const nodeJakarta: Nodee = new Nodee("Jakarta", { x: 130, y: 274 })
+    const nodeBandung: Nodee = new Nodee("Bandung", { x: 390, y: 200 })
 
     nodeJakarta.addNeighbor(nodeBandung, 100)
-    nodeBandung.addNeighbor(nodeJakarta, 100)
 
     const nodes = [nodeJakarta, nodeBandung]
 
