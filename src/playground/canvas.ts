@@ -17,9 +17,11 @@ export class Canvas {
     dragFrom: Coordinate
     config: CanvasConfig
     isDirectedGraph: boolean = false
+    lines: Line[] = []
+    selectedNode: Node[] = []
+
     private runningBorder: boolean = false
     private runningBorderOffset: number = 0
-    lines: Line[] = []
     
     
     /**
@@ -148,20 +150,14 @@ export class Canvas {
                 let node = this.nodes[i]
 
                 // if the node is clicked
-                if(position.x > node.position.x - node.nodeConfig.size &&
-                    position.x < node.position.x + node.nodeConfig.size &&
-                    position.y < node.position.y + node.nodeConfig.size &&
-                    position.y > node.position.y - node.nodeConfig.size ) {
-                        console.log('dragging ', node.name)
-                        node.movable = true
-                        node.moveFrom = {
-                            x: node.position.x,
-                            y: node.position.y,
-                        }
-
-                        console.log('drag from: ', this.dragFrom)
-                        console.log('move from: ', node.moveFrom)
+                if(node.isOnCoordinate(position))  {
+                    node.movable = true
+                    node.moveFrom = {
+                        x: node.position.x,
+                        y: node.position.y,
                     }
+
+                }
             }
         })
         
@@ -170,18 +166,15 @@ export class Canvas {
             let position = this.getCursorPosition(e)
             let node: Nodee;
 
+            // Change cursor on node hover
+            if(this.nodes.some(node => node.isOnCoordinate(position))) {
+                this.canvas.style.cursor = 'pointer'
+            } else {
+                this.canvas.style.cursor = 'default'
+            }
+
             for(let i = 0; i < this.nodes.length; i++) {
                 node = this.nodes[i]
-                
-                // if the node is clicked
-                if(position.x > node.position.x - node.nodeConfig.size &&
-                    position.x < node.position.x + node.nodeConfig.size &&
-                    position.y < node.position.y + node.nodeConfig.size &&
-                    position.y > node.position.y - node.nodeConfig.size ) {
-                        this.canvas.style.cursor = 'pointer'
-                } else {
-                    this.canvas.style.cursor = 'default'
-                }
 
                 // Move the node if movable
                 if(!this.nodes[i].movable) continue
@@ -190,7 +183,6 @@ export class Canvas {
                 let dy = position.y - this.dragFrom.y
                 
                 node.move(node.moveFrom.x + dx, node.moveFrom.y + dy)
-                
             }
         })
         

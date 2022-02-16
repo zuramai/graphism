@@ -55,12 +55,16 @@ export class Nodee implements NodeInterface {
     move(x?: number, y?: number) {
         if(x) this.position.x = x
         if(y) this.position.y = y
-
     }
 
-    onHover(callback: Function) {
-        callback.call(this)
+    isOnCoordinate(coordinate: Coordinate): boolean {
+        if(coordinate.x > this.position.x - this.nodeConfig.size &&
+            coordinate.x <= this.position.x + this.nodeConfig.size &&
+            coordinate.y > this.position.y - this.nodeConfig.size &&
+            coordinate.y <= this.position.y + this.nodeConfig.size) {
+                console.log('checking ', coordinate)
+                return true
+            }
+        return false
     }
-
-    
 }
