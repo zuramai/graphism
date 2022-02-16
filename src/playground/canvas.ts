@@ -1,6 +1,7 @@
 import { Nodee } from "./node"
 import { CanvasConfig, Coordinate } from "./../types/canvas"
 import { NodeConfig } from "../types/node"
+import Line from "./line"
 
 const defaultConfig: CanvasConfig = {
     lineColor: "#555",
@@ -15,8 +16,10 @@ export class Canvas {
     ctx: CanvasRenderingContext2D;
     dragFrom: Coordinate
     config: CanvasConfig
+    isDirectedGraph: boolean = false
     private runningBorder: boolean = false
     private runningBorderOffset: number = 0
+    lines: Line[] = []
     
     
     /**
@@ -50,10 +53,8 @@ export class Canvas {
     }
 
     private drawLines() {
-        for(let i = 0; i < this.nodes.length; i++) {
-            for(let j = 0; j < this.nodes[i].neighbors.length; j++) {
-                this.nodes[i].neighbors[j].line.draw(this.ctx)
-            }
+        for(let i = 0; i < this.lines.length; i++) {
+            this.lines[i].draw(this.ctx)
         }
     }
 
@@ -100,13 +101,35 @@ export class Canvas {
         })
     }
 
-    createNode(coordinate: Coordinate, name: string, config?: NodeConfig): Nodee {
+    createNode(name: string, coordinate: Coordinate,  config?: NodeConfig): Nodee {
         let node = new Nodee(name, coordinate, config)
         this.nodes.push(node)
 
         console.log("creating new node ", name," at ", coordinate)
 
         return node
+    }
+
+    addNodeNeighbor(from: Nodee, to: Nodee, distance: number) {
+        let line: Line
+
+        // Check if the line exists from the other way around
+        let createdLine = this.lines.find(l => 
+            (l.from == from && l.to == to) ||
+            (l.from == to && l.to == from) 
+        )
+
+        if(createdLine) {
+            line = createdLine
+        } else {
+            line = new Line(from, to, {})
+            this.lines.push(line)
+        }
+
+        from.addNeighbor(to, distance, line)
+
+        if(!this.isDirectedGraph)
+            to.addNeighbor(from, distance, line)
     }
 
     private update() {
@@ -125,10 +148,10 @@ export class Canvas {
                 let node = this.nodes[i]
 
                 // if the node is clicked
-                if(position.x > node.position.x - node.size &&
-                    position.x < node.position.x + node.size &&
-                    position.y < node.position.y + node.size &&
-                    position.y > node.position.y - node.size ) {
+                if(position.x > node.position.x - node.nodeConfig.size &&
+                    position.x < node.position.x + node.nodeConfig.size &&
+                    position.y < node.position.y + node.nodeConfig.size &&
+                    position.y > node.position.y - node.nodeConfig.size ) {
                         console.log('dragging ', node.name)
                         node.movable = true
                         node.moveFrom = {
@@ -151,10 +174,10 @@ export class Canvas {
                 node = this.nodes[i]
                 
                 // if the node is clicked
-                if(position.x > node.position.x - node.size &&
-                    position.x < node.position.x + node.size &&
-                    position.y < node.position.y + node.size &&
-                    position.y > node.position.y - node.size ) {
+                if(position.x > node.position.x - node.nodeConfig.size &&
+                    position.x < node.position.x + node.nodeConfig.size &&
+                    position.y < node.position.y + node.nodeConfig.size &&
+                    position.y > node.position.y - node.nodeConfig.size ) {
                         this.canvas.style.cursor = 'pointer'
                 } else {
                     this.canvas.style.cursor = 'default'

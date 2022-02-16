@@ -12,13 +12,13 @@ document.getElementById('node-add').addEventListener('click', () => {
     showHelperText(`Click anywhere to create ${name.value} node`)
 
     canvas.waitingForClick().then(coordinate => {
-        canvas.createNode(coordinate, name.value)
+        canvas.createNode(name.value,coordinate)
         hideHelperText()
     })
 })
 
 document.getElementById('generate-graph').addEventListener('click', () => {
-    const nodes = generateGraph()
+    const nodes = generateGraph(canvas)
     canvas.nodes = nodes
     hideTitleScreen()
 })
@@ -47,13 +47,14 @@ function hideHelperText() {
     helperText.classList.remove('show')
 }
 
-function generateGraph(): Nodee[] {
+function generateGraph(canvas: Canvas): Nodee[] {
 
     // Create new node
-    const nodeJakarta: Nodee = new Nodee("Jakarta", { x: 130, y: 274 })
-    const nodeBandung: Nodee = new Nodee("Bandung", { x: 390, y: 200 })
+    const nodeJakarta = canvas.createNode("Jakarta", { x: 130, y: 274 })
+    const nodeBandung = canvas.createNode("Bandung", { x: 390, y: 200 })
 
-    nodeJakarta.addNeighbor(nodeBandung, 100)
+    canvas.addNodeNeighbor(nodeBandung, nodeJakarta, 100)
+    canvas.addNodeNeighbor(nodeJakarta, nodeBandung, 100)
 
     const nodes = [nodeJakarta, nodeBandung]
 
