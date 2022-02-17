@@ -1,11 +1,14 @@
 import './assets/scss/main.scss'
-import { Canvas } from "./playground/canvas"
-import { Nodee } from "./playground/node"
-
-const canvasEl = document.querySelector('canvas')
+import { createGraphism } from "../../packages/graphism/src"
 
 // Create the canvas instance
-const canvas = new Canvas(canvasEl, [])
+const canvas = createGraphism({
+    el: "#canvas",
+    canvasBackground: "#eee",
+})
+
+
+
 const helperText = <HTMLElement>document.getElementById('helper-text')
 
 // Event listeners
@@ -32,7 +35,7 @@ function addNode() {
  * Create new and start with random graph
  */
 function generateGraphEvent() {
-    const nodes = generateGraph(canvas)
+    const nodes = canvas.generateGraph()
     canvas.nodes = nodes
     hideTitleScreen()
 }
@@ -71,23 +74,4 @@ function showHelperText(text: string, blink: boolean = true) {
 function hideHelperText() {
     helperText.classList.remove('blinking')
     helperText.classList.remove('show')
-}
-
-/**
- * Generate node at random points
- * @param canvas Canvas instance
- * @returns A set of nodes
- */
-function generateGraph(canvas: Canvas): Nodee[] {
-
-    // Create new node
-    const nodeJakarta = canvas.createNode("Jakarta", { x: 130, y: 274 })
-    const nodeBandung = canvas.createNode("Bandung", { x: 390, y: 200 })
-
-    canvas.addNodeNeighbor(nodeBandung, nodeJakarta, 100)
-    canvas.addNodeNeighbor(nodeJakarta, nodeBandung, 100)
-
-    const nodes = [nodeJakarta, nodeBandung]
-
-    return nodes
 }

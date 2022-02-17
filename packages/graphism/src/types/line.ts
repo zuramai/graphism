@@ -1,5 +1,4 @@
-import { Nodee } from "../playground/node";
-import { Coordinate } from "./canvas";
+import { NodeInterface } from "./node";
 
 export interface LineConfig {
     color?: string
@@ -9,8 +8,8 @@ export interface LineConfig {
 
 export interface LineInterface {
     lineConfig?: LineConfig
-    from: Nodee
-    to: Nodee
+    from: NodeInterface
+    to: NodeInterface
 
     draw: (ctx: CanvasRenderingContext2D) => void
 }

@@ -1,7 +1,7 @@
-import { Nodee } from "./node"
-import { CanvasConfig, Coordinate } from "./../types/canvas"
-import { NodeConfig } from "../types/node"
-import Line from "./line"
+import { Nodee } from "./components/node"
+import { CanvasConfig, Coordinate } from "./types/canvas"
+import { NodeConfig } from "./types/node"
+import Line from "./components/line"
 
 const defaultConfig: CanvasConfig = {
     lineColor: "#555",
@@ -10,12 +10,11 @@ const defaultConfig: CanvasConfig = {
     canvasBackground: "#eee"
 }
 
-export class Canvas {
+export class Graphism {
     canvas: HTMLCanvasElement
-    nodes: Nodee[]
     ctx: CanvasRenderingContext2D;
+    nodes: Nodee[] = []
     dragFrom: Coordinate
-    config: CanvasConfig
     isDirectedGraph: boolean = false
     lines: Line[] = []
     selectedNode: Node[] = []
@@ -30,15 +29,30 @@ export class Canvas {
      * @param nodes Initial nodes
      * @param config Canvas configuration
      */
-    constructor(el: HTMLCanvasElement|string, nodes: Nodee[] = [], config?: CanvasConfig) {
-        this.canvas = typeof el == "string" ? document.querySelector<HTMLCanvasElement>("el") : el
-        this.ctx = this.canvas.getContext('2d')
-        this.nodes = nodes
+    constructor(public config: CanvasConfig = {}) {
         this.config = Object.assign(defaultConfig, config)
-        this.init()
+
+        this.mount(config.el)
     }
 
-    private init() {
+    resolveSelector<T>(selector: string | T | null | undefined): T | null {
+        if (typeof selector === 'string')
+          return document.querySelector(selector) as unknown as T
+        else
+          return selector || null
+    }
+
+    mount(el: string | HTMLCanvasElement) {
+        if (this.canvas)
+            throw new Error('[graphism] already mounted, unmount previous target first')
+
+        this.canvas = this.resolveSelector(el)
+        
+        if (!this.canvas)
+            throw new Error('[graphism] target element not found')
+
+        this.ctx = this.canvas.getContext('2d')
+
         // Set canvas size
         this.canvas.width = this.canvas.clientWidth
         this.canvas.height = this.canvas.clientHeight
@@ -46,6 +60,26 @@ export class Canvas {
         this.listener()
 
         requestAnimationFrame(() => this.render())
+    }
+
+    /**
+     * Generate node at random points
+     * @param canvas Canvas instance
+     * @returns A set of nodes
+     */
+    generateGraph() {
+         // Create new node
+        const nodeJakarta = this.createNode("Jakarta", { x: 130, y: 274 })
+        const nodeBandung = this.createNode("Bandung", { x: 390, y: 200 })
+
+        this.addNodeNeighbor(nodeBandung, nodeJakarta, 100)
+        this.addNodeNeighbor(nodeJakarta, nodeBandung, 100)
+
+        const nodes = [nodeJakarta, nodeBandung]
+
+        this.nodes = nodes
+
+        return nodes
     }
 
     private draw() {
@@ -91,9 +125,8 @@ export class Canvas {
     }
 
     
-
     waitingForClick(): Promise<Coordinate> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             this.runningBorder = true
             this.canvas.addEventListener('click', e => {
                 let position = this.getCursorPosition(e)
@@ -201,6 +234,7 @@ export class Canvas {
         })
     }
 
+    
     getCursorPosition(e) {
         let rect = this.canvas.getBoundingClientRect()
         return {
@@ -219,4 +253,8 @@ export class Canvas {
     solve() {
 
     }
+}
+
+export function createGraphism(config?: CanvasConfig): Graphism {
+    return new Graphism(config)
 }

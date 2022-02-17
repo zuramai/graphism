@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && cross-env NODE_ENV=production vite build",
+    "preview": "vite preview"
+  }
+}

@@ -11,7 +11,8 @@ export interface NodeInterface {
     
     move: (x?: number, y?: number) => void
     draw: (ctx: CanvasRenderingContext2D) => void
-    addNeighbor: (node: NodeInterface, distance: number, line: Line) => void
+    addNeighbor: (node: NodeInterface, distance: number, line: LineInterface) => void
+    isOnCoordinate: (coordinate: Coordinate) => boolean
 }
 
 export interface NeighborInterface {

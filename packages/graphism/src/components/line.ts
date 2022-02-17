@@ -1,4 +1,3 @@
-import { Coordinate } from "../types/canvas";
 import { LineConfig, LineInterface } from "../types/line";
 import { Nodee } from "./node";
 

@@ -1,7 +1,6 @@
 import { Coordinate } from "../types/canvas";
 import { LineInterface } from "../types/line";
 import { NeighborInterface, NodeConfig, NodeInterface } from "../types/node";
-import Line from "./line";
 
 
 let defaultNodeConfig: NodeConfig = {
@@ -26,7 +25,7 @@ export class Nodee implements NodeInterface {
         this.nodeConfig = Object.assign(this.nodeConfig, config)
     }
 
-    addNeighbor(node: Nodee, distance: number, line: Line) {
+    addNeighbor(node: Nodee, distance: number, line: LineInterface) {
         this.neighbors.push({
             node,
             distance,
@@ -62,7 +61,6 @@ export class Nodee implements NodeInterface {
             coordinate.x <= this.position.x + this.nodeConfig.size &&
             coordinate.y > this.position.y - this.nodeConfig.size &&
             coordinate.y <= this.position.y + this.nodeConfig.size) {
-                console.log('checking ', coordinate)
                 return true
             }
         return false
