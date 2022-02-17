@@ -3,37 +3,60 @@ import { Canvas } from "./playground/canvas"
 import { Nodee } from "./playground/node"
 
 const canvasEl = document.querySelector('canvas')
-const canvas = new Canvas(canvasEl, [])
 
-document.getElementById('node-add').addEventListener('click', () => {
+// Create the canvas instance
+const canvas = new Canvas(canvasEl, [])
+const helperText = <HTMLElement>document.getElementById('helper-text')
+
+// Event listeners
+document.getElementById('node-add').addEventListener('click', addNode)
+document.getElementById('generate-graph').addEventListener('click', generateGraphEvent)
+document.getElementById('create-new').addEventListener('click', createNewGraph)
+
+/**
+ * Execute create new node
+ */
+function addNode() {
     let name = <HTMLFormElement>document.getElementById("name")
     document.querySelector('.modal-add').classList.remove('modal-open')
 
     showHelperText(`Click anywhere to create ${name.value} node`)
 
     canvas.waitingForClick().then(coordinate => {
-        canvas.createNode(name.value,coordinate)
+        canvas.createNode(name ? name.value : "", coordinate)
         hideHelperText()
     })
-})
+}
 
-document.getElementById('generate-graph').addEventListener('click', () => {
+/**
+ * Create new and start with random graph
+ */
+function generateGraphEvent() {
     const nodes = generateGraph(canvas)
     canvas.nodes = nodes
     hideTitleScreen()
-})
+}
 
-document.getElementById('create-new').addEventListener('click', () => {
+/**
+ * Create new and start with clean canvas
+ */
+function createNewGraph() {
     hideTitleScreen()
-})
+}
 
+/**
+ * Hide the title screen
+ */
 function hideTitleScreen() {
     let titleScreen = document.querySelector<HTMLElement>('.page-title')
     titleScreen.classList.toggle('show')
 }
 
-let helperText = <HTMLElement>document.getElementById('helper-text')
-
+/**
+ * Show a helper text with custom text
+ * @param text The text to be shown
+ * @param blink Blink animation for the text
+ */
 function showHelperText(text: string, blink: boolean = true) {
     if(blink) {
         helperText.classList.add('blinking')
@@ -42,11 +65,19 @@ function showHelperText(text: string, blink: boolean = true) {
     helperText.classList.add('show')
 }
 
+/**
+ * Hide the helper text
+ */
 function hideHelperText() {
     helperText.classList.remove('blinking')
     helperText.classList.remove('show')
 }
 
+/**
+ * Generate node at random points
+ * @param canvas Canvas instance
+ * @returns A set of nodes
+ */
 function generateGraph(canvas: Canvas): Nodee[] {
 
     // Create new node
