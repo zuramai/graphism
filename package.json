@@ -1,17 +1,17 @@
 {
   "name": "graphism",
-  "version": "1.0.0",
+  "version": "0.0.1-dev",
   "description": "",
   "main": "index.js",
   "private": true,
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",
     "play:build": "pnpm -C playground run build",
-    "js:dev": "pnpm run --filter ./package dev",
-    "js:build": "pnpm run -r --filter ./package build",
+    "js:dev": "pnpm run --filter ./packages dev",
+    "js:build": "pnpm run -r --filter ./packages build",
     "dev": "nr play:dev",
     "build": "nr js:build",
-    "release": "bumpp package.json package/package.json --tag --commit --push && pnpm -r publish --access public"
+    "release": "bumpp package.json packages/*/package.json --tag --commit --push && pnpm -r publish --access public"
   },
   "repository": {
     "type": "git",
@@ -24,13 +24,13 @@
     "url": "https://github.com/zuramai/graph-algorithms/issues"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^0.16.1",
+    "bumpp": "^7.1.1",
+    "eslint": "^8.9.0",
+    "pnpm": "^6.31.0",
     "sass": "^1.49.7",
     "tsup": "^5.11.13",
     "typescript": "^4.5.4",
     "vite": "^2.8.0"
-  },
-  "dependencies": {
-    "@antfu/eslint-config": "^0.16.1",
-    "eslint": "^8.9.0"
   }
 }
