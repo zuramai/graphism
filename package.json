@@ -25,8 +25,10 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.16.1",
+    "@antfu/ni": "^0.13.0",
     "bumpp": "^7.1.1",
     "eslint": "^8.9.0",
+    "nanoevents": "^6.0.2",
     "pnpm": "^6.31.0",
     "sass": "^1.49.7",
     "tsup": "^5.11.13",

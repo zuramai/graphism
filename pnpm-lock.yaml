@@ -5,8 +5,10 @@ importers:
   .:
     specifiers:
       '@antfu/eslint-config': ^0.16.1
+      '@antfu/ni': ^0.13.0
       bumpp: ^7.1.1
       eslint: ^8.9.0
+      nanoevents: ^6.0.2
       pnpm: ^6.31.0
       sass: ^1.49.7
       tsup: ^5.11.13
@@ -14,8 +16,10 @@ importers:
       vite: ^2.8.0
     devDependencies:
       '@antfu/eslint-config': 0.16.1_eslint@8.9.0+typescript@4.5.5
+      '@antfu/ni': 0.13.0
       bumpp: 7.1.1
       eslint: 8.9.0
+      nanoevents: 6.0.2
       pnpm: 6.31.0
       sass: 1.49.7
       tsup: 5.11.13_typescript@4.5.5
@@ -111,6 +115,11 @@ packages:
     transitivePeerDependencies:
       - supports-color
       - typescript
+    dev: true
+
+  /@antfu/ni/0.13.0:
+    resolution: {integrity: sha512-p4/11Pu+NwjVZ+XUdfD7p102xudpu9I3FnSaEA+2SCve166TXg5ivRVm1+sk383IIc1Ducxefkfad5EmUO6ujA==}
+    hasBin: true
     dev: true
 
   /@babel/code-frame/7.16.7:
@@ -1831,6 +1840,11 @@ packages:
       any-promise: 1.3.0
       object-assign: 4.1.1
       thenify-all: 1.6.0
+    dev: true
+
+  /nanoevents/6.0.2:
+    resolution: {integrity: sha512-FRS2otuFcPPYDPYViNWQ42+1iZqbXydinkRHTHFxrF4a1CpBfmydR9zkI44WSXAXCyPrkcGtPk5CnpW6Y3lFKQ==}
+    engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
     dev: true
 
   /nanoid/3.3.1:

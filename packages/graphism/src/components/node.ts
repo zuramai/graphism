@@ -1,14 +1,19 @@
-import { Coordinate } from "../types/canvas";
+import { createNanoEvents } from "nanoevents";
+import { Coordinate, EventsMap, NodeEventsMap } from "../types";
 import { LineInterface } from "../types/line";
 import { NeighborInterface, NodeConfig, NodeInterface } from "../types/node";
 
 
 let defaultNodeConfig: NodeConfig = {
     backgroundColor: "white",
+    borderColor: "#ddd",
+    borderSize: 2,
     shape: "circle",
     size: 50,
     textColor: "#222",
-    fontSize: 14
+    fontSize: 22,
+    hoverBorderSize: 10,
+    hoverBorderColor: 'rgba(57, 138, 185, .2)'
 }
 
 export class Nodee implements NodeInterface {
@@ -18,11 +23,16 @@ export class Nodee implements NodeInterface {
     position: Coordinate
     movable: boolean = false;
     moveFrom: Coordinate;
+    private _emitter = createNanoEvents<NodeEventsMap>()
 
     constructor(name: string, position: Coordinate, config?: NodeConfig) {
         this.name = name        
         this.position = position
         this.nodeConfig = Object.assign(this.nodeConfig, config)
+    }
+
+    on<E extends keyof NodeEventsMap>(event: E, callback: NodeEventsMap[E]) {
+        return this._emitter.on(event, callback)
     }
 
     addNeighbor(node: Nodee, distance: number, line: LineInterface) {
@@ -34,15 +44,26 @@ export class Nodee implements NodeInterface {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
+
+        // Outer border
+        ctx.beginPath()
+        ctx.arc(this.position.x, this.position.y, this.nodeConfig.size , 0, Math.PI * 2)
+        ctx.strokeStyle = this.nodeConfig.hoverBorderColor
+        ctx.lineWidth = this.nodeConfig.hoverBorderSize
+        ctx.stroke()
+        ctx.closePath()
+
         // Create the node shape
         ctx.beginPath()
         ctx.fillStyle = this.nodeConfig.backgroundColor
         ctx.arc(this.position.x, this.position.y, this.nodeConfig.size, 0, Math.PI * 2)
-        ctx.strokeStyle = "#aaa"
-        ctx.lineWidth = 3
+        ctx.strokeStyle = this.nodeConfig.borderColor
+        ctx.lineWidth = this.nodeConfig.borderSize
         ctx.stroke()
         ctx.fill()
         ctx.closePath()
+
+
 
         // Draw text
         ctx.fillStyle = this.nodeConfig.textColor

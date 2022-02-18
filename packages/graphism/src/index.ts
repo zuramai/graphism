@@ -1,6 +1,7 @@
 import { Nodee } from "./components/node"
-import { CanvasConfig, Coordinate } from "./types/canvas"
+import { CanvasConfig, Coordinate, EventsMap } from "./types"
 import { NodeConfig } from "./types/node"
+import { createNanoEvents } from 'nanoevents'
 import Line from "./components/line"
 
 const defaultConfig: CanvasConfig = {
@@ -18,6 +19,8 @@ export class Graphism {
     isDirectedGraph: boolean = false
     lines: Line[] = []
     selectedNode: Node[] = []
+
+    private _emitter = createNanoEvents<EventsMap>()
 
     private runningBorder: boolean = false
     private runningBorderOffset: number = 0
@@ -57,9 +60,18 @@ export class Graphism {
         this.canvas.width = this.canvas.clientWidth
         this.canvas.height = this.canvas.clientHeight
 
-        this.listener()
+        // Event listeners
+        this.canvas.addEventListener('mousedown', this.mouseDown.bind(this))
+        this.canvas.addEventListener('mousemove', this.mouseMove.bind(this))
+        this.canvas.addEventListener('mouseup', this.mouseUp.bind(this))
+
+        this._emitter.emit("mounted")
 
         requestAnimationFrame(() => this.render())
+    }
+
+    on<E extends keyof EventsMap>(event: E, callback: EventsMap[E]) {
+        return this._emitter.on(event, callback)
     }
 
     /**
@@ -173,65 +185,62 @@ export class Graphism {
         }
     }
     
-    private listener() {
-        this.canvas.addEventListener('mousedown', e => {
-            let position = this.getCursorPosition(e)
 
-            this.dragFrom = position
+    private mouseUp(e: MouseEvent) {
+        let position = this.getCursorPosition(e)
 
-            for(let i = 0; i < this.nodes.length; i++) {
-                let node = this.nodes[i]
+        for(let i = 0; i < this.nodes.length; i++) {
+            if(this.nodes[i].movable) {
+                console.log('stop at', position)
+                console.log('node stop at', this.nodes[i].position)
+            }
+            this.nodes[i].movable = false
+            
+        }
+    }
 
-                // if the node is clicked
-                if(node.isOnCoordinate(position))  {
-                    node.movable = true
-                    node.moveFrom = {
-                        x: node.position.x,
-                        y: node.position.y,
-                    }
+    private mouseDown(e: MouseEvent) {
+        let position = this.getCursorPosition(e)
 
+        this.dragFrom = position
+
+        for(let i = 0; i < this.nodes.length; i++) {
+            let node = this.nodes[i]
+
+            // if the node is clicked
+            if(node.isOnCoordinate(position))  {
+                node.movable = true
+                node.moveFrom = {
+                    x: node.position.x,
+                    y: node.position.y,
                 }
+
             }
-        })
-        
+        }
+    }
 
-        this.canvas.addEventListener('mousemove', e => {
-            let position = this.getCursorPosition(e)
-            let node: Nodee;
+    private mouseMove(e: MouseEvent) {
+        let position = this.getCursorPosition(e)
+        let node: Nodee;
 
-            // Change cursor on node hover
-            if(this.nodes.some(node => node.isOnCoordinate(position))) {
-                this.canvas.style.cursor = 'pointer'
-            } else {
-                this.canvas.style.cursor = 'default'
-            }
+        // Change cursor on node hover
+        if(this.nodes.some(node => node.isOnCoordinate(position))) {
+            this.canvas.style.cursor = 'pointer'
+        } else {
+            this.canvas.style.cursor = 'grab'
+        }
 
-            for(let i = 0; i < this.nodes.length; i++) {
-                node = this.nodes[i]
+        for(let i = 0; i < this.nodes.length; i++) {
+            node = this.nodes[i]
 
-                // Move the node if movable
-                if(!this.nodes[i].movable) continue
+            // Move the node if movable
+            if(!this.nodes[i].movable) continue
 
-                let dx = position.x - this.dragFrom.x
-                let dy = position.y - this.dragFrom.y
-                
-                node.move(node.moveFrom.x + dx, node.moveFrom.y + dy)
-            }
-        })
-        
-
-        this.canvas.addEventListener('mouseup', e => {
-            let position = this.getCursorPosition(e)
-
-            for(let i = 0; i < this.nodes.length; i++) {
-                if(this.nodes[i].movable) {
-                    console.log('stop at', position)
-                    console.log('node stop at', this.nodes[i].position)
-                }
-                this.nodes[i].movable = false
-                
-            }
-        })
+            let dx = position.x - this.dragFrom.x
+            let dy = position.y - this.dragFrom.y
+            
+            node.move(node.moveFrom.x + dx, node.moveFrom.y + dy)
+        }
     }
 
     

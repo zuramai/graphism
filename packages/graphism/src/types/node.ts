@@ -1,4 +1,4 @@
-import { Coordinate } from "./canvas";
+import { Coordinate } from ".";
 import { LineInterface } from "./line";
 
 export interface NodeInterface {
@@ -28,4 +28,17 @@ export interface NodeConfig {
     size?: number
     textColor?: string
     fontSize?: number
+    borderColor?: string
+    borderSize?: number
+    hoverBorderColor?: string
+    hoverBorderSize?: number
+}
+
+export interface NodeEventsMap {
+    "node:created": (node: NodeInterface) => void
+    "node:move": (node: NodeInterface) => void
+    "node:mouseover": (node: NodeInterface) => void
+    "node:mouseleave": (node: NodeInterface) => void
+    "node:click": (node: NodeInterface) => void
+    "node:connect": (node1: NodeInterface, node2: NodeInterface) => void
 }
