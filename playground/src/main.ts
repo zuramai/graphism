@@ -1,13 +1,13 @@
 import './assets/scss/main.scss'
 import { createGraphism } from "../../packages/graphism/src"
 
+const el = document.querySelector<HTMLCanvasElement>('#canvas')
+
 // Create the canvas instance
 const canvas = createGraphism({
-    el: "#canvas",
+    el,
     canvasBackground: "#eee",
 })
-
-
 
 const helperText = <HTMLElement>document.getElementById('helper-text')
 
@@ -39,7 +39,7 @@ function generateGraphEvent() {
     canvas.nodes = nodes
     hideTitleScreen()
 }
-
+    
 /**
  * Create new and start with clean canvas
  */

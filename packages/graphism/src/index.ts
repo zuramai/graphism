@@ -20,10 +20,11 @@ export class Graphism {
     lines: Line[] = []
     selectedNode: Node[] = []
 
+    private _hoveredNode: Nodee = null
     private _emitter = createNanoEvents<EventsMap>()
 
-    private runningBorder: boolean = false
-    private runningBorderOffset: number = 0
+    private _runningBorder: boolean = false
+    private _runningBorderOffset: number = 0
     
     
     /**
@@ -34,7 +35,6 @@ export class Graphism {
      */
     constructor(public config: CanvasConfig = {}) {
         this.config = Object.assign(defaultConfig, config)
-
         this.mount(config.el)
     }
 
@@ -64,6 +64,7 @@ export class Graphism {
         this.canvas.addEventListener('mousedown', this.mouseDown.bind(this))
         this.canvas.addEventListener('mousemove', this.mouseMove.bind(this))
         this.canvas.addEventListener('mouseup', this.mouseUp.bind(this))
+        this.canvas.addEventListener('click', this.mouseClick.bind(this))
 
         this._emitter.emit("mounted")
 
@@ -114,10 +115,14 @@ export class Graphism {
 
     private drawBackground() {
         // Background
-        this.ctx.fillStyle = this.config.canvasBackground
-        this.ctx.fillRect(0,0,this.canvas.width, this.canvas.height)
+        if(typeof this.config.canvasBackground == 'string' || this.config.canvasBackground instanceof CanvasPattern) {
+            this.ctx.fillStyle = this.config.canvasBackground
+            this.ctx.fillRect(0,0,this.canvas.width, this.canvas.height)
+        } else if (this.config.canvasBackground instanceof HTMLImageElement) 
+            this.ctx.drawImage(this.config.canvasBackground, 0, 0, this.canvas.width, this.canvas.height)
 
-        if(this.runningBorder) {
+
+        if(this._runningBorder) {
             // Running border
 
             this.ctx.save()
@@ -127,7 +132,7 @@ export class Graphism {
             this.ctx.rect(0, 0, this.canvas.width, this.canvas.height)
             this.ctx.lineWidth = 10
             this.ctx.setLineDash([0, 25, 50])
-            this.ctx.lineDashOffset = this.runningBorderOffset
+            this.ctx.lineDashOffset = this._runningBorderOffset
             this.ctx.stroke()
 
             this.ctx.closePath()
@@ -139,10 +144,10 @@ export class Graphism {
     
     waitingForClick(): Promise<Coordinate> {
         return new Promise((resolve) => {
-            this.runningBorder = true
+            this._runningBorder = true
             this.canvas.addEventListener('click', e => {
                 let position = this.getCursorPosition(e)
-                this.runningBorder = false
+                this._runningBorder = false
                 resolve(position)
             })
         })
@@ -151,6 +156,8 @@ export class Graphism {
     createNode(name: string, coordinate: Coordinate,  config?: NodeConfig): Nodee {
         let node = new Nodee(name, coordinate, config)
         this.nodes.push(node)
+
+        this._emitter.emit("node:created", node)
 
         console.log("creating new node ", name," at ", coordinate)
 
@@ -177,17 +184,20 @@ export class Graphism {
 
         if(!this.isDirectedGraph)
             to.addNeighbor(from, distance, line)
+
+        this._emitter.emit("node:connect", from, to)
     }
 
     private update() {
-        if(this.runningBorder) {
-            this.runningBorderOffset++
+        if(this._runningBorder) {
+            this._runningBorderOffset++
         }
     }
     
 
     private mouseUp(e: MouseEvent) {
         let position = this.getCursorPosition(e)
+        console.log(e)
 
         for(let i = 0; i < this.nodes.length; i++) {
             if(this.nodes[i].movable) {
@@ -224,9 +234,16 @@ export class Graphism {
         let node: Nodee;
 
         // Change cursor on node hover
-        if(this.nodes.some(node => node.isOnCoordinate(position))) {
+        if(node = this.nodes.find(node => node.isOnCoordinate(position))) {
             this.canvas.style.cursor = 'pointer'
+            this._emitter.emit("node:mouseover", node)
+            this._hoveredNode = node
+            node.isHovered = true
         } else {
+            if(this.canvas.style.cursor == 'pointer') {
+                this._hoveredNode.isHovered = false
+                this._emitter.emit("node:mouseleave", this._hoveredNode) 
+            }
             this.canvas.style.cursor = 'grab'
         }
 
@@ -240,6 +257,19 @@ export class Graphism {
             let dy = position.y - this.dragFrom.y
             
             node.move(node.moveFrom.x + dx, node.moveFrom.y + dy)
+        }
+    }
+    private mouseClick(e: MouseEvent) {
+        let position = this.getCursorPosition(e)
+        let node: Nodee = null;
+
+        // Check if a node is clicked
+        for(let i = this.nodes.length-1; i >= 0; i--) {
+            node = this.nodes[i]
+            if(node.isOnCoordinate(position)) {
+                node.isActive = !node.isActive
+                break
+            }
         }
     }
 

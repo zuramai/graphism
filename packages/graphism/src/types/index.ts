@@ -11,7 +11,7 @@ export interface Coordinate {
 
 export interface CanvasConfig {
     el?: HTMLCanvasElement | string,
-    canvasBackground?: string
+    canvasBackground?: string | CanvasPattern | HTMLImageElement
     lineColor?: string 
     nodeBackground?: string
     nodeTextColor?: string

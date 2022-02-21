@@ -12,8 +12,9 @@ let defaultNodeConfig: NodeConfig = {
     size: 50,
     textColor: "#222",
     fontSize: 22,
-    hoverBorderSize: 10,
-    hoverBorderColor: 'rgba(57, 138, 185, .2)'
+    hoverBorderSize: 2,
+    hoverBorderColor: 'rgba(120, 118, 240, .6)',
+    hoverFillColor: 'rgba(120, 118, 240, .3)'
 }
 
 export class Nodee implements NodeInterface {
@@ -23,7 +24,9 @@ export class Nodee implements NodeInterface {
     position: Coordinate
     movable: boolean = false;
     moveFrom: Coordinate;
-    private _emitter = createNanoEvents<NodeEventsMap>()
+    isHovered = false
+    isActive = false
+    
 
     constructor(name: string, position: Coordinate, config?: NodeConfig) {
         this.name = name        
@@ -31,9 +34,7 @@ export class Nodee implements NodeInterface {
         this.nodeConfig = Object.assign(this.nodeConfig, config)
     }
 
-    on<E extends keyof NodeEventsMap>(event: E, callback: NodeEventsMap[E]) {
-        return this._emitter.on(event, callback)
-    }
+
 
     addNeighbor(node: Nodee, distance: number, line: LineInterface) {
         this.neighbors.push({
@@ -45,13 +46,17 @@ export class Nodee implements NodeInterface {
 
     draw(ctx: CanvasRenderingContext2D) {
 
-        // Outer border
+        // Hover state outer border 
         ctx.beginPath()
-        ctx.arc(this.position.x, this.position.y, this.nodeConfig.size , 0, Math.PI * 2)
+        ctx.arc(this.position.x, this.position.y, this.nodeConfig.size + 5, 0, Math.PI * 2)
         ctx.strokeStyle = this.nodeConfig.hoverBorderColor
+        ctx.fillStyle = this.nodeConfig.hoverFillColor
         ctx.lineWidth = this.nodeConfig.hoverBorderSize
-        ctx.stroke()
+        if(this.isHovered) ctx.fill()
+        if(this.isActive) ctx.stroke()
         ctx.closePath()
+
+        // Active state outer border
 
         // Create the node shape
         ctx.beginPath()
@@ -62,8 +67,6 @@ export class Nodee implements NodeInterface {
         ctx.stroke()
         ctx.fill()
         ctx.closePath()
-
-
 
         // Draw text
         ctx.fillStyle = this.nodeConfig.textColor
