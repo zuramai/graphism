@@ -1,4 +1,4 @@
-import { Coordinate } from ".";
+import { CanvasMode, Coordinate } from ".";
 import { LineInterface } from "./line";
 
 export interface NodeInterface {
@@ -8,8 +8,16 @@ export interface NodeInterface {
     nodeConfig: NodeConfig
     movable: boolean
     moveFrom: Coordinate
+    mode: CanvasMode
+    isSelected: boolean
+    isHovered: boolean 
+
+    _borderOffset: number 
+
     
     move: (x?: number, y?: number) => void
+    update: () => void
+    select: () => void
     draw: (ctx: CanvasRenderingContext2D) => void
     addNeighbor: (node: NodeInterface, distance: number, line: LineInterface) => void
     isOnCoordinate: (coordinate: Coordinate) => boolean

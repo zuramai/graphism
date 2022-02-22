@@ -13,7 +13,7 @@ export default class Line implements LineInterface {
     to: Nodee
 
     constructor(from: Nodee, to: Nodee, config?: LineConfig) {
-        this.lineConfig = config
+        this.lineConfig = Object.assign(defaultLineConfig, config)
         this.from = from
         this.to = to
     }

@@ -1,5 +1,5 @@
 import { createNanoEvents } from "nanoevents";
-import { Coordinate, EventsMap, NodeEventsMap } from "../types";
+import { CanvasMode, Coordinate, EventsMap, NodeEventsMap } from "../types";
 import { LineInterface } from "../types/line";
 import { NeighborInterface, NodeConfig, NodeInterface } from "../types/node";
 
@@ -25,7 +25,10 @@ export class Nodee implements NodeInterface {
     movable: boolean = false;
     moveFrom: Coordinate;
     isHovered = false
-    isActive = false
+    isSelected = false
+    mode:CanvasMode = "normal"
+
+    _borderOffset = 0
     
 
     constructor(name: string, position: Coordinate, config?: NodeConfig) {
@@ -33,8 +36,6 @@ export class Nodee implements NodeInterface {
         this.position = position
         this.nodeConfig = Object.assign(this.nodeConfig, config)
     }
-
-
 
     addNeighbor(node: Nodee, distance: number, line: LineInterface) {
         this.neighbors.push({
@@ -52,11 +53,11 @@ export class Nodee implements NodeInterface {
         ctx.strokeStyle = this.nodeConfig.hoverBorderColor
         ctx.fillStyle = this.nodeConfig.hoverFillColor
         ctx.lineWidth = this.nodeConfig.hoverBorderSize
-        if(this.isHovered) ctx.fill()
-        if(this.isActive) ctx.stroke()
+        ctx.setLineDash(this.mode == "connecting" ? [50,10] : [0])
+        ctx.lineDashOffset = this._borderOffset
+        if(this.isHovered && !this.isSelected) ctx.fill()
+        if(this.isSelected) ctx.stroke()
         ctx.closePath()
-
-        // Active state outer border
 
         // Create the node shape
         ctx.beginPath()
@@ -73,6 +74,17 @@ export class Nodee implements NodeInterface {
         ctx.font = `${this.nodeConfig.fontSize}px Lora"`
         ctx.fillText(this.name, this.position.x, this.position.y)
         ctx.textAlign = "center"
+    }
+
+    update() {
+        this._borderOffset++
+        console.log('updating border offset')
+    }
+
+    select() {
+        this.isSelected = !this.isSelected
+
+        if(!this.isSelected) this._borderOffset = 0
     }
 
     move(x?: number, y?: number) {

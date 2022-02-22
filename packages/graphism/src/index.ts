@@ -1,6 +1,6 @@
 import { Nodee } from "./components/node"
-import { CanvasConfig, Coordinate, EventsMap } from "./types"
-import { NodeConfig } from "./types/node"
+import { CanvasConfig, CanvasMode, Coordinate, EventsMap } from "./types"
+import { NodeConfig, NodeInterface } from "./types/node"
 import { createNanoEvents } from 'nanoevents'
 import Line from "./components/line"
 
@@ -18,12 +18,12 @@ export class Graphism {
     dragFrom: Coordinate
     isDirectedGraph: boolean = false
     lines: Line[] = []
-    selectedNode: Node[] = []
+    selectedNode: Nodee[] = []
+    mode: CanvasMode = "normal"
 
     private _hoveredNode: Nodee = null
     private _emitter = createNanoEvents<EventsMap>()
 
-    private _runningBorder: boolean = false
     private _runningBorderOffset: number = 0
     
     
@@ -71,8 +71,12 @@ export class Graphism {
         requestAnimationFrame(() => this.render())
     }
 
-    on<E extends keyof EventsMap>(event: E, callback: EventsMap[E]) {
-        return this._emitter.on(event, callback)
+    on<E extends keyof EventsMap>(event: E, callback: any, once: boolean = false) {
+        const unbind =  this._emitter.on(event, (...args) => {
+            if(once) unbind()
+            callback(...args)
+        })
+        return unbind
     }
 
     /**
@@ -122,9 +126,8 @@ export class Graphism {
             this.ctx.drawImage(this.config.canvasBackground, 0, 0, this.canvas.width, this.canvas.height)
 
 
-        if(this._runningBorder) {
+        if(["creating", "connecting"].includes(this.mode)) {
             // Running border
-
             this.ctx.save()
             this.ctx.beginPath()
 
@@ -140,16 +143,15 @@ export class Graphism {
             this.ctx.restore()
         }
     }
-
     
     waitingForClick(): Promise<Coordinate> {
         return new Promise((resolve) => {
-            this._runningBorder = true
+            this.mode = "creating"
+
             this.canvas.addEventListener('click', e => {
                 let position = this.getCursorPosition(e)
-                this._runningBorder = false
                 resolve(position)
-            })
+            }, { once: true })
         })
     }
 
@@ -158,10 +160,40 @@ export class Graphism {
         this.nodes.push(node)
 
         this._emitter.emit("node:created", node)
+        this.setMode('normal')
+        this.clearSelectedNode()
 
         console.log("creating new node ", name," at ", coordinate)
 
         return node
+    }
+
+    clearSelectedNode() {
+        for(let i = 0; i < this.nodes.length; i++) {
+            this.nodes[i].isSelected = false
+            this.nodes[i].mode = "normal"
+        }
+        this.selectedNode = []
+        console.log('clearing selected node')
+    }
+
+    setMode(mode: CanvasMode) {
+        this.mode = mode
+
+        switch (mode) {
+            case "connecting":
+                this.clearSelectedNode()
+                this.on("node:click", (node1: NodeInterface) => {
+                    this.on("node:click", (node2: NodeInterface) => {
+                        this.addNodeNeighbor(node1, node2, 0)
+                        this.clearSelectedNode()
+                        this.mode = "normal"
+                    }, true)
+                }, true)
+                break;
+            default:
+                break;
+        }
     }
 
     addNodeNeighbor(from: Nodee, to: Nodee, distance: number) {
@@ -189,7 +221,10 @@ export class Graphism {
     }
 
     private update() {
-        if(this._runningBorder) {
+        for(let i = 0; i < this.nodes.length; i++) {
+            this.nodes[i].update()
+        }
+        if(["creating", "connecting"].includes(this.mode)) {
             this._runningBorderOffset++
         }
     }
@@ -261,16 +296,27 @@ export class Graphism {
     }
     private mouseClick(e: MouseEvent) {
         let position = this.getCursorPosition(e)
-        let node: Nodee = null;
+        
+        // If the click is instant click (not moving or dragging)
+        if(position.x == this.dragFrom.x && position.y == this.dragFrom.y) {
+            
+            // Check if a node is clicked
+            for(let i = this.nodes.length-1; i >= 0; i--) {
+                let node = this.nodes[i]
 
-        // Check if a node is clicked
-        for(let i = this.nodes.length-1; i >= 0; i--) {
-            node = this.nodes[i]
-            if(node.isOnCoordinate(position)) {
-                node.isActive = !node.isActive
-                break
+                if(node.isOnCoordinate(position)) {
+                    this.selectNode(node, this.mode)
+                    this._emitter.emit("node:click", node)
+                    break
+                }
             }
+
         }
+    }
+
+    selectNode(node: Nodee, mode: CanvasMode = "normal") {
+        node.select()
+        node.mode = !node.isSelected ? "normal" : mode
     }
 
     

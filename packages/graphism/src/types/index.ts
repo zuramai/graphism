@@ -17,6 +17,8 @@ export interface CanvasConfig {
     nodeTextColor?: string
 }
 
+export type CanvasMode = "normal" | "connecting" | "creating"
+
 export interface EventsMap extends NodeEventsMap {
     start: () => void
     end: () => void

@@ -1,5 +1,6 @@
 import './assets/scss/main.scss'
 import { createGraphism } from "../../packages/graphism/src"
+import { NodeInterface } from '../../packages/graphism/src/types'
 
 const el = document.querySelector<HTMLCanvasElement>('#canvas')
 
@@ -15,6 +16,7 @@ const helperText = <HTMLElement>document.getElementById('helper-text')
 document.getElementById('node-add').addEventListener('click', addNode)
 document.getElementById('generate-graph').addEventListener('click', generateGraphEvent)
 document.getElementById('create-new').addEventListener('click', createNewGraph)
+document.getElementById('connectNode').addEventListener('click', connectNode)
 
 /**
  * Execute create new node
@@ -31,6 +33,20 @@ function addNode() {
     })
 }
 
+
+/**
+ * Start connecting mode in canvas
+ */
+function connectNode() {
+    canvas.setMode('connecting')
+    showHelperText("Click any node to connect")
+
+    canvas.on("node:connect", (node1: NodeInterface, node2: NodeInterface) => {
+        hideHelperText()
+    }) 
+
+}
+
 /**
  * Create new and start with random graph
  */
@@ -39,7 +55,8 @@ function generateGraphEvent() {
     canvas.nodes = nodes
     hideTitleScreen()
 }
-    
+
+
 /**
  * Create new and start with clean canvas
  */

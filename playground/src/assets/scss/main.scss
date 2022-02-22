@@ -134,6 +134,7 @@ body {
         left: 50%;
         transform: translateX(-50%);
         bottom: 100px;
+        pointer-events: none;
         display: none;
         text-shadow: 1px 10px 30px rgba(100,100,100,1);
 
