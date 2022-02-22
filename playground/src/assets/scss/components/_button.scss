@@ -26,13 +26,13 @@
         box-shadow: 0px 7px 20px rgba(179, 170, 170, 0.295);
     }
     &.btn-primary {
-        background-color: $primary;
+        background-color: $color-primary;
         color: white;
         &:hover {
-            background-color: darken($primary, 30%);
+            background-color: darken($color-primary, 30%);
         }
         &:active {
-            background-color: lighten($primary, 5%);
+            background-color: lighten($color-primary, 5%);
         }
     }
 }

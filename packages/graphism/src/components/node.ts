@@ -38,6 +38,9 @@ export class Nodee implements NodeInterface {
     }
 
     addNeighbor(node: Nodee, distance: number, line: LineInterface) {
+        // If the neighbor already exists
+        if(this.neighbors.find(n => n.node == node)) return
+
         this.neighbors.push({
             node,
             distance,
@@ -78,7 +81,6 @@ export class Nodee implements NodeInterface {
 
     update() {
         this._borderOffset++
-        console.log('updating border offset')
     }
 
     select() {
