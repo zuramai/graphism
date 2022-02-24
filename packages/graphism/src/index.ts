@@ -19,6 +19,7 @@ export class Graphism {
     isDirectedGraph: boolean = false
     lines: Line[] = []
     selectedNode: Nodee[] = []
+    holdingNode: Nodee = null
     mode: CanvasMode = "normal"
 
     private _hoveredNode: Nodee = null
@@ -172,6 +173,7 @@ export class Graphism {
         for(let i = 0; i < this.nodes.length; i++) {
             this.nodes[i].isSelected = false
             this.nodes[i].mode = "normal"
+            this.nodes[i].movable = false
         }
         this.selectedNode = []
         console.log('clearing selected node')
@@ -233,15 +235,7 @@ export class Graphism {
     private mouseUp(e: MouseEvent) {
         let position = this.getCursorPosition(e)
         console.log(e)
-
-        for(let i = 0; i < this.nodes.length; i++) {
-            if(this.nodes[i].movable) {
-                console.log('stop at', position)
-                console.log('node stop at', this.nodes[i].position)
-            }
-            this.nodes[i].movable = false
-            
-        }
+        this.holdingNode = null
     }
 
     private mouseDown(e: MouseEvent) {
@@ -254,7 +248,7 @@ export class Graphism {
 
             // if the node is clicked
             if(node.isOnCoordinate(position))  {
-                node.movable = true
+                this.holdingNode = node
                 node.moveFrom = {
                     x: node.position.x,
                     y: node.position.y,
@@ -282,34 +276,45 @@ export class Graphism {
             this.canvas.style.cursor = 'grab'
         }
 
-        for(let i = 0; i < this.nodes.length; i++) {
-            node = this.nodes[i]
+        if(!this.nodes.length) return
+        let dx = position.x - this.dragFrom.x
+        let dy = position.y - this.dragFrom.y
 
-            // Move the node if movable
-            if(!this.nodes[i].movable) continue
-
-            let dx = position.x - this.dragFrom.x
-            let dy = position.y - this.dragFrom.y
-            
+        if(!this.holdingNode) return
+        // If selected more than one nodes and move the selected node
+        console.log('moving', this.selectedNode.length, this.holdingNode)
+        if(this.selectedNode.length > 1 && this.holdingNode.isSelected) {
+            for(let i = 0; i < this.selectedNode.length; i++) {
+                node = this.nodes[i]
+                node.move(node.moveFrom.x + dx, node.moveFrom.y + dy)    
+            }            
+        } else {
+            // Just move the holding node
+            node = this.holdingNode
             node.move(node.moveFrom.x + dx, node.moveFrom.y + dy)
         }
     }
     private mouseClick(e: MouseEvent) {
         let position = this.getCursorPosition(e)
-        
         // If the click is instant click (not moving or dragging)
         if(position.x == this.dragFrom.x && position.y == this.dragFrom.y) {
-            
+            this._emitter.emit('canvas:click', position)
+            let isNodeClicked = false            
+
             // Check if a node is clicked
             for(let i = this.nodes.length-1; i >= 0; i--) {
                 let node = this.nodes[i]
 
                 if(node.isOnCoordinate(position)) {
+                    if(!e.ctrlKey) this.clearSelectedNode()
                     this.selectNode(node, this.mode)
+                    isNodeClicked = true
                     this._emitter.emit("node:click", node)
                     break
                 }
             }
+
+            if(!isNodeClicked) this.clearSelectedNode()
 
         }
     }
@@ -317,6 +322,7 @@ export class Graphism {
     selectNode(node: Nodee, mode: CanvasMode = "normal") {
         node.select()
         node.mode = !node.isSelected ? "normal" : mode
+        this.selectedNode.push(node)
     }
 
     

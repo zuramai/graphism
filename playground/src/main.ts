@@ -31,12 +31,13 @@ function addNode(graphism: Graphism) {
 
     showHelperText(`Click anywhere to create ${name.value} node`)
 
-    graphism.waitingForClick().then(coordinate => {
+    graphism.setMode("creating")
+    graphism.on("canvas:click", (coordinate) => {
         let nameVal = name ? name.value : ""
         graphism.createNode(nameVal, coordinate)
         createNotification("success", `Node ${nameVal} created`)
         hideHelperText()
-    })
+    }, true)
 }
 
 
@@ -90,7 +91,7 @@ function showHelperText(text: string, blink: boolean = true) {
     }
     helperText.innerText = text
     helperText.classList.add('show')
-}
+}       
 
 /**
  * Hide the helper text
