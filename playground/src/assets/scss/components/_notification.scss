@@ -1,0 +1,48 @@
+@use "./../variables" as *;
+
+.notifications {
+    position: fixed;
+    right: .5rem;
+    bottom: 1rem;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.notification {
+    min-width: 200px;
+    max-width: 320px;
+    padding: .5rem 2rem .5rem .8rem;
+    position: relative;
+    border-radius: .3rem;
+    margin-top: .3rem;
+    font-size: .925rem;
+    color: white;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+
+    button {
+        background-color: transparent;
+        color: white;
+        position: absolute;
+        right: .5rem;
+        cursor: pointer;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        color: white;
+
+        svg {
+            fill: currentColor;
+            vertical-align: middle;
+        }
+    }
+    &.notification-primary {
+        background-color: $color-primary;
+    }
+    &.notification-danger {
+        background-color: $color-danger;
+    }
+    &.notification-success {
+        background-color: $color-success;
+    }
+}
