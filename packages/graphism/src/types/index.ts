@@ -25,6 +25,7 @@ export interface EventsMap extends NodeEventsMap {
     grab: () => void
     mounted: () => void
     unmounted: () => void
+    error: (message: string) => void
 
     "canvas:click": (coordinate: Coordinate) => void
 }

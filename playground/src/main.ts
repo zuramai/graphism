@@ -9,7 +9,7 @@ window.onload = () => {
     // Create the canvas instance
     const graphism = createGraphism({
         el,
-        canvasBackground: "#fafafa",
+        canvasBackground: "#efefef",
     })
     
     

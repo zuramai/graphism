@@ -1,0 +1,31 @@
+.sidebar {
+    width: auto;
+    height: auto;
+    overflow-y: auto;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    padding: 1rem;
+    border-radius: .7rem;
+    box-shadow: 0 1rem 30px rgba(224, 224, 224, 0.753);
+
+    .icons {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: .3rem;
+    }
+    .sidebar-icon {
+        a {
+            color: #777;
+            padding: .3rem;
+            display: block;
+            border-radius: .3rem;
+            &:hover {
+                background-color: rgba(165, 163, 163, 0.1);
+            }
+        }
+    }
+}

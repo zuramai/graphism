@@ -5,6 +5,7 @@
 @use "./components/input";
 @use "./components/modal";
 @use "./components/notification";
+@use "./components/sidebar";
 @use "./utilities";
 
 * {
@@ -36,7 +37,9 @@ body {
     color: rgb(49, 47, 47);
 }
 
-
+main {
+    display: flex;
+}
 .container {
     width: clamp(320px, 90%, 1400px);
     padding: 0 1rem;
@@ -99,9 +102,11 @@ body {
 }
 .playground {
     position: relative;
+    flex: 1;
 
     .menu {
         width: 80%;
+        flex-wrap: wrap;
         position: absolute;
         background-color: white;
         left: 50%;
