@@ -30,9 +30,7 @@ export class Graphism {
     
     /**
      * Rendering canvas to visualize algorithms
-     * @param el Canvas element
-     * @param nodes Initial nodes
-     * @param config Canvas configuration
+     * @param config The canvas configuration
      */
     constructor(public config: CanvasConfig = {}) {
         this.config = Object.assign(defaultConfig, config)
@@ -233,13 +231,14 @@ export class Graphism {
     
 
     private mouseUp(e: MouseEvent) {
-        let position = this.getCursorPosition(e)
-        console.log(e)
         this.holdingNode = null
+
+        console.log("Mouseup ", this.selectedNode)
     }
 
     private mouseDown(e: MouseEvent) {
         let position = this.getCursorPosition(e)
+        console.log('mousedown')
 
         this.dragFrom = position
 
@@ -252,6 +251,14 @@ export class Graphism {
                 node.moveFrom = {
                     x: node.position.x,
                     y: node.position.y,
+                }
+
+                for(let j = 0; j < this.selectedNode.length; j++) {
+                    let s = this.selectedNode[j]
+                    s.moveFrom = {
+                        x: s.position.x,
+                        y: s.position.y,
+                    }
                 }
 
             }
@@ -280,9 +287,11 @@ export class Graphism {
         let dx = position.x - this.dragFrom.x
         let dy = position.y - this.dragFrom.y
 
+        console.log("Move dx = ", dx, " dy", dy)
+
         if(!this.holdingNode) return
+
         // If selected more than one nodes and move the selected node
-        console.log('moving', this.selectedNode.length, this.holdingNode)
         if(this.selectedNode.length > 1 && this.holdingNode.isSelected) {
             for(let i = 0; i < this.selectedNode.length; i++) {
                 node = this.nodes[i]
@@ -296,6 +305,7 @@ export class Graphism {
     }
     private mouseClick(e: MouseEvent) {
         let position = this.getCursorPosition(e)
+
         // If the click is instant click (not moving or dragging)
         if(position.x == this.dragFrom.x && position.y == this.dragFrom.y) {
             this._emitter.emit('canvas:click', position)

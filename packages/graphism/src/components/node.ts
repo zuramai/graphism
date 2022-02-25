@@ -27,7 +27,7 @@ export class Nodee implements NodeInterface {
     isHovered = false
     isSelected = false
     mode:CanvasMode = "normal"
-
+    
     _borderOffset = 0
     
 
