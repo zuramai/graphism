@@ -36,11 +36,12 @@ export interface NodeConfig {
     size?: number
     textColor?: string
     fontSize?: number
+    fontFamily?: string
     borderColor?: string
     borderSize?: number
     hoverBorderColor?: string
     hoverBorderSize?: number
-    hoverFillColor?: string
+    hoverBackgroundColor?: string
 }
 
 export interface NodeEventsMap {

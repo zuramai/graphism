@@ -13,8 +13,9 @@ let defaultNodeConfig: NodeConfig = {
     textColor: "#222",
     fontSize: 22,
     hoverBorderSize: 2,
+    fontFamily: "Lora",
     hoverBorderColor: 'rgba(120, 118, 240, .6)',
-    hoverFillColor: 'rgba(120, 118, 240, .3)'
+    hoverBackgroundColor: 'white',
 }
 
 export class Nodee implements NodeInterface {
@@ -54,7 +55,7 @@ export class Nodee implements NodeInterface {
         ctx.beginPath()
         ctx.arc(this.position.x, this.position.y, this.nodeConfig.size + 5, 0, Math.PI * 2)
         ctx.strokeStyle = this.nodeConfig.hoverBorderColor
-        ctx.fillStyle = this.nodeConfig.hoverFillColor
+        ctx.fillStyle = this.nodeConfig.hoverBackgroundColor
         ctx.lineWidth = this.nodeConfig.hoverBorderSize
         ctx.setLineDash(this.mode == "connecting" ? [50,10] : [0])
         ctx.lineDashOffset = this._borderOffset
@@ -74,7 +75,7 @@ export class Nodee implements NodeInterface {
 
         // Draw text
         ctx.fillStyle = this.nodeConfig.textColor
-        ctx.font = `${this.nodeConfig.fontSize}px Lora"`
+        ctx.font = `${this.nodeConfig.fontSize}px ${this.nodeConfig.fontFamily}"`
         ctx.fillText(this.name, this.position.x, this.position.y)
         ctx.textAlign = "center"
     }

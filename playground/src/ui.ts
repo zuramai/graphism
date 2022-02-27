@@ -1,3 +1,5 @@
+// This file contains controls for user interfaces
+
 let modals = document.querySelectorAll('.modal')
 
 modals.forEach(modal => {
@@ -22,14 +24,12 @@ for(let i = 0; i < sidebarItems.length; i++)  {
     let item = sidebarItems[i]
     let sub = item.querySelector(".sidebar-sub") 
     
-    item.addEventListener('click', () => {
+    item.querySelector(".sidebar-group-icon").addEventListener('click', () => {
         // Close all sub menu
         sidebarItems.forEach(si => si !== item && si.classList.remove('sidebar-item-open'))
 
         // Open the submenu
         item.classList.toggle('sidebar-item-open')
     })    
-
-    
 
 }

@@ -2,6 +2,7 @@ import './assets/scss/main.scss'
 import { createGraphism } from "../../packages/graphism/src"
 import { NodeInterface } from '../../packages/graphism/src/types'
 import { Graphism } from 'graphism'
+import { camelToSnakeCase } from './utils'
 
 window.onload = () => {
     const el = document.querySelector<HTMLCanvasElement>('#canvas')
@@ -11,14 +12,57 @@ window.onload = () => {
         el,
         canvasBackground: "#efefef",
     })
-    
-    
+
     // Event listeners
     document.getElementById('node-add').addEventListener('click', addNode.bind(null, graphism))
     document.getElementById('generate-graph').addEventListener('click', generateGraphEvent.bind(null, graphism))
     document.getElementById('create-new').addEventListener('click', createNewGraph)
     document.getElementById('connectNode').addEventListener('click', connectNode.bind(null, graphism))
+
+    // Customization provider
+    let proxy = createProxy(graphism, customizations)
+    customizationHandler(proxy)
+}
+
+let customizations = {
+    fontSize: 22,
+    fontFamily: "Lora",
+    textColor: "#222",
+    backgroundColor: "white",
+    borderColor: "#ddd",
+    borderSize: 2,
+    size: 50,
+    hoverBorderColor: 'rgba(120, 118, 240, .6)',
+    hoverBackgroundColor: 'white'
+}
+
+
+
+function createProxy<T extends object>(graphism: Graphism, target: T): T {
+    return new Proxy(target, {
+        set(obj, prop, value) {
+            obj[prop] = value
     
+            // Change the input value
+            let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(prop)}`)
+            input.value = value
+    
+            // Change the configuration in the node
+            for(let i = 0; i< graphism.selectedNode.length; i++) {
+                graphism.selectedNode[i].nodeConfig[prop] = value
+            }
+
+            return true
+        }
+    })
+}
+
+function customizationHandler<T extends object>(obj: T) {
+    Object.keys(obj).forEach(key => {
+        console.log(`querying: custom-${camelToSnakeCase(key)}`)
+        let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(key)}`)
+        input.addEventListener('keydown', () => obj[key] = input.value)
+    })
 }
 
 
@@ -40,7 +84,6 @@ function addNode(graphism: Graphism) {
     }, true)
 }
 
-
 /**
  * Start connecting mode in canvas
  */
@@ -61,7 +104,6 @@ function generateGraphEvent(graphism: Graphism) {
     graphism.nodes = nodes
     hideTitleScreen()
 }
-
 
 /**
  * Create new and start with clean canvas
