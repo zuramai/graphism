@@ -1,0 +1,26 @@
+@use "./../variables";
+
+.form-group {
+    &:not(:last-child) {
+        margin-bottom: .8rem;
+}
+    & > label {
+        margin-bottom: .3rem;
+        user-select: none;
+        display: block;
+    }
+}
+.form-input {
+    width: 100%;
+    padding: .2rem .3rem;
+    border-radius: .3rem;
+    border: 1px solid rgb(191, 194, 197);
+    outline: none;
+    transition: all .1s;
+    background-color: white;
+    
+    &:focus {
+        box-shadow: 0px 2px 20px rgba(149, 151, 163, 0.247);
+        border-color: variables.$color-primary;
+    }
+}

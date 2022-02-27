@@ -4,3 +4,9 @@
 .flex { display: flex; }
 .items-center { align-items: center; }
 .my-3 { margin: .6rem 0; }
+.gap-2 { gap: .2rem }
+
+.grid { display: grid; }
+.two-cols { gap: 1rem; grid-template-columns: 1fr 1fr; }
+
+.inline-block { display: inline-block; }

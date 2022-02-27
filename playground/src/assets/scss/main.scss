@@ -1,7 +1,9 @@
 @use "./variables" as *;
+@use "./mixins";
 @use "./animation";
 @use "./components/button";
 @use "./components/dropdown";
+@use "./components/forms";
 @use "./components/input";
 @use "./components/modal";
 @use "./components/notification";
@@ -108,13 +110,12 @@ main {
         width: 80%;
         flex-wrap: wrap;
         position: absolute;
-        background-color: white;
         left: 50%;
         transform: translateX(-50%);
         top: 1rem;
         border-radius: 1rem;
         gap: .5rem;
-        padding: .6rem;
+        @include mixins.cardWithShadow;
         box-shadow: 0 10px 30px rgba(155, 154, 154, 0.3);
         display: flex;
 

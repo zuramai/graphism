@@ -7,6 +7,10 @@
     cursor: pointer;
     border: none;
 
+    &.btn-active {
+        background-color: rgba(179, 170, 170, 0.295);
+    }
+
     &.btn-circle {
         border-radius: 50%;
         border: 1px solid #ccc;

@@ -1,15 +1,14 @@
+@use "./../mixins";
+
 .sidebar {
     width: auto;
     height: auto;
-    overflow-y: auto;
     position: absolute;
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
     background-color: white;
-    padding: 1rem;
-    border-radius: .7rem;
-    box-shadow: 0 1rem 30px rgba(224, 224, 224, 0.753);
+    @include mixins.cardWithShadow;
 
     .icons {
         list-style: none;
@@ -17,7 +16,8 @@
         flex-direction: column;
         gap: .3rem;
     }
-    .sidebar-icon {
+    .sidebar-item {
+        position: relative;
         a {
             color: #777;
             padding: .3rem;
@@ -26,6 +26,25 @@
             &:hover {
                 background-color: rgba(165, 163, 163, 0.1);
             }
+        }
+
+        &.sidebar-item-open .sidebar-sub {
+            right: calc(100% + 1.3rem);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar-sub {
+            position: absolute;
+            right: calc(100% + 1rem);
+            top: 0;
+            min-width: 230px;
+            visibility: hidden;
+            opacity: 0;
+            background-color: white;
+            transition: all .2s ease-in-out;
+            @include mixins.cardWithShadow;
+
         }
     }
 }

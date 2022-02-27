@@ -15,3 +15,21 @@ openAddModal.addEventListener('click', e => {
     addModal.classList.toggle('modal-open')
     console.log('open')
 })
+
+let sidebarItems = document.querySelectorAll<HTMLElement>(".sidebar-item")
+
+for(let i = 0; i < sidebarItems.length; i++)  {
+    let item = sidebarItems[i]
+    let sub = item.querySelector(".sidebar-sub") 
+    
+    item.addEventListener('click', () => {
+        // Close all sub menu
+        sidebarItems.forEach(si => si !== item && si.classList.remove('sidebar-item-open'))
+
+        // Open the submenu
+        item.classList.toggle('sidebar-item-open')
+    })    
+
+    
+
+}
