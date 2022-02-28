@@ -14,6 +14,7 @@ window.onload = () => {
     })
 
     // Event listeners
+    window.addEventListener('resize', resizeCanvas.bind(null, el))
     document.getElementById('node-add').addEventListener('click', addNode.bind(null, graphism))
     document.getElementById('generate-graph').addEventListener('click', generateGraphEvent.bind(null, graphism))
     document.getElementById('create-new').addEventListener('click', createNewGraph)
@@ -35,7 +36,6 @@ let customizations = {
     hoverBorderColor: 'rgba(120, 118, 240, .6)',
     hoverBackgroundColor: 'white'
 }
-
 
 
 function createProxy<T extends object>(graphism: Graphism, target: T): T {
@@ -60,8 +60,8 @@ function createProxy<T extends object>(graphism: Graphism, target: T): T {
 function customizationHandler<T extends object>(obj: T) {
     Object.keys(obj).forEach(key => {
         console.log(`querying: custom-${camelToSnakeCase(key)}`)
-        let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(key)}`)
-        input.addEventListener('keydown', () => obj[key] = input.value)
+        // let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(key)}`)
+        // input.addEventListener('keydown', () => obj[key] = input.value)
     })
 }
 
@@ -175,4 +175,12 @@ function createNotification(type: string, text: string, duration: number =  2000
     btn.addEventListener('click', () => {
         wrapper.removeChild(notif)
     },{once: true})
+}
+
+function resizeCanvas(canvas: HTMLCanvasElement) {
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    canvas.setAttribute('width', canvas.width.toString())
+    canvas.setAttribute('height', canvas.height.toString())
 }

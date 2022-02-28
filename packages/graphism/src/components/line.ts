@@ -3,7 +3,7 @@ import { Nodee } from "./node";
 
 let defaultLineConfig = {
     color: "#777",
-    width: 2,
+    width: 5,
     text: ""
 }
 

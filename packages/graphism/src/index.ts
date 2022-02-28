@@ -8,7 +8,7 @@ const defaultConfig: CanvasConfig = {
     lineColor: "#555",
     nodeBackground: "white",
     nodeTextColor: "#555",
-    canvasBackground: "#eee"
+    canvasBackground: "#ccc"
 }
 
 export class Graphism {
