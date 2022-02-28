@@ -163,21 +163,21 @@
                     <label for="font-style">Alignment</label>
                     <div class="flex">
 
-                      <input type="radio" name="alignment" id="align-left">
+                      <input type="radio" class="radio-hidden" name="custom-text-align" id="align-left">
                       <label for="align-left" href="#" class="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-text-left" viewBox="0 0 16 16">
                           <path fill-rule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
                         </svg>
                       </label>
 
-                      <input type="radio" name="alignment" id="align-center">
-                      <label for="align-center" href="#" class="btn btn-active">
+                      <input type="radio" class="radio-hidden" name="custom-text-align" id="align-center">
+                      <label for="align-center" href="#" class="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-text-left" viewBox="0 0 16 16">
                           <path fill-rule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
                         </svg>
                       </label>
 
-                      <input type="radio" name="alignment" id="align-right">
+                      <input type="radio" class="radio-hidden" name="custom-text-align" id="align-right">
                       <label for="align-right" href="#" class="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-text-left" viewBox="0 0 16 16">
                           <path fill-rule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
@@ -188,7 +188,7 @@
                 </div>
                 <div class="form-group">
                   <label for="font-style">Font Family</label>
-                  <select name="font-family" id="" class="form-input">
+                  <select name="font-family" id="custom-font-family" class="form-input">
                     <option value="Lora">Lora</option>
                     <option value="Arial">Arial</option>
                     <option value="Helvetica">Helvetica</option>
@@ -204,7 +204,7 @@
                 </div>
                 <div class="form-group">
                   <label for="font-style">Color</label>
-                  <input type="color" id="font-style" class="form-input">
+                  <input type="color" id="custom-text-color" class="form-input">
                 </div>
               </div>
             </li>
@@ -244,6 +244,40 @@
                         </svg>
                       </a>
                     </div>
+                  </div>
+                  <div class="grid two-cols">
+                    <div class="form-group">
+                      <label for="custom-background-color">Background Color</label>
+                      <input type="color" id="custom-background-color" class="form-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="custom-hover-background-color">Background Color</label>
+                      <input type="color" id="custom-hover-background-color" class="form-input">
+                    </div>
+                  </div>
+                  <div class="grid two-cols">
+                    <div class="form-group">
+                      <label for="custom-border-color">Border Color</label>
+                      <input type="color" id="custom-border-color" class="form-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="custom-border-hover-color">Border Hover Color</label>
+                      <input type="color" id="custom-hover-border-color" class="form-input">
+                    </div>
+                  </div>
+                  <div class="grid two-cols">
+                    <div class="form-group">
+                      <label for="custom-width">Width</label>
+                      <input type="number" value="16" id="custom-width" class="form-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="custom-height">Height</label>
+                      <input type="number" value="16" id="custom-height" class="form-input">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="custom-border-size">Border Size</label>
+                    <input type="number" value="16" id="custom-border-size" class="form-input">
                   </div>
               </div>
             </li>

@@ -32,7 +32,8 @@ let customizations = {
     backgroundColor: "white",
     borderColor: "#ddd",
     borderSize: 2,
-    size: 50,
+    width: 50,
+    height: 50,
     hoverBorderColor: 'rgba(120, 118, 240, .6)',
     hoverBackgroundColor: 'white'
 }
@@ -41,6 +42,7 @@ let customizations = {
 function createProxy<T extends object>(graphism: Graphism, target: T): T {
     return new Proxy(target, {
         set(obj, prop, value) {
+
             obj[prop] = value
     
             // Change the input value
@@ -50,6 +52,7 @@ function createProxy<T extends object>(graphism: Graphism, target: T): T {
             // Change the configuration in the node
             for(let i = 0; i< graphism.selectedNode.length; i++) {
                 graphism.selectedNode[i].nodeConfig[prop] = value
+                console.log(`changed config ${prop.toString()} from ${obj[prop]} to ${value}`)
             }
 
             return true
@@ -60,8 +63,10 @@ function createProxy<T extends object>(graphism: Graphism, target: T): T {
 function customizationHandler<T extends object>(obj: T) {
     Object.keys(obj).forEach(key => {
         console.log(`querying: custom-${camelToSnakeCase(key)}`)
-        // let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(key)}`)
-        // input.addEventListener('keydown', () => obj[key] = input.value)
+        let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(key)}`)
+        if(!input) input = document.querySelector<HTMLInputElement>(key)
+
+        input.addEventListener('keyup', () => obj[key] = input.value)
     })
 }
 
@@ -162,7 +167,6 @@ function createNotification(type: string, text: string, duration: number =  2000
     svgClose.setAttribute('height', "16")
     path.setAttribute("d", "M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z")
     
-    
     svgClose.appendChild(path)
     btn.appendChild(svgClose)
     notif.appendChild(btn)
@@ -171,7 +175,7 @@ function createNotification(type: string, text: string, duration: number =  2000
     wrapper.appendChild(notif)
 
     setTimeout(() => wrapper.removeChild(notif), duration)
-
+    
     btn.addEventListener('click', () => {
         wrapper.removeChild(notif)
     },{once: true})

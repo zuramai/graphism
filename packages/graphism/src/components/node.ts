@@ -1,5 +1,4 @@
-import { createNanoEvents } from "nanoevents";
-import { CanvasMode, Coordinate, EventsMap, NodeEventsMap } from "../types";
+import { CanvasMode, Coordinate } from "../types";
 import { LineInterface } from "../types/line";
 import { NeighborInterface, NodeConfig, NodeInterface } from "../types/node";
 
@@ -75,7 +74,7 @@ export class Nodee implements NodeInterface {
 
         // Draw text
         ctx.fillStyle = this.nodeConfig.textColor
-        ctx.font = `${this.nodeConfig.fontSize}px ${this.nodeConfig.fontFamily}"`
+        ctx.font = `${this.nodeConfig.fontSize}px ${this.nodeConfig.fontFamily}`
         ctx.fillText(this.name, this.position.x, this.position.y)
         ctx.textAlign = "center"
     }

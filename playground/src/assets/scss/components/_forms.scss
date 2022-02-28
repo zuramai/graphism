@@ -24,3 +24,11 @@
         border-color: variables.$color-primary;
     }
 }
+
+.radio-hidden {
+    appearance: none;
+
+    &:checked + label {
+        background-color: rgba(179, 170, 170, 0.295);
+    }
+}
