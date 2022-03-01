@@ -50,11 +50,11 @@ function createProxy<T extends object>(graphism: Graphism, target: T): T {
             input.value = value
     
             // Change the configuration in the node
-            for(let i = 0; i< graphism.selectedNode.length; i++) {
-                graphism.selectedNode[i].nodeConfig[prop] = value
-                console.log(`changed config ${prop.toString()} from ${obj[prop]} to ${value}`)
-            }
-
+            console.log("Changing: ", graphism.selectedNode[0])
+            graphism.selectedNode[0].nodeConfig[prop] = value
+            // for(let i = 0; i< graphism.selectedNode.length; i++) {
+            //     console.log(`changed config ${prop.toString()} from ${obj[prop]} to ${value}`)
+            // }
             return true
         }
     })
@@ -66,7 +66,7 @@ function customizationHandler<T extends object>(obj: T) {
         let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(key)}`)
         if(!input) input = document.querySelector<HTMLInputElement>(key)
 
-        input.addEventListener('keyup', () => obj[key] = input.value)
+        input.addEventListener('input', () => obj[key] = input.value)
     })
 }
 

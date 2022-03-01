@@ -10,7 +10,7 @@ let defaultNodeConfig: NodeConfig = {
     shape: "circle",
     size: 50,
     textColor: "#222",
-    fontSize: 22,
+    fontSize: 16,
     hoverBorderSize: 2,
     fontFamily: "Lora",
     hoverBorderColor: 'rgba(120, 118, 240, .6)',
@@ -19,7 +19,7 @@ let defaultNodeConfig: NodeConfig = {
 
 export class Nodee implements NodeInterface {
     neighbors?: NeighborInterface[] = [];
-    nodeConfig: NodeConfig = defaultNodeConfig
+    nodeConfig: NodeConfig = {}
     name: string;
     position: Coordinate
     movable: boolean = false;
@@ -34,6 +34,7 @@ export class Nodee implements NodeInterface {
     constructor(name: string, position: Coordinate, config?: NodeConfig) {
         this.name = name        
         this.position = position
+        this.nodeConfig = Object.assign(this.nodeConfig, defaultNodeConfig)
         this.nodeConfig = Object.assign(this.nodeConfig, config)
     }
 
@@ -75,8 +76,9 @@ export class Nodee implements NodeInterface {
         // Draw text
         ctx.fillStyle = this.nodeConfig.textColor
         ctx.font = `${this.nodeConfig.fontSize}px ${this.nodeConfig.fontFamily}`
-        ctx.fillText(this.name, this.position.x, this.position.y)
+        ctx.textBaseline = 'middle';
         ctx.textAlign = "center"
+        ctx.fillText(this.name, this.position.x, this.position.y)
     }
 
     update() {

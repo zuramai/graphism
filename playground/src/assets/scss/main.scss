@@ -113,7 +113,7 @@ main {
         left: 50%;
         transform: translateX(-50%);
         top: 1rem;
-        border-radius: 1rem;
+        background-color: white;
         gap: .5rem;
         @include mixins.cardWithShadow;
         box-shadow: 0 10px 30px rgba(155, 154, 154, 0.3);
