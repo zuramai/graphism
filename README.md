@@ -30,6 +30,7 @@ const graphism = createGraphism({
 // Generate an random graph
 graphism.generateGraph()
 
+```
+
 ## License
 MIT
-```
