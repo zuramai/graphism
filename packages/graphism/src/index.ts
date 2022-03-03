@@ -351,11 +351,9 @@ export class Graphism {
         requestAnimationFrame(() => this.render())
     }
 
-    solve() {
-
-    }
 }
 
+export * from "./types"
 export function createGraphism(config?: CanvasConfig): Graphism {
     return new Graphism(config)
 }
