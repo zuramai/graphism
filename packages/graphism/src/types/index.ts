@@ -1,6 +1,6 @@
 import { NodeEventsMap } from "./node"
+import { LineEventsMap } from "./line"
 
-export * from "./algorithm"
 export * from "./line"
 export * from "./node"
 
@@ -19,7 +19,7 @@ export interface CanvasConfig {
 
 export type CanvasMode = "normal" | "connecting" | "creating"
 
-export interface EventsMap extends NodeEventsMap {
+export interface EventsMap extends NodeEventsMap, LineEventsMap {
     start: () => void
     end: () => void
     grab: () => void
@@ -28,4 +28,8 @@ export interface EventsMap extends NodeEventsMap {
     error: (message: string) => void
 
     "canvas:click": (coordinate: Coordinate) => void
+}
+
+export interface Hoverable {
+    isHovered: boolean
 }

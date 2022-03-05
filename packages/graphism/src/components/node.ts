@@ -26,9 +26,12 @@ export class Nodee implements NodeInterface {
     moveFrom: Coordinate;
     isHovered = false
     isSelected = false
-    mode:CanvasMode = "normal"
+    mode: CanvasMode = "normal"
     
-    _borderOffset = 0
+    private _borderOffset = 0
+
+    gCost = 0
+    parent: NodeInterface = null;
     
 
     constructor(name: string, position: Coordinate, config?: NodeConfig) {

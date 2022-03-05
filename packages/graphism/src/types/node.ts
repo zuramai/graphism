@@ -2,17 +2,19 @@ import { CanvasMode, Coordinate } from ".";
 import { LineInterface } from "./line";
 
 export interface NodeInterface {
-    neighbors?: NeighborInterface[]
     name: string
+    neighbors?: NeighborInterface[]
+    mode: CanvasMode
     position: Coordinate
     nodeConfig: NodeConfig
     movable: boolean
     moveFrom: Coordinate
-    mode: CanvasMode
     isSelected: boolean
     isHovered: boolean 
 
-    _borderOffset: number 
+    // Algorithm purpose
+    gCost: number
+    parent: NodeInterface
 
     
     move: (x?: number, y?: number) => void

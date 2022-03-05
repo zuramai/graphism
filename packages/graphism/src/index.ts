@@ -1,5 +1,5 @@
 import { Nodee } from "./components/node"
-import { CanvasConfig, CanvasMode, Coordinate, EventsMap } from "./types"
+import { CanvasConfig, CanvasMode, Coordinate, EventsMap, Hoverable, LineInterface } from "./types"
 import { NodeConfig, NodeInterface } from "./types/node"
 import { createNanoEvents } from 'nanoevents'
 import Line from "./components/line"
@@ -22,7 +22,7 @@ export class Graphism {
     holdingNode: Nodee = null
     mode: CanvasMode = "normal"
 
-    private _hoveredNode: Nodee = null
+    private _hoveredElement: LineInterface|NodeInterface = null
     private _emitter = createNanoEvents<EventsMap>()
 
     private _runningBorderOffset: number = 0
@@ -196,7 +196,7 @@ export class Graphism {
         }
     }
 
-    addNodeNeighbor(from: Nodee, to: Nodee, distance: number) {
+    addNodeNeighbor(from: NodeInterface, to: NodeInterface, distance: number) {
         let line: Line
 
         // Check if the line exists from the other way around
@@ -268,21 +268,28 @@ export class Graphism {
     private mouseMove(e: MouseEvent) {
         let position = this.getCursorPosition(e)
         let node: Nodee;
+        let line: LineInterface;
+        if(this._hoveredElement != null) {
+            this._hoveredElement.isHovered = false
+            this._hoveredElement = null
+        }
+        this.canvas.style.cursor = 'grab'
 
         // Change cursor on node hover
         if(node = this.nodes.find(node => node.isOnCoordinate(position))) {
             this.canvas.style.cursor = 'pointer'
             this._emitter.emit("node:mouseover", node)
-            this._hoveredNode = node
+            this._hoveredElement = node
             node.isHovered = true
-        } else {
-            if(this.canvas.style.cursor == 'pointer') {
-                this._hoveredNode.isHovered = false
-                this._emitter.emit("node:mouseleave", this._hoveredNode) 
-            }
-            this.canvas.style.cursor = 'grab'
-        }
-
+        } else if (line = this.lines.find(line => line.isOnCoordinate(position))) {
+            // Change cursor on line hover
+            this.canvas.style.cursor = 'pointer'
+            this._emitter.emit("line:mouseover", line)
+            this._hoveredElement = line
+            line.isHovered = true
+            console.log("checking line")
+        } 
+        
         if(!this.nodes.length) return
         let dx = position.x - this.dragFrom.x
         let dy = position.y - this.dragFrom.y
