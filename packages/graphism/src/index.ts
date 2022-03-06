@@ -1,5 +1,5 @@
 import { Nodee } from "./components/node"
-import { CanvasConfig, CanvasMode, Coordinate, EventsMap, Hoverable, LineInterface } from "./types"
+import { CanvasConfig, CanvasMode, Component, Coordinate, EventsMap, LineInterface } from "./types"
 import { NodeConfig, NodeInterface } from "./types/node"
 import { createNanoEvents } from 'nanoevents'
 import Line from "./components/line"
@@ -14,15 +14,15 @@ const defaultConfig: CanvasConfig = {
 export class Graphism {
     canvas: HTMLCanvasElement
     ctx: CanvasRenderingContext2D;
-    nodes: Nodee[] = []
+    nodes: NodeInterface[] = []
     dragFrom: Coordinate
     isDirectedGraph: boolean = false
-    lines: Line[] = []
-    selectedNode: Nodee[] = []
-    holdingNode: Nodee = null
+    lines: LineInterface[] = []
+    selectedNode: NodeInterface[] = []
+    holdingNode: NodeInterface = null
     mode: CanvasMode = "normal"
 
-    private _hoveredElement: LineInterface|NodeInterface = null
+    private _hoveredElement: Component = null
     private _emitter = createNanoEvents<EventsMap>()
 
     private _runningBorderOffset: number = 0
@@ -154,7 +154,7 @@ export class Graphism {
         })
     }
 
-    createNode(name: string, coordinate: Coordinate,  config?: NodeConfig): Nodee {
+    createNode(name: string, coordinate: Coordinate,  config?: NodeConfig): NodeInterface {
         let node = new Nodee(name, coordinate, config)
         this.nodes.push(node)
 
@@ -197,7 +197,7 @@ export class Graphism {
     }
 
     addNodeNeighbor(from: NodeInterface, to: NodeInterface, distance: number) {
-        let line: Line
+        let line: LineInterface
 
         // Check if the line exists from the other way around
         let createdLine = this.lines.find(l => 
@@ -267,29 +267,25 @@ export class Graphism {
 
     private mouseMove(e: MouseEvent) {
         let position = this.getCursorPosition(e)
-        let node: Nodee;
-        let line: LineInterface;
+        let element: Component;
+        let node: NodeInterface;
+        let elements: Component[] = [...this.nodes, ...this.lines]
+
         if(this._hoveredElement != null) {
             this._hoveredElement.isHovered = false
             this._hoveredElement = null
         }
+
         this.canvas.style.cursor = 'grab'
 
         // Change cursor on node hover
-        if(node = this.nodes.find(node => node.isOnCoordinate(position))) {
+        if(element = elements.find(el => el.isOnCoordinate(position))) {
             this.canvas.style.cursor = 'pointer'
-            this._emitter.emit("node:mouseover", node)
-            this._hoveredElement = node
-            node.isHovered = true
-        } else if (line = this.lines.find(line => line.isOnCoordinate(position))) {
-            // Change cursor on line hover
-            this.canvas.style.cursor = 'pointer'
-            this._emitter.emit("line:mouseover", line)
-            this._hoveredElement = line
-            line.isHovered = true
-            console.log("checking line")
+            this._emitter.emit(`${element.name}:mouseover`, element)
+            this._hoveredElement = element
+            element.isHovered = true
         } 
-        
+
         if(!this.nodes.length) return
         let dx = position.x - this.dragFrom.x
         let dy = position.y - this.dragFrom.y
@@ -301,13 +297,13 @@ export class Graphism {
         // If selected more than one nodes and move the selected node
         if(this.selectedNode.length > 1 && this.holdingNode.isSelected) {
             for(let i = 0; i < this.selectedNode.length; i++) {
-                node = this.nodes[i]
-                node.move(node.moveFrom.x + dx, node.moveFrom.y + dy)    
+                element = this.nodes[i]
+                element.move(element.moveFrom.x + dx, element.moveFrom.y + dy)    
             }            
         } else {
             // Just move the holding node
             node = this.holdingNode
-            node.move(node.moveFrom.x + dx, node.moveFrom.y + dy)
+            element.move(element.moveFrom.x + dx, element.moveFrom.y + dy)
         }
     }
     private mouseClick(e: MouseEvent) {
@@ -336,7 +332,7 @@ export class Graphism {
         }
     }
 
-    selectNode(node: Nodee, mode: CanvasMode = "normal") {
+    selectNode(node: NodeInterface, mode: CanvasMode = "normal") {
         node.select()
         node.mode = !node.isSelected ? "normal" : mode
         this.selectedNode.push(node)

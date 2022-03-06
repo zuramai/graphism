@@ -18,9 +18,10 @@ let defaultNodeConfig: NodeConfig = {
 }
 
 export class Nodee implements NodeInterface {
+    name: "node" | "line" = "node";
     neighbors?: NeighborInterface[] = [];
     nodeConfig: NodeConfig = {}
-    name: string;
+    text: string;
     position: Coordinate
     movable: boolean = false;
     moveFrom: Coordinate;
@@ -28,20 +29,20 @@ export class Nodee implements NodeInterface {
     isSelected = false
     mode: CanvasMode = "normal"
     
-    private _borderOffset = 0
+    _borderOffset?: number = 0
 
     gCost = 0
     parent: NodeInterface = null;
     
 
     constructor(name: string, position: Coordinate, config?: NodeConfig) {
-        this.name = name        
+        this.text = name        
         this.position = position
         this.nodeConfig = Object.assign(this.nodeConfig, defaultNodeConfig)
         this.nodeConfig = Object.assign(this.nodeConfig, config)
     }
 
-    addNeighbor(node: Nodee, distance: number, line: LineInterface) {
+    addNeighbor(node: NodeInterface, distance: number, line: LineInterface) {
         // If the neighbor already exists
         if(this.neighbors.find(n => n.node == node)) return
 
@@ -81,7 +82,7 @@ export class Nodee implements NodeInterface {
         ctx.font = `${this.nodeConfig.fontSize}px ${this.nodeConfig.fontFamily}`
         ctx.textBaseline = 'middle';
         ctx.textAlign = "center"
-        ctx.fillText(this.name, this.position.x, this.position.y)
+        ctx.fillText(this.text, this.position.x, this.position.y)
     }
 
     update() {

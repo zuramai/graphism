@@ -39,38 +39,6 @@ let customizations = {
 }
 
 
-function createProxy<T extends object>(graphism: Graphism, target: T): T {
-    return new Proxy(target, {
-        set(obj, prop, value) {
-
-            obj[prop] = value
-    
-            // Change the input value
-            let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(prop)}`)
-            input.value = value
-    
-            // Change the configuration in the node
-            console.log("Changing: ", graphism.selectedNode[0])
-            graphism.selectedNode[0].nodeConfig[prop] = value
-            // for(let i = 0; i< graphism.selectedNode.length; i++) {
-            //     console.log(`changed config ${prop.toString()} from ${obj[prop]} to ${value}`)
-            // }
-            return true
-        }
-    })
-}
-
-function customizationHandler<T extends object>(obj: T) {
-    Object.keys(obj).forEach(key => {
-        console.log(`querying: custom-${camelToSnakeCase(key)}`)
-        let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(key)}`)
-        if(!input) input = document.querySelector<HTMLInputElement>(key)
-
-        input.addEventListener('input', () => obj[key] = input.value)
-    })
-}
-
-
 /**
  * Execute create new node
  */
@@ -149,7 +117,7 @@ function hideHelperText() {
 }
 
 /**
- * 
+ * Create popup notification
  * @param type The notification type (primary, danger, warning)
  * @param text Text content to be displayed in notification
  * @param duration The duration of notification to stay visible
@@ -187,4 +155,33 @@ function resizeCanvas(canvas: HTMLCanvasElement) {
 
     canvas.setAttribute('width', canvas.width.toString())
     canvas.setAttribute('height', canvas.height.toString())
+}
+
+
+function createProxy<T extends object>(graphism: Graphism, target: T): T {
+    return new Proxy(target, {
+        set(obj, prop, value) {
+            obj[prop] = value
+    
+            // Change the input value
+            let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(prop)}`)
+            input.value = value
+    
+            // Change the configuration in the node
+            console.log("Changing: ", graphism.selectedNode[0])
+            graphism.selectedNode[0].nodeConfig[prop] = value
+         
+            return true
+        }
+    })
+}
+
+function customizationHandler<T extends object>(obj: T) {
+    Object.keys(obj).forEach(key => {
+        console.log(`querying: custom-${camelToSnakeCase(key)}`)
+        let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(key)}`)
+        if(!input) input = document.querySelector<HTMLInputElement>(key)
+
+        input.addEventListener('input', () => obj[key] = input.value)
+    })
 }

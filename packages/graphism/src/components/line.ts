@@ -11,10 +11,12 @@ let defaultLineConfig = {
 }
 
 export default class Line implements LineInterface {
+    name: "node" | "line" = "line";
     lineConfig: LineConfig = defaultLineConfig;
     from: NodeInterface
     to: NodeInterface
     isHovered: boolean = false
+    isSelected: boolean = false
 
     constructor(from: NodeInterface, to: NodeInterface, config?: LineConfig) {
         this.lineConfig = Object.assign(defaultLineConfig, config)
@@ -36,8 +38,7 @@ export default class Line implements LineInterface {
 
     isOnCoordinate(point: Coordinate): boolean {
         let is = Math.ceil(distance(this.from.position, point)) + 
-        Math.ceil(distance(this.to.position, point)) == Math.ceil(distance(this.from.position, this.to.position)) + 1
-        console.log(Math.ceil(distance(this.from.position, point)), Math.ceil(distance(this.to.position, point)), Math.ceil(distance(this.from.position, this.to.position)))
+            Math.ceil(distance(this.to.position, point)) == Math.ceil(distance(this.from.position, this.to.position)) + 1
         return is
     }
 }

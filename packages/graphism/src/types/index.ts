@@ -30,6 +30,10 @@ export interface EventsMap extends NodeEventsMap, LineEventsMap {
     "canvas:click": (coordinate: Coordinate) => void
 }
 
-export interface Hoverable {
+export interface Component {
     isHovered: boolean
+    isSelected: boolean
+    name:  "node" | "line";
+
+    isOnCoordinate: (point: Coordinate) => boolean 
 }

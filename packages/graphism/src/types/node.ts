@@ -1,16 +1,14 @@
-import { CanvasMode, Coordinate } from ".";
+import { CanvasMode, Component, Coordinate } from ".";
 import { LineInterface } from "./line";
 
-export interface NodeInterface {
-    name: string
+export interface NodeInterface extends Component {
+    text: string
     neighbors?: NeighborInterface[]
     mode: CanvasMode
     position: Coordinate
     nodeConfig: NodeConfig
     movable: boolean
     moveFrom: Coordinate
-    isSelected: boolean
-    isHovered: boolean 
 
     // Algorithm purpose
     gCost: number
