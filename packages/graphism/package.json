@@ -1,6 +1,6 @@
 {
   "name": "graphism",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -15,7 +15,9 @@
     "url": "git+https://github.com/zuramai/graphism.git"
   },
   "homepage": "https://github.com/zuramai/graphism#readme",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "author": "zuramai <saugi.dev@gmail.com>",
   "license": "MIT",
   "scripts": {

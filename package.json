@@ -1,6 +1,6 @@
 {
   "name": "graphism",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A website to create tree graph and run algorithms on top of it",
   "private": true,
   "scripts": {

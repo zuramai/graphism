@@ -1,13 +1,17 @@
 {
   "name": "@graphism/algorithms",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "unpkg": "dist/index.global.js",
   "jsdelivr": "dist/index.global.js",
-  "keywords": ["graph", "tree", "graph-visualizer"],
+  "keywords": [
+    "graph",
+    "tree",
+    "graph-visualizer"
+  ],
   "author": "Saugi <saugi.dev@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -17,7 +21,9 @@
   "bugs": {
     "url": "https://github.com/zuramai/graphism/issues"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "homepage": "https://github.com/zuramai/graphism#readme",
   "repository": {
     "type": "git",
