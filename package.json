@@ -1,8 +1,7 @@
 {
   "name": "graphism",
   "version": "0.0.1-dev",
-  "description": "",
-  "main": "index.js",
+  "description": "A website to create tree graph and run algorithms on top of it",
   "private": true,
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",

@@ -8,8 +8,8 @@ export default class AStarAlgorithm implements AlgorithmInterface{
     path: NodeInterface[] = []
     progressStack = []
 
-    private openSet: NodeInterface[] = []
-    private closedSet: NodeInterface[] = []
+    // private openSet: NodeInterface[] = []
+    // private closedSet: NodeInterface[] = []
 
     constructor(nodes: NodeInterface[][]) {
         this.nodes = nodes

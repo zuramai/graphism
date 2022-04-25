@@ -1,7 +1,12 @@
-import { AlgorithmInterface } from "./../types/algorithm"
+import { NodeInterface } from "graphism"
+import { AlgorithmInterface } from "./../types"
 
-class PrimAlgorithm implements AlgorithmInterface {
-    
+export class PrimAlgorithm implements AlgorithmInterface {
+    startNode: NodeInterface
+    endNode: NodeInterface 
+    nodes: NodeInterface[][] = []
+    path: NodeInterface[] = []
+    progressStack = []
     constructor() {
 
     }

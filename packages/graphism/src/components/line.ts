@@ -1,7 +1,6 @@
 import { Coordinate, NodeInterface } from "../types";
 import { LineConfig, LineInterface } from "../types/line";
 import { distance } from "../utils";
-import { Nodee } from "./node";
 
 let defaultLineConfig = {
     color: "#777",

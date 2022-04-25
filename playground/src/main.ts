@@ -1,7 +1,5 @@
 import './assets/scss/main.scss'
-import { createGraphism } from "../../packages/graphism/src"
-import { NodeInterface } from '../../packages/graphism/src/types'
-import { Graphism } from 'graphism'
+import { createGraphism, Graphism } from "graphism"
 import { camelToSnakeCase } from './utils'
 
 window.onload = () => {
@@ -64,7 +62,7 @@ function connectNode(graphism: Graphism) {
     graphism.setMode('connecting')
     showHelperText("Click any node to connect")
 
-    graphism.on("node:connect", (node1: NodeInterface, node2: NodeInterface) => {
+    graphism.on("node:connect", () => {
         hideHelperText()
     }) 
 }

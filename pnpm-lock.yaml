@@ -38,7 +38,13 @@ importers:
       vite: 2.8.3_sass@1.49.7
 
   playground:
-    specifiers: {}
+    specifiers:
+      cross-env: ^7.0.3
+      graphism: workspace:*
+    dependencies:
+      graphism: link:../packages/graphism
+    devDependencies:
+      cross-env: 7.0.3
 
 packages:
 
@@ -608,6 +614,14 @@ packages:
 
   /concat-map/0.0.1:
     resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
+    dev: true
+
+  /cross-env/7.0.3:
+    resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
+    engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
+    hasBin: true
+    dependencies:
+      cross-spawn: 7.0.3
     dev: true
 
   /cross-spawn/7.0.3:

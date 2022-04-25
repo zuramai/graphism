@@ -1,5 +1,5 @@
 import { AlgorithmInterface } from "..";
-import { NodeInterface, NeighborInterface } from "graphism";
+import { NodeInterface } from "graphism";
 
 export default class AStarAlgorithm implements AlgorithmInterface{
     startNode: NodeInterface
@@ -50,8 +50,8 @@ export default class AStarAlgorithm implements AlgorithmInterface{
         }
     }
 
-    private fscore(from: NodeInterface, to: NeighborInterface) {
-        let g = from.gCost + to.distance;
-        return g 
-    }
+    // private fscore(from: NodeInterface, to: NeighborInterface) {
+    //     let g = from.gCost + to.distance;
+    //     return g 
+    // }
 }

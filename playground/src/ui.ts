@@ -22,7 +22,6 @@ let sidebarItems = document.querySelectorAll<HTMLElement>(".sidebar-item")
 
 for(let i = 0; i < sidebarItems.length; i++)  {
     let item = sidebarItems[i]
-    let sub = item.querySelector(".sidebar-sub") 
     
     item.querySelector(".sidebar-group-icon").addEventListener('click', () => {
         // Close all sub menu

@@ -230,7 +230,7 @@ export class Graphism {
     }
     
 
-    private mouseUp(e: MouseEvent) {
+    private mouseUp() {
         this.holdingNode = null
 
         console.log("Mouseup ", this.selectedNode)
@@ -268,7 +268,6 @@ export class Graphism {
     private mouseMove(e: MouseEvent) {
         let position = this.getCursorPosition(e)
         let element: Component;
-        let node: NodeInterface;
         let elements: Component[] = [...this.nodes, ...this.lines]
 
         if(this._hoveredElement != null) {
@@ -302,7 +301,6 @@ export class Graphism {
             }            
         } else {
             // Just move the holding node
-            node = this.holdingNode
             element.move(element.moveFrom.x + dx, element.moveFrom.y + dy)
         }
     }
