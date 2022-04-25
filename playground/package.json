@@ -4,5 +4,11 @@
     "dev": "vite",
     "build": "tsc && cross-env NODE_ENV=production vite build",
     "preview": "vite preview"
+  },
+  "dependencies": {
+    "graphism": "workspace:*"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
