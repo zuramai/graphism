@@ -33,7 +33,9 @@ export interface EventsMap extends NodeEventsMap, LineEventsMap {
 export interface Component {
     isHovered: boolean
     isSelected: boolean
-    name:  "node" | "line";
+    moveFrom: Coordinate
+    name:  "node" | "line"
 
     isOnCoordinate: (point: Coordinate) => boolean 
+    move: (x?: number, y?: number) => void
 }

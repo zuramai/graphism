@@ -12,6 +12,7 @@ let defaultLineConfig = {
 
 export default class Line implements LineInterface {
     name: "node" | "line" = "line";
+    moveFrom: Coordinate;
     lineConfig: LineConfig = defaultLineConfig;
     from: NodeInterface
     to: NodeInterface
@@ -40,5 +41,9 @@ export default class Line implements LineInterface {
         let is = Math.ceil(distance(this.from.position, point)) + 
             Math.ceil(distance(this.to.position, point)) == Math.ceil(distance(this.from.position, this.to.position)) + 1
         return is
+    }
+
+    move() {
+
     }
 }

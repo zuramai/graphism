@@ -281,7 +281,7 @@ export class Graphism {
         // Change cursor on node hover
         if(element = elements.find(el => el.isOnCoordinate(position))) {
             this.canvas.style.cursor = 'pointer'
-            this._emitter.emit(`${element.name}:mouseover`, element)
+            this._emitter.emit(`${element.name}:mouseover`, element as LineInterface)
             this._hoveredElement = element
             element.isHovered = true
         } 
