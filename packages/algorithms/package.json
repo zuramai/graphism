@@ -1,6 +1,6 @@
 {
   "name": "@graphisme/algorithms",
-  "version": "0.1.1",
+  "version": "0.1.2-beta.1",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -27,7 +27,7 @@
   "homepage": "https://github.com/zuramai/graphism#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zuramai/graphism.git"
+    "url": "https://github.com/zuramai/graphism.git"
   },
   "dependencies": {
     "graphism": "workspace:*"
