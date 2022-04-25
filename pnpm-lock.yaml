@@ -27,7 +27,15 @@ importers:
       vite: 2.8.3_sass@1.49.7
 
   packages/algorithms:
-    specifiers: {}
+    specifiers:
+      '@antfu/ni': ^0.13.0
+      graphism: workspace:*
+      tsup: ^5.11.13
+    dependencies:
+      graphism: link:../graphism
+    devDependencies:
+      '@antfu/ni': 0.13.0
+      tsup: 5.11.13_typescript@4.5.5
 
   packages/graphism:
     specifiers:

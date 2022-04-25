@@ -2,11 +2,32 @@
   "name": "@graphism/algorithms",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/index.global.js",
+  "jsdelivr": "dist/index.global.js",
+  "keywords": ["graph", "tree", "graph-visualizer"],
+  "author": "Saugi <saugi.dev@gmail.com>",
+  "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nr build --watch",
+    "build": "tsup src/index.ts --format esm,cjs,iife --dts --no-splitting --clean --dts-resolve"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "bugs": {
+    "url": "https://github.com/zuramai/graphism/issues"
+  },
+  "files": ["dist"],
+  "homepage": "https://github.com/zuramai/graphism#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zuramai/graphism.git"
+  },
+  "dependencies": {
+    "graphism": "workspace:*"
+  },
+  "devDependencies": {
+    "@antfu/ni": "^0.13.0",
+    "tsup": "^5.11.13"
+  }
 }
