@@ -1,6 +1,6 @@
 {
-  "name": "@graphisme/algorithms",
-  "version": "0.1.2-beta.1",
+  "name": "@graphism/algorithms",
+  "version": "0.1.2-beta.2",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
