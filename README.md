@@ -1,7 +1,7 @@
 # Graphism
 Graphism is a tool to create graph visualization and run an algorithm on top of it.
 
-[Live Demo](https://zuramia.github.io/graphism) (built with Vanilla JavaScript!)
+[Live Demo](https://zuramai.github.io/graphism) (built with Vanilla JavaScript!)
 
 ## Features
 
