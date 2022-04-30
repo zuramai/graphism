@@ -4,6 +4,7 @@ import { NodeInterface } from "./node";
 export interface LineConfig {
     color?: string
     hoverColor?: string
+    selectedColor?: string
     width?: number
     text?: string
 }

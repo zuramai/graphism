@@ -21,6 +21,10 @@ window.onload = () => {
     // Customization provider
     let proxy = createProxy(graphism, customizations)
     customizationHandler(proxy)
+
+    let asc = graphism.createNode("ASC", { x: 300, y: 300 })
+    let wsc = graphism.createNode("WSC", { x: 700, y: 400 })
+    graphism.addNodeNeighbor(asc,wsc,100)
 }
 
 let customizations = {

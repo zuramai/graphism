@@ -100,6 +100,8 @@ export class Nodee implements NodeInterface {
         if(y) this.position.y = y
     }
 
+    
+
     isOnCoordinate(coordinate: Coordinate): boolean {
         if(coordinate.x > this.position.x - this.nodeConfig.size &&
             coordinate.x <= this.position.x + this.nodeConfig.size &&

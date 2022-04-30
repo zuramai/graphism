@@ -177,6 +177,14 @@ export class Graphism {
         console.log('clearing selected node')
     }
 
+    clearSelectedLine() {
+        for(let i = 0; i < this.lines.length; i++) {
+            this.lines[i].isSelected = false
+        }
+        this.selectedNode = []
+        console.log('clearing selected node')
+    }
+
     setMode(mode: CanvasMode) {
         this.mode = mode
 
@@ -285,13 +293,12 @@ export class Graphism {
             element.isHovered = true
         } 
 
-        if(!this.nodes.length) return
+        if(!this.nodes.length || !this.holdingNode) return
         let dx = position.x - this.dragFrom.x
         let dy = position.y - this.dragFrom.y
 
         console.log("Move dx = ", dx, " dy", dy)
 
-        if(!this.holdingNode) return
 
         // If selected more than one nodes and move the selected node
         if(this.selectedNode.length > 1 && this.holdingNode.isSelected) {
@@ -311,6 +318,7 @@ export class Graphism {
         if(position.x == this.dragFrom.x && position.y == this.dragFrom.y) {
             this._emitter.emit('canvas:click', position)
             let isNodeClicked = false            
+            let isLineClicked = false            
 
             // Check if a node is clicked
             for(let i = this.nodes.length-1; i >= 0; i--) {
@@ -325,6 +333,17 @@ export class Graphism {
                 }
             }
 
+            // Check if a line is clicked 
+            for(let i = 0; i < this.lines.length; i++) {
+                let line = this.lines[i]
+                if(line.isOnCoordinate(position)) {
+                    line.isSelected = true
+                    isLineClicked = true
+                    console.log("line cliekd")
+                }
+            }
+
+            if(!isLineClicked) this.clearSelectedLine()
             if(!isNodeClicked) this.clearSelectedNode()
 
         }
