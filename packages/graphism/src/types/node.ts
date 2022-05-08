@@ -1,4 +1,4 @@
-import { CanvasMode, ComponentInterface, Coordinate } from ".";
+import { CanvasMode, ComponentInterface, Coordinate } from "./index";
 import { LineInterface } from "./line";
 
 export interface NodeInterface extends ComponentInterface {
@@ -48,6 +48,8 @@ export interface NodeEventsMap {
     "node:move": (node: NodeInterface) => void
     "node:mouseover": (node: NodeInterface) => void
     "node:mouseleave": (node: NodeInterface) => void
-    "node:click": (node: NodeInterface) => void
+    "node:select": (node: NodeInterface) => void
+    "node:deselect": (node: NodeInterface) => void
+    "node:clearSelect": () => void
     "node:connect": (node1: NodeInterface, node2: NodeInterface) => void
 }

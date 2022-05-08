@@ -19,5 +19,8 @@ export interface LineInterface extends ComponentInterface {
 
 
 export interface LineEventsMap {
+    "line:select": (line: LineInterface) => void
+    "line:deselect": (line: LineInterface) => void
+    "line:clearSelect": () => void
     "line:mouseover": (line: LineInterface) => void
 }

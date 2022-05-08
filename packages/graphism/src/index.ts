@@ -174,6 +174,7 @@ export class Graphism {
             this.nodes[i].mode = "normal"
             this.nodes[i].movable = false
         }
+        this._emitter.emit("node:clearSelect")
         this.selectedNode = []
         console.log('clearing selected node')
     }
@@ -182,8 +183,10 @@ export class Graphism {
         for(let i = 0; i < this.lines.length; i++) {
             this.lines[i].isSelected = false
         }
+        this._emitter.emit("line:clearSelect")
+        
         this.selectedNode = []
-        console.log('clearing selected node')
+        console.log('clearing selected line')
     }
 
     setMode(mode: CanvasMode) {
@@ -192,8 +195,8 @@ export class Graphism {
         switch (mode) {
             case "connecting":
                 this.clearSelectedNode()
-                this.on("node:click", (node1: NodeInterface) => {
-                    this.on("node:click", (node2: NodeInterface) => {
+                this.on("node:select", (node1: NodeInterface) => {
+                    this.on("node:select", (node2: NodeInterface) => {
                         this.addNodeNeighbor(node1, node2, 0)
                         this.clearSelectedNode()
                         this.mode = "normal"
@@ -330,7 +333,7 @@ export class Graphism {
                     if(!e.ctrlKey) this.clearSelectedNode()
                     this.selectNode(node, this.mode)
                     isNodeClicked = true
-                    this._emitter.emit("node:click", node)
+                    this._emitter.emit("node:select", node)
                     break
                 }
             }
@@ -341,7 +344,7 @@ export class Graphism {
                 if(line.isOnCoordinate(position)) {
                     line.isSelected = true
                     isLineClicked = true
-                    console.log("line cliekd")
+                    this._emitter.emit("line:select", line)
                 }
             }
 
