@@ -30,7 +30,7 @@ export interface EventsMap extends NodeEventsMap, LineEventsMap {
     "canvas:click": (coordinate: Coordinate) => void
 }
 
-export interface Component {
+export interface ComponentInterface {
     isHovered: boolean
     isSelected: boolean
     moveFrom: Coordinate

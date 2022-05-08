@@ -1,6 +1,7 @@
 import { CanvasMode, Coordinate } from "../types";
 import { LineInterface } from "../types/line";
 import { NeighborInterface, NodeConfig, NodeInterface } from "../types/node";
+import { Component } from "./abstract";
 
 
 let defaultNodeConfig: NodeConfig = {
@@ -17,25 +18,24 @@ let defaultNodeConfig: NodeConfig = {
     hoverBackgroundColor: 'white',
 }
 
-export class Nodee implements NodeInterface {
-    name: "node" | "line" = "node";
+export class Nodee extends Component implements NodeInterface {
     neighbors?: NeighborInterface[] = [];
     nodeConfig: NodeConfig = {}
     text: string;
     position: Coordinate
     movable: boolean = false;
-    moveFrom: Coordinate;
     isHovered = false
     isSelected = false
     mode: CanvasMode = "normal"
     
     _borderOffset?: number = 0
 
-    gCost = 0
     parent: NodeInterface = null;
     
 
     constructor(name: string, position: Coordinate, config?: NodeConfig) {
+        super()
+        this.name = "node"
         this.text = name        
         this.position = position
         this.nodeConfig = Object.assign(this.nodeConfig, defaultNodeConfig)

@@ -1,7 +1,7 @@
-import { CanvasMode, Component, Coordinate } from ".";
+import { CanvasMode, ComponentInterface, Coordinate } from ".";
 import { LineInterface } from "./line";
 
-export interface NodeInterface extends Component {
+export interface NodeInterface extends ComponentInterface {
     text: string
     neighbors?: NeighborInterface[]
     mode: CanvasMode
@@ -10,8 +10,7 @@ export interface NodeInterface extends Component {
     movable: boolean
     moveFrom: Coordinate
 
-    // Algorithm purpose
-    gCost: number
+    // Backtracking purpose
     parent: NodeInterface
 
     

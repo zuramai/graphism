@@ -1,6 +1,7 @@
 import { Coordinate, NodeInterface } from "../types";
 import { LineConfig, LineInterface } from "../types/line";
 import { distance } from "../utils";
+import { Component } from "./abstract";
 
 let defaultLineConfig = {
     color: "#777",
@@ -10,9 +11,8 @@ let defaultLineConfig = {
     text: ""
 }
 
-export default class Line implements LineInterface {
+export default class Line extends Component implements LineInterface {
     name: "node" | "line" = "line";
-    moveFrom: Coordinate;
     lineConfig: LineConfig = defaultLineConfig;
     from: NodeInterface
     to: NodeInterface
@@ -20,6 +20,7 @@ export default class Line implements LineInterface {
     isSelected: boolean = false
 
     constructor(from: NodeInterface, to: NodeInterface, config?: LineConfig) {
+        super()
         this.lineConfig = Object.assign(defaultLineConfig, config)
         this.from = from
         this.to = to
@@ -41,13 +42,15 @@ export default class Line implements LineInterface {
         ctx.closePath()
     }
 
+    move(x?: number, y?: number) {
+        
+    }
+
+
     isOnCoordinate(point: Coordinate): boolean {
         let is = Math.ceil(distance(this.from.position, point)) + 
             Math.ceil(distance(this.to.position, point)) == Math.ceil(distance(this.from.position, this.to.position)) 
         return is
     }
 
-    move() {
-
-    }
 }

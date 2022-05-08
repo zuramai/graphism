@@ -1,8 +1,9 @@
 import { Nodee } from "./components/node"
-import { CanvasConfig, CanvasMode, Component, Coordinate, EventsMap, LineInterface } from "./types"
+import { CanvasConfig, CanvasMode,  Coordinate, EventsMap, LineInterface } from "./types"
 import { NodeConfig, NodeInterface } from "./types/node"
 import { createNanoEvents } from 'nanoevents'
 import Line from "./components/line"
+import { Component } from "./components/abstract"
 
 const defaultConfig: CanvasConfig = {
     lineColor: "#555",
@@ -297,7 +298,7 @@ export class Graphism {
         let dx = position.x - this.dragFrom.x
         let dy = position.y - this.dragFrom.y
 
-        console.log("Move dx = ", dx, " dy", dy)
+        // console.log("Move dx = ", dx, " dy", dy)
 
 
         // If selected more than one nodes and move the selected node
@@ -308,6 +309,7 @@ export class Graphism {
             }            
         } else {
             // Just move the holding node
+            
             element.move(element.moveFrom.x + dx, element.moveFrom.y + dy)
         }
     }

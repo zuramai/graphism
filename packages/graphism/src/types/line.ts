@@ -1,4 +1,4 @@
-import { Component } from ".";
+import { ComponentInterface } from ".";
 import { NodeInterface } from "./node";
 
 export interface LineConfig {
@@ -9,7 +9,7 @@ export interface LineConfig {
     text?: string
 }
 
-export interface LineInterface extends Component {
+export interface LineInterface extends ComponentInterface {
     lineConfig?: LineConfig
     from: NodeInterface
     to: NodeInterface
