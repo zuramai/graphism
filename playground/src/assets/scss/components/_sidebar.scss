@@ -18,12 +18,16 @@
     }
     .sidebar-item {
         position: relative;
-        a {
+        .sidebar-group-icon {
             color: #777;
             padding: .3rem;
             display: block;
             border-radius: .3rem;
-            &:hover {
+            &.disabled {
+                color: #ccc;
+                cursor: not-allowed;
+            }
+            &:not(.disabled):hover {
                 background-color: rgba(165, 163, 163, 0.1);
             }
         }
@@ -47,4 +51,6 @@
 
         }
     }
+
+    
 }
