@@ -1,4 +1,4 @@
-import { Coordinate } from "./types";
+import { Coordinate } from "../types";
 
 /**
  * Calculate Distance between two points
