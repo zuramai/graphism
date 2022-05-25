@@ -2,41 +2,9 @@ import './assets/scss/main.scss'
 import { createGraphism, Graphism } from "graphism"
 import { camelToSnakeCase } from './utils'
 import { createNotification } from "./components/notification"
+import { toggleModalFromSelector } from './ui'
+import { saveCanvasToImg } from '../../packages/graphism/src/utils'
 
-window.onload = () => {
-    const el = document.querySelector<HTMLCanvasElement>('#canvas')
-
-    // Create the canvas instance
-    const graphism = createGraphism({
-        el,
-        canvasBackground: "#efefef",
-    })
-
-    // Event listeners
-    window.addEventListener('resize', resizeCanvas.bind(null, el))
-    document.getElementById('node-add').addEventListener('click', addNode.bind(null, graphism))
-    document.getElementById('generate-graph').addEventListener('click', generateGraphEvent.bind(null, graphism))
-    document.getElementById('create-new').addEventListener('click', createNewGraph)
-    document.getElementById('connectNode').addEventListener('click', connectNode.bind(null, graphism))
-
-    // Customization provider
-    let proxy = createProxy(graphism, customizations)
-    customizationHandler(proxy)
-
-    // Initial state
-    let asc = graphism.createNode("ASC", { x: 300, y: 300 })
-    let wsc = graphism.createNode("WSC", { x: 700, y: 400 })
-    graphism.addNodeNeighbor(asc,wsc,100)
-
-    graphism.on("line:select", (line) => {
-        console.log("line selected")
-        document.getElementById('options-line').classList.remove('disabled')
-    })
-    graphism.on("line:clearSelect", () => {
-        console.log("line clearerd")
-        document.getElementById('options-line').classList.add('disabled')
-    })
-}
 
 let customizations = {
     fontSize: 22,
@@ -51,6 +19,53 @@ let customizations = {
     hoverBackgroundColor: 'white'
 }
 
+window.onload = () => {
+    const el = document.querySelector<HTMLCanvasElement>('#canvas')
+
+    // Create the canvas instance
+    const graphism = createGraphism({
+        el,
+        canvasBackground: "#efefef",
+    })
+
+  
+
+    // Customization provider
+    let proxy = createProxy(graphism, customizations)
+    customizationHandler(proxy)
+
+    // Initial state EXAMPLE
+    let asc = graphism.createNode("ASC", { x: 300, y: 300 })
+    let wsc = graphism.createNode("WSC", { x: 700, y: 400 })
+    graphism.addNodeNeighbor(asc,wsc,100)
+
+    graphismEventListeners(graphism, el)
+}
+
+
+/**
+ * Add listeners to improve playground functionality
+ * @param graphism Graphism instance
+ * @param canvas HTML canvas element
+ */
+function graphismEventListeners(graphism: Graphism, canvas: HTMLCanvasElement) {
+    window.addEventListener('resize', resizeCanvas.bind(null, canvas))
+    document.getElementById('node-add').addEventListener('click', addNode.bind(null, graphism))
+    document.getElementById('generate-graph').addEventListener('click', generateGraphEvent.bind(null, graphism))
+    document.getElementById('create-new').addEventListener('click', createNewGraph)
+    document.getElementById('connectNode').addEventListener('click', connectNode.bind(null, graphism))
+    document.getElementById('saveToImage').addEventListener('click', () => saveCanvasToImg(canvas))
+    toggleModalFromSelector(document.querySelector('.modal-add'), document.getElementById('openAddModal'))
+    
+    graphism.on("line:select", (line) => {
+        console.log("line selected")
+        document.getElementById('options-line').classList.remove('disabled')
+    })
+    graphism.on("line:clearSelect", () => {
+        console.log("line clearerd")
+        document.getElementById('options-line').classList.add('disabled')
+    })
+}
 
 /**
  * Execute create new node
