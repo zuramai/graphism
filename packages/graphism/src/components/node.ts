@@ -27,6 +27,7 @@ export class Nodee extends Component implements NodeInterface {
     isHovered = false
     isSelected = false
     mode: CanvasMode = "normal"
+    gCost: number = 0;
     
     _borderOffset?: number = 0
 
