@@ -8,7 +8,7 @@ export interface ProgressStack {
 export interface AlgorithmInterface {
     nodes: NodeInterface[][]
     startNode: NodeInterface
-    path: NodeInterface[]
+    path: (NodeInterface|LineInterface)[]
     
     progressStack: ProgressStack[]
 
@@ -16,12 +16,14 @@ export interface AlgorithmInterface {
 }
 
 export interface ShortestPathAlgorithm {
-    searchValue: string
     endNode: NodeInterface
 }
 
 export interface SearchAlgorithm {
-    findValue: NodeList
+    findValue: string
+}
+
+export interface SpanningTreeAlgorithm {
 }
 
 export interface SolveOptions {
