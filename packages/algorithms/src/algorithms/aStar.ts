@@ -1,22 +1,14 @@
-import { AlgorithmInterface } from "..";
-import { NodeInterface } from "graphism";
+import { NodeInterface } from "graphism"
+import { GraphAlgorithm } from "."
+import { ShortestPathAlgorithm, SolveOptions } from "../types"
+export default class AStarAlgorithm extends GraphAlgorithm implements ShortestPathAlgorithm {
+    endNode: NodeInterface
 
-export default class AStarAlgorithm implements AlgorithmInterface{
-    startNode: NodeInterface
-    endNode: NodeInterface 
-    nodes: NodeInterface[][] = []
-    path: NodeInterface[] = []
-    progressStack = []
-
-    // private openSet: NodeInterface[] = []
-    // private closedSet: NodeInterface[] = []
-
-    constructor(nodes: NodeInterface[][]) {
-        this.nodes = nodes
-    }
-    
-    solve(startNode: NodeInterface, endNode: NodeInterface, speed: number) {
-        
+    constructor() {
+        super()
     }
 
+    solve(solveOptions: SolveOptions) {
+        // Unimplemented
+    }
 }

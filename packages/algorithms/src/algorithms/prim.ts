@@ -1,17 +1,11 @@
-import { NodeInterface } from "graphism"
-import { AlgorithmInterface } from "./../types"
-
-export class PrimAlgorithm implements AlgorithmInterface {
-    startNode: NodeInterface
-    endNode: NodeInterface 
-    nodes: NodeInterface[][] = []
-    path: NodeInterface[] = []
-    progressStack = []
+import { GraphAlgorithm } from "."
+import { SolveOptions, SpanningTreeAlgorithm } from "../types"
+export default class PrimAlgorithm extends GraphAlgorithm implements SpanningTreeAlgorithm {
     constructor() {
-
+        super()
     }
 
-    solve() {
-
+    solve(solveOptions: SolveOptions) {
+        // Unimplemented
     }
 }

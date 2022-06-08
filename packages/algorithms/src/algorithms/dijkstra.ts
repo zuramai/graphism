@@ -1,22 +1,21 @@
-import { AlgorithmInterface } from "..";
 import { NodeInterface } from "graphism";
+import { GraphAlgorithm } from ".";
+import { ShortestPathAlgorithm, SolveOptions } from "../types";
 
-export default class AStarAlgorithm implements AlgorithmInterface{
-    startNode: NodeInterface
-    endNode: NodeInterface 
-    nodes: NodeInterface[][] = []
-    path: NodeInterface[] = []
-    progressStack = []
-
+export default class DijkstraAlgorithm extends GraphAlgorithm implements ShortestPathAlgorithm {
+    endNode: NodeInterface;
+    
     private openSet: NodeInterface[] = []
     private closedSet: NodeInterface[] = []
 
     constructor(nodes: NodeInterface[][]) {
+        super()
         this.nodes = nodes
     }
     
-    solve(startNode: NodeInterface, endNode: NodeInterface, speed: number) {
-        this.openSet.push(startNode)
+    
+    solve(solveOptions: SolveOptions) {
+        this.openSet.push(this.startNode)
 
         if(this.openSet.length > 0) {
             this.openSet.sort((a,b) => a.gCost - b.gCost)
@@ -24,8 +23,9 @@ export default class AStarAlgorithm implements AlgorithmInterface{
             let currentNode = this.openSet.shift()
             this.closedSet.push(currentNode)
 
-            if (currentNode == endNode) {
-                while(currentNode != startNode) {
+            // Backtracking
+            if (currentNode == this.endNode) {
+                while(currentNode != this.startNode) {
                     this.path.push(currentNode)
                     currentNode = currentNode.parent
                     // alert("parent is "+currentNode.coordinate.x + ' '+  currentNode.coordinate.y)
@@ -49,9 +49,4 @@ export default class AStarAlgorithm implements AlgorithmInterface{
             }
         }
     }
-
-    // private fscore(from: NodeInterface, to: NeighborInterface) {
-    //     let g = from.gCost + to.distance;
-    //     return g 
-    // }
 }

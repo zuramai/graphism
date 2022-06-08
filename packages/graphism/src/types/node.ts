@@ -13,6 +13,9 @@ export interface NodeInterface extends ComponentInterface {
     // Backtracking purpose
     parent: NodeInterface
 
+    // For Dijkstra
+    gCost: number
+
     
     move: (x?: number, y?: number) => void
     update: () => void
