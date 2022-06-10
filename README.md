@@ -1,13 +1,19 @@
-# Graphism
-Graphism is a tool to create graph visualization and run an algorithm on top of it.
-
-[Live Demo](https://zuramai.github.io/graphism) (built with Vanilla JavaScript!)
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/45036724/172974810-4ba481f9-bd24-4128-99aa-ebfdd61cf19a.svg" alt="Graphism Logo" width="400" height="120" align="center">
+</p>
+<p align="center">
+A tool to create graph visualization 
+</p>
+<p align="center">
+    <a href="https://zuramai.github.io/graphism">Playground</a> • <a href="https://zuramai.github.io/graphism/docs">Documentation</a>
+</p>
 
 ## Features
 
 - Vanilla JavaScript - integrate into any framework you like
 - Run algorithms on the graph (like Kruskal's algorithm, Dijkstra's algorithm, etc)
 - Design your own graph
+- Save graph in .png
 
 ## Install
 
