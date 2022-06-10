@@ -20,11 +20,8 @@ export interface CanvasConfig {
 export type CanvasMode = "normal" | "connecting" | "creating"
 
 export interface EventsMap extends NodeEventsMap, LineEventsMap {
-    start: () => void
-    end: () => void
     grab: () => void
     mounted: () => void
-    unmounted: () => void
     error: (message: string) => void
 
     "canvas:click": (coordinate: Coordinate) => void
