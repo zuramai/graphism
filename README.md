@@ -38,5 +38,65 @@ graphism.generateGraph()
 
 ```
 
+## API
+```ts
+// Create new node and return the Node instance
+createNode: (name: string, coordinate: Coordinate, config?: NodeConfig) => NodeInterface
+
+// Clear selected
+clearSelectedNode: () => void
+clearSelectedLine: () => void
+
+// Select a node
+selectNode: (node: NodeInterface, mode: CanvasMode = "normal") => NodeInterface
+
+// Connect two node
+addNodeNeighbor: (from: NodeInterface, to: NodeInterface, distance: number) => void
+
+// Generate random graph 
+generateGraph: () => void
+
+// Event listener
+on: (event: string, callback: any, once: boolean = false) => void
+```
+
+
+## Events
+
+### Event Usage
+
+Example of event usage
+```js
+graphism.on("node:select", (node1: NodeInterface) => {
+    console.log(`The node clicked contains value = ${node1.value}`)
+})
+
+// If you want the event only trigger once, add `true` to the third param
+graphism.on("grab", () => {
+    console.log("You are grabbing the canvas, this will only run once")
+}, true)
+```
+
+### Event list
+
+| Name | Param | Description |
+| ---- | ----- | ----------- |
+| mounted |  | Graphism is successfully mounted |
+| grab | | User grabbing on the canvas |
+| error | (message: string) | Triggered when error occured |
+| canvas:click | (coordinate: Coordinate) | Canvas clicked by user |
+| node:created | | New node created |
+| node:move | (node: NodeInterface) | Node moved |
+| node:mouseover | | The cursor is on the node | 
+| node:mouseleave | | The cursor is going out from the node |
+| node:select | | Node is selected |
+| node:deselect | | Node is deselected |
+| node:clearSelect |  | All nodes is deselected |
+| node:connect | | Two nodes are connected |
+| line:select | | Line is selected |
+| line:deselect | | Line is deselected |
+| line:clearSelect | | All lines is deselected |
+| line:mouseover | | The cursor is on the line |
+
 ## License
-MIT
+MIT License	
