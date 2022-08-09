@@ -12,6 +12,7 @@ import type {
 import type { NodeConfig, NodeInterface } from './types/node'
 import Line from './components/line'
 import type { Component } from './components/abstract'
+import { getDistance } from './utils'
 
 const defaultConfig: CanvasConfig = {
   lineColor: '#555',
@@ -236,7 +237,7 @@ export class Graphism {
     }
   }
 
-  addNodeNeighbor(from: NodeInterface, to: NodeInterface, distance: number) {
+  addNodeNeighbor(from: NodeInterface, to: NodeInterface, distance?: number) {
     let line: LineInterface
 
     // Check if the line exists from the other way around
@@ -251,6 +252,8 @@ export class Graphism {
       line = new Line(from, to, {})
       this.lines.push(line)
     }
+
+    distance = distance ?? getDistance(from.position, to.position)
 
     from.addNeighbor(to, distance, line)
 

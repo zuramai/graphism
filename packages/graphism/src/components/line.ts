@@ -1,6 +1,6 @@
 import type { Coordinate, NodeInterface } from '../types'
 import type { LineConfig, LineInterface } from '../types/line'
-import { distance } from '../utils'
+import { getDistance } from '../utils'
 import { Component } from './abstract'
 
 const defaultLineConfig = {
@@ -46,8 +46,8 @@ export default class Line extends Component implements LineInterface {
   }
 
   isOnCoordinate(point: Coordinate): boolean {
-    const is = Math.ceil(distance(this.from.position, point))
-            + Math.ceil(distance(this.to.position, point)) == Math.ceil(distance(this.from.position, this.to.position))
+    const is = Math.ceil(getDistance(this.from.position, point))
+            + Math.ceil(getDistance(this.to.position, point)) === Math.ceil(getDistance(this.from.position, this.to.position))
     return is
   }
 }
