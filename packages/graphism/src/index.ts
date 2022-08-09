@@ -239,6 +239,7 @@ export class Graphism {
 
   addNodeNeighbor(from: NodeInterface, to: NodeInterface, distance?: number) {
     let line: LineInterface
+    distance = distance ?? Math.round(getDistance(from.position, to.position))
 
     // Check if the line exists from the other way around
     const createdLine = this.lines.find(
@@ -249,11 +250,9 @@ export class Graphism {
       line = createdLine
     }
     else {
-      line = new Line(from, to, {})
+      line = new Line(from, to, distance, {})
       this.lines.push(line)
     }
-
-    distance = distance ?? getDistance(from.position, to.position)
 
     from.addNeighbor(to, distance, line)
 
@@ -328,9 +327,7 @@ export class Graphism {
     const dx = position.x - this.dragFrom.x
     const dy = position.y - this.dragFrom.y
 
-    // console.log("Move dx = ", dx, " dy", dy)
-
-    // If selected more than one nodes and move the selected node
+    // If selected more than one nodes, move all selected node
     if (this.selectedNode.length > 1 && this.holdingNode.isSelected) {
       for (let i = 0; i < this.selectedNode.length; i++) {
         element = this.nodes[i]
@@ -339,7 +336,6 @@ export class Graphism {
     }
     else {
       // Just move the holding node
-
       element.move(element.moveFrom.x + dx, element.moveFrom.y + dy)
     }
   }
