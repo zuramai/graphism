@@ -8,7 +8,7 @@ const defaultLineConfig = {
   width: 5,
   hoverColor: 'rgba(120, 118, 240, .6)',
   selectedColor: '#2f5ea8',
-  text: '',
+  text: null,
 }
 
 export default class Line extends Component implements LineInterface {
@@ -18,12 +18,14 @@ export default class Line extends Component implements LineInterface {
   to: NodeInterface
   isHovered = false
   isSelected = false
+  distance: number
 
-  constructor(from: NodeInterface, to: NodeInterface, config?: LineConfig) {
+  constructor(from: NodeInterface, to: NodeInterface, distance: number, config?: LineConfig) {
     super()
     this.lineConfig = Object.assign(defaultLineConfig, config)
     this.from = from
     this.to = to
+    this.distance = distance
   }
 
   draw(ctx) {
@@ -40,6 +42,25 @@ export default class Line extends Component implements LineInterface {
     ctx.lineTo(this.to.position.x, this.to.position.y)
     ctx.stroke()
     ctx.closePath()
+
+    this.drawText(ctx)
+  }
+
+  drawText(ctx: CanvasRenderingContext2D) {
+    const middlePosition: Coordinate = {
+      x: (this.from.position.x + this.to.position.x) / 2,
+      y: (this.from.position.y + this.to.position.y) / 2,
+    }
+    ctx.fillStyle = this.lineConfig.selectedColor
+    ctx.font = '18px Arial bold'
+    if (!this.lineConfig.text) {
+      // If text doesn't exists, draw the distance
+      if(this.distance === 0) return
+      ctx.fillText(this.distance.toString(), middlePosition.x, middlePosition.y)
+      return
+    }
+
+    ctx.fillText(this.lineConfig.text, middlePosition.x, middlePosition.y)
   }
 
   move(x?: number, y?: number) {

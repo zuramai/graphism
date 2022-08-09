@@ -1,47 +1,48 @@
 import './assets/scss/main.scss'
-import { createGraphism, Graphism } from "graphism"
-import { camelToSnakeCase } from './utils'
-import { createNotification } from "./components/notification"
-import { toggleModalFromSelector } from './ui'
+import type { Graphism } from 'graphism'
+import { createGraphism } from 'graphism'
 import { saveCanvasToImg } from '../../packages/graphism/src/utils'
+import { camelToSnakeCase } from './utils'
+import { createNotification } from './components/notification'
+import { toggleModalFromSelector } from './ui'
 
-
-let customizations = {
-    fontSize: 22,
-    fontFamily: "Lora",
-    textColor: "#222",
-    backgroundColor: "white",
-    borderColor: "#ddd",
-    borderSize: 2,
-    width: 50,
-    height: 50,
-    hoverBorderColor: 'rgba(120, 118, 240, .6)',
-    hoverBackgroundColor: 'white'
+const customizations = {
+  fontSize: 22,
+  fontFamily: 'Lora',
+  textColor: '#222',
+  backgroundColor: 'white',
+  borderColor: '#ddd',
+  borderSize: 2,
+  width: 50,
+  height: 50,
+  hoverBorderColor: 'rgba(120, 118, 240, .6)',
+  hoverBackgroundColor: 'white',
 }
 
 window.onload = () => {
-    const el = document.querySelector<HTMLCanvasElement>('#canvas')
+  const el = document.querySelector<HTMLCanvasElement>('#canvas')
 
-    // Create the canvas instance
-    const graphism = createGraphism({
-        el,
-        canvasBackground: "#efefef",
-    })
+  // Create the canvas instance
+  const graphism = createGraphism({
+    el,
+    canvasBackground: '#efefef',
+  })
 
-  
+  // Customization provider
+  const proxy = createProxy(graphism, customizations)
+  customizationHandler(proxy)
 
-    // Customization provider
-    let proxy = createProxy(graphism, customizations)
-    customizationHandler(proxy)
+  // Initial state EXAMPLE
+  //   const a = graphism.createNode('a', { x: 300, y: 300 })
+  //   const b = graphism.createNode('b', { x: 500, y: 400 })
+  //   const c = graphism.createNode('c', { x: 900, y: 400 })
+  //   const d = graphism.createNode('d', { x: 200, y: 500 })
+  //   graphism.addNodeNeighbor(a, b, 100)
+  //   graphism.addNodeNeighbor(a, c)
+  //   graphism.addNodeNeighbor(a, d)
 
-    // Initial state EXAMPLE
-    let asc = graphism.createNode("ASC", { x: 300, y: 300 })
-    let wsc = graphism.createNode("WSC", { x: 700, y: 400 })
-    graphism.addNodeNeighbor(asc,wsc,100)
-
-    graphismEventListeners(graphism, el)
+  graphismEventListeners(graphism, el)
 }
-
 
 /**
  * Add listeners to improve playground functionality
@@ -49,76 +50,76 @@ window.onload = () => {
  * @param canvas HTML canvas element
  */
 function graphismEventListeners(graphism: Graphism, canvas: HTMLCanvasElement) {
-    window.addEventListener('resize', resizeCanvas.bind(null, canvas))
-    document.getElementById('node-add').addEventListener('click', addNode.bind(null, graphism))
-    document.getElementById('generate-graph').addEventListener('click', generateGraphEvent.bind(null, graphism))
-    document.getElementById('create-new').addEventListener('click', createNewGraph)
-    document.getElementById('connectNode').addEventListener('click', connectNode.bind(null, graphism))
-    document.getElementById('saveToImage').addEventListener('click', () => saveCanvasToImg(canvas))
-    toggleModalFromSelector(document.querySelector('.modal-add'), document.getElementById('openAddModal'))
-    
-    graphism.on("line:select", (line) => {
-        console.log("line selected")
-        document.getElementById('options-line').classList.remove('disabled')
-    })
-    graphism.on("line:clearSelect", () => {
-        console.log("line clearerd")
-        document.getElementById('options-line').classList.add('disabled')
-    })
+  window.addEventListener('resize', resizeCanvas.bind(null, canvas))
+  document.getElementById('node-add').addEventListener('click', addNode.bind(null, graphism))
+  document.getElementById('generate-graph').addEventListener('click', generateGraphEvent.bind(null, graphism))
+  document.getElementById('create-new').addEventListener('click', createNewGraph)
+  document.getElementById('connectNode').addEventListener('click', connectNode.bind(null, graphism))
+  document.getElementById('saveToImage').addEventListener('click', () => saveCanvasToImg(canvas))
+  toggleModalFromSelector(document.querySelector('.modal-add'), document.getElementById('openAddModal'))
+
+  graphism.on('line:select', () => {
+    console.log('line selected')
+    document.getElementById('options-line').classList.remove('disabled')
+  })
+  graphism.on('line:clearSelect', () => {
+    console.log('line clearerd')
+    document.getElementById('options-line').classList.add('disabled')
+  })
 }
 
 /**
  * Execute create new node
  */
 function addNode(graphism: Graphism) {
-    let name = <HTMLFormElement>document.getElementById("name")
-    document.querySelector('.modal-add').classList.remove('modal-open')
+  const name = <HTMLFormElement>document.getElementById('name')
+  document.querySelector('.modal-add').classList.remove('modal-open')
 
-    showHelperText(`Click anywhere to create ${name.value} node`)
+  showHelperText(`Click anywhere to create ${name.value} node`)
 
-    graphism.setMode("creating")
-    graphism.on("canvas:click", (coordinate) => {
-        let nameVal = name ? name.value : ""
-        graphism.createNode(nameVal, coordinate)
-        createNotification("success", `Node ${nameVal} created`)
-        hideHelperText()
-    }, true)
+  graphism.setMode('creating')
+  graphism.on('canvas:click', (coordinate) => {
+    const nameVal = name ? name.value : ''
+    graphism.createNode(nameVal, coordinate)
+    createNotification('success', `Node ${nameVal} created`)
+    hideHelperText()
+  }, true)
 }
 
 /**
  * Start connecting mode in canvas
  */
 function connectNode(graphism: Graphism) {
-    graphism.setMode('connecting')
-    showHelperText("Click any node to connect")
+  graphism.setMode('connecting')
+  showHelperText('Click any node to connect')
 
-    graphism.on("node:connect", () => {
-        hideHelperText()
-    }, true) 
+  graphism.on('node:connect', () => {
+    hideHelperText()
+  }, true)
 }
 
 /**
  * Create new and start with random graph
  */
 function generateGraphEvent(graphism: Graphism) {
-    const nodes = graphism.generateGraph()
-    graphism.nodes = nodes
-    hideTitleScreen()
+  const nodes = graphism.generateGraph()
+  graphism.nodes = nodes
+  hideTitleScreen()
 }
 
 /**
  * Create new and start with clean canvas
  */
 function createNewGraph() {
-    hideTitleScreen()
+  hideTitleScreen()
 }
 
 /**
  * Hide the title screen
  */
 function hideTitleScreen() {
-    let titleScreen = document.querySelector<HTMLElement>('.page-title')
-    titleScreen.classList.toggle('show')
+  const titleScreen = document.querySelector<HTMLElement>('.page-title')
+  titleScreen.classList.toggle('show')
 }
 
 const helperText = <HTMLElement>document.getElementById('helper-text')
@@ -128,56 +129,54 @@ const helperText = <HTMLElement>document.getElementById('helper-text')
  * @param text The text to be shown
  * @param blink Blink animation for the text
  */
-function showHelperText(text: string, blink: boolean = true) {
-    if(blink) {
-        helperText.classList.add('blinking')
-    }
-    helperText.innerText = text
-    helperText.classList.add('show')
-}       
+function showHelperText(text: string, blink = true) {
+  if (blink)
+    helperText.classList.add('blinking')
+
+  helperText.innerText = text
+  helperText.classList.add('show')
+}
 
 /**
  * Hide the helper text
  */
 function hideHelperText() {
-    helperText.classList.remove('blinking')
-    helperText.classList.remove('show')
+  helperText.classList.remove('blinking')
+  helperText.classList.remove('show')
 }
-
 
 function resizeCanvas(canvas: HTMLCanvasElement) {
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
+  canvas.width = window.innerWidth
+  canvas.height = window.innerHeight
 
-    canvas.setAttribute('width', canvas.width.toString())
-    canvas.setAttribute('height', canvas.height.toString())
+  canvas.setAttribute('width', canvas.width.toString())
+  canvas.setAttribute('height', canvas.height.toString())
 }
 
-
 function createProxy<T extends object>(graphism: Graphism, target: T): T {
-    return new Proxy(target, {
-        set(obj, prop, value) {
-            obj[prop] = value
-    
-            // Change the input value
-            let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(prop)}`)
-            input.value = value
-    
-            // Change the configuration in the node
-            console.log("Changing: ", graphism.selectedNode[0])
-            graphism.selectedNode[0].nodeConfig[prop] = value
-         
-            return true
-        }
-    })
+  return new Proxy(target, {
+    set(obj, prop, value) {
+      obj[prop] = value
+
+      // Change the input value
+      const input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(prop)}`)
+      input.value = value
+
+      // Change the configuration in the node
+      console.log('Changing: ', graphism.selectedNode[0])
+      graphism.selectedNode[0].nodeConfig[prop] = value
+
+      return true
+    },
+  })
 }
 
 function customizationHandler<T extends object>(obj: T) {
-    Object.keys(obj).forEach(key => {
-        console.log(`querying: custom-${camelToSnakeCase(key)}`)
-        let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(key)}`)
-        if(!input) input = document.querySelector<HTMLInputElement>(key)
+  Object.keys(obj).forEach((key) => {
+    console.log(`querying: custom-${camelToSnakeCase(key)}`)
+    let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(key)}`)
+    if (!input) input = document.querySelector<HTMLInputElement>(key)
 
-        input.addEventListener('input', () => obj[key] = input.value)
-    })
+    input.addEventListener('input', () => obj[key] = input.value)
+  })
 }
