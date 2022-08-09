@@ -1,2 +1,2 @@
-export * from "./math"
-export * from "./canvas"
+export * from './math'
+export * from './canvas'

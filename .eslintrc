@@ -1,5 +1,9 @@
 {
     "extends": [
       "@antfu"
-    ]
+    ],
+    "rules": {
+      "no-callback": "off",
+      "no-console": "off"
+    }
 }

@@ -1,38 +1,38 @@
-import { NodeEventsMap } from "./node"
-import { LineEventsMap } from "./line"
+import type { NodeEventsMap } from './node'
+import type { LineEventsMap } from './line'
 
-export * from "./line"
-export * from "./node"
+export * from './line'
+export * from './node'
 
 export interface Coordinate {
-    x: number
-    y: number
+  x: number
+  y: number
 }
 
 export interface CanvasConfig {
-    el?: HTMLCanvasElement | string,
-    canvasBackground?: string | CanvasPattern | HTMLImageElement
-    lineColor?: string 
-    nodeBackground?: string
-    nodeTextColor?: string
+  el?: HTMLCanvasElement | string
+  canvasBackground?: string | CanvasPattern | HTMLImageElement
+  lineColor?: string
+  nodeBackground?: string
+  nodeTextColor?: string
 }
 
-export type CanvasMode = "normal" | "connecting" | "creating"
+export type CanvasMode = 'normal' | 'connecting' | 'creating'
 
 export interface EventsMap extends NodeEventsMap, LineEventsMap {
-    grab: () => void
-    mounted: () => void
-    error: (message: string) => void
+  grab: () => void
+  mounted: () => void
+  error: (message: string) => void
 
-    "canvas:click": (coordinate: Coordinate) => void
+  'canvas:click': (coordinate: Coordinate) => void
 }
 
 export interface ComponentInterface {
-    isHovered: boolean
-    isSelected: boolean
-    moveFrom: Coordinate
-    name:  "node" | "line"
+  isHovered: boolean
+  isSelected: boolean
+  moveFrom: Coordinate
+  name: 'node' | 'line'
 
-    isOnCoordinate: (point: Coordinate) => boolean 
-    move: (x?: number, y?: number) => void
+  isOnCoordinate: (point: Coordinate) => boolean
+  move: (x?: number, y?: number) => void
 }
