@@ -26,14 +26,14 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.16.1",
     "@antfu/eslint-config-ts": "^0.26.0",
-    "@antfu/ni": "^0.16.2",
-    "bumpp": "^7.1.1",
-    "eslint": "^8.16.0",
+    "@antfu/ni": "^0.16.3",
+    "bumpp": "^7.2.0",
+    "eslint": "^8.21.0",
     "nanoevents": "^6.0.2",
-    "pnpm": "^6.32.17",
-    "sass": "^1.52.1",
+    "pnpm": "^6.34.0",
+    "sass": "^1.54.4",
     "tsup": "^5.12.9",
-    "typescript": "^4.7.2",
-    "vite": "^2.9.9"
+    "typescript": "^4.7.4",
+    "vite": "^2.9.14"
   }
 }
