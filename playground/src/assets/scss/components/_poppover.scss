@@ -1,0 +1,12 @@
+.poppover {
+    position: absolute;
+    width: 240px;
+    left: 50%;
+    top: 50%;
+    background-color: white;
+    padding: 1rem;
+    border-radius: .3rem;
+    box-shadow: 1px 10px 1rem rgba(30,30,30,.1);
+    display: none;
+    min-width: 150px;
+}
