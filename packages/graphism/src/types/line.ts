@@ -7,6 +7,7 @@ export interface LineConfig {
   selectedColor?: string
   width?: number
   text?: string
+  dynamicDistance?: boolean
 }
 
 export interface LineInterface extends ComponentInterface {
@@ -14,6 +15,7 @@ export interface LineInterface extends ComponentInterface {
   from: NodeInterface
   to: NodeInterface
   isHovered: boolean
+  updateDistance: () => void
   draw: (ctx: CanvasRenderingContext2D) => void
 }
 

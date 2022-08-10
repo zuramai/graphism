@@ -108,6 +108,9 @@ export class Nodee extends Component implements NodeInterface {
   move(x?: number, y?: number) {
     if (x) this.position.x = x
     if (y) this.position.y = y
+    this.neighbors.forEach((neighbor) => {
+      neighbor.line.updateDistance()
+    })
   }
 
   isOnCoordinate(coordinate: Coordinate): boolean {

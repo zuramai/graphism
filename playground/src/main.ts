@@ -33,10 +33,10 @@ window.onload = () => {
   customizationHandler(proxy)
 
   // Initial state EXAMPLE
-    const a = graphism.createNode('a', { x: 300, y: 300 })
-    const b = graphism.createNode('b', { x: 500, y: 400 })
-    const c = graphism.createNode('c', { x: 900, y: 400 })
-    const d = graphism.createNode('d', { x: 200, y: 500 })
+  // const a = graphism.createNode('a', { x: 300, y: 300 })
+  // const b = graphism.createNode('b', { x: 500, y: 400 })
+  // const c = graphism.createNode('c', { x: 900, y: 400 })
+  // const d = graphism.createNode('d', { x: 200, y: 500 })
   //   graphism.addNodeNeighbor(a, b, 100)
   //   graphism.addNodeNeighbor(a, c)
   //   graphism.addNodeNeighbor(a, d)

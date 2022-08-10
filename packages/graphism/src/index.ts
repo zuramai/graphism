@@ -7,6 +7,7 @@ import type {
   CanvasMode,
   Coordinate,
   EventsMap,
+  LineConfig,
   LineInterface,
 } from './types'
 import type { NodeConfig, NodeInterface } from './types/node'
@@ -79,7 +80,7 @@ export class Graphism {
   on<E extends keyof EventsMap>(event: E, callback: any, once = false) {
     const unbind = this._emitter.on(event, (...args) => {
       if (once) unbind()
-      callback(...args)
+      callback(...args) // eslint-disable-line n/no-callback-literal
     })
     return unbind
   }
@@ -216,18 +217,18 @@ export class Graphism {
 
   addNodeNeighbor(from: NodeInterface, to: NodeInterface, distance?: number) {
     let line: LineInterface
-    distance = distance ?? Math.round(getDistance(from.position, to.position))
+    const lineConfig: LineConfig = {}
+    if (distance === null || distance === undefined) lineConfig.dynamicDistance = true
 
+    distance ??= Math.round(getDistance(from.position, to.position))
     // Check if the line exists from the other way around
     const createdLine = this.lines.find(
       l => (l.from === from && l.to === to) || (l.from === to && l.to === from),
     )
 
-    if (createdLine) {
-      line = createdLine
-    }
+    if (createdLine) line = createdLine
     else {
-      line = new Line(from, to, distance, {})
+      line = new Line(from, to, distance, lineConfig)
       this.lines.push(line)
     }
 
@@ -248,13 +249,10 @@ export class Graphism {
 
   private mouseUp() {
     this.holdingNode = null
-
-    console.log('Mouseup ', this.selectedNode)
   }
 
   private mouseDown(e: MouseEvent) {
     const position = this.getCursorPosition(e)
-    console.log('mousedown')
 
     this.dragFrom = position
 

@@ -9,6 +9,7 @@ const defaultLineConfig = {
   hoverColor: 'rgba(120, 118, 240, .6)',
   selectedColor: '#2f5ea8',
   text: null,
+  dynamicDistance: false,
 }
 
 export default class Line extends Component implements LineInterface {
@@ -22,7 +23,7 @@ export default class Line extends Component implements LineInterface {
 
   constructor(from: NodeInterface, to: NodeInterface, distance: number, config?: LineConfig) {
     super()
-    this.lineConfig = Object.assign(defaultLineConfig, config)
+    this.lineConfig = { ...defaultLineConfig, ...config }
     this.from = from
     this.to = to
     this.distance = distance
@@ -62,6 +63,11 @@ export default class Line extends Component implements LineInterface {
     }
 
     ctx.fillText(this.lineConfig.text, middlePosition.x, middlePosition.y)
+  }
+
+  updateDistance() {
+    if (this.lineConfig.dynamicDistance)
+      this.distance = Math.round(getDistance(this.from.position, this.to.position))
   }
 
   move(x?: number, y?: number) {
