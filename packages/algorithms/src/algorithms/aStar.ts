@@ -1,14 +1,14 @@
-import { NodeInterface } from "graphism"
-import { GraphAlgorithm } from "."
-import { ShortestPathAlgorithm, SolveOptions } from "../types"
+import type { NodeInterface } from 'graphism'
+import type { ShortestPathAlgorithm, SolveOptions } from '../types'
+import { GraphAlgorithm } from '.'
 export default class AStarAlgorithm extends GraphAlgorithm implements ShortestPathAlgorithm {
-    endNode: NodeInterface
+  endNode: NodeInterface
 
-    constructor() {
-        super()
-    }
+  constructor() {
+    super()
+  }
 
-    solve(solveOptions: SolveOptions) {
-        // Unimplemented
-    }
+  solve(solveOptions: SolveOptions) {
+    // Unimplemented
+  }
 }

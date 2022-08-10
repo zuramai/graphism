@@ -1,13 +1,13 @@
-import { GraphAlgorithm } from "."
-import { SearchAlgorithm, SolveOptions } from "../types"
+import type { SearchAlgorithm, SolveOptions } from '../types'
+import { GraphAlgorithm } from '.'
 export default class BFSAlgorithm extends GraphAlgorithm implements SearchAlgorithm {
-    findValue: string
+  findValue: string
 
-    constructor() {
-        super()
-    }
+  constructor() {
+    super()
+  }
 
-    solve(solveOptions: SolveOptions) {
-        // Unimplemented
-    }
+  solve(solveOptions: SolveOptions) {
+    // Unimplemented
+  }
 }

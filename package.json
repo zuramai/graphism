@@ -3,6 +3,13 @@
   "version": "0.1.2",
   "description": "A website to create tree graph and run algorithms on top of it",
   "private": true,
+  "keywords": [],
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zuramai/graph-algorithms.git"
+  },
+  "author": "",
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",
     "play:build": "pnpm -C playground run build",
@@ -10,16 +17,9 @@
     "js:build": "pnpm run -r --filter ./packages build",
     "dev": "nr play:dev",
     "build": "nr js:build",
-    "lint": "eslint --ext .ts --ignore-path .gitignore .",
+    "lint:fix": "eslint . --fix",
     "release": "bumpp package.json packages/*/package.json --tag --commit --push && pnpm -r publish --access public"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zuramai/graph-algorithms.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/zuramai/graph-algorithms/issues"
   },

@@ -55,7 +55,7 @@ export default class Line extends Component implements LineInterface {
     ctx.font = '18px Arial bold'
     if (!this.lineConfig.text) {
       // If text doesn't exists, draw the distance
-      if(this.distance === 0) return
+      if (this.distance === 0) return
       ctx.fillText(this.distance.toString(), middlePosition.x, middlePosition.y)
       return
     }
