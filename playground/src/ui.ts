@@ -13,7 +13,7 @@ function modalControls() {
   modals.forEach((modal) => {
     const closeBtn = modal.querySelector('.modal-close')
 
-    closeBtn.addEventListener('click', (e) => {
+    closeBtn.addEventListener('click', () => {
       modal.classList.remove('modal-open')
     })
   })
@@ -38,15 +38,18 @@ function navbarSubmenuTogglers() {
 }
 
 export function toggleModalFromSelector(modal: HTMLElement, toggler: HTMLElement) {
-  toggler.addEventListener('click', (e) => {
+  toggler.addEventListener('click', () => {
     modal.classList.toggle('modal-open')
   })
 }
 
 export function showPoppover(id: string, position: Coordinate): HTMLElement {
   const poppoverEl = document.getElementById(id)
+  console.log(position.y, poppoverEl.clientHeight, document.body.clientHeight)
+  if (position.y + poppoverEl.clientHeight > document.body.clientHeight) position.y -= poppoverEl.clientHeight
+  if (position.x + poppoverEl.clientWidth > document.body.clientWidth) position.x -= poppoverEl.clientWidth
   poppoverEl.style.left = `${position.x}px`
   poppoverEl.style.top = `${position.y}px`
-  poppoverEl.style.display = 'block'
+  poppoverEl.style.visibility = 'visible'
   return poppoverEl
 }

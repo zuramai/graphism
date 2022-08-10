@@ -110,7 +110,7 @@ function connectNode(graphism: Graphism) {
         graphism.addNodeNeighbor(node1, node2, distance === '' ? null : ~~distance)
         graphism.clearSelectedNode()
         graphism.mode = 'normal'
-        poppoverEl.style.display = 'none'
+        poppoverEl.style.visibility = 'hidden'
       }, { once: true })
     }, true)
   }, true)
