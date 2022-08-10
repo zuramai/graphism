@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/graphism/assets/index.601c18a3.js"></script>
-    <link rel="stylesheet" href="/graphism/assets/index.ece0556f.css">
+    <script type="module" crossorigin src="/graphism/assets/index.cfb9a1b5.js"></script>
+    <link rel="stylesheet" href="/graphism/assets/index.c1d93a16.css">
   </head>
   <body>
     <div id="app">
@@ -312,6 +312,17 @@
       <div class="notifications">
         <!-- Notifications will apear in here -->
       </div>
+
+      <!-- Distance input poppover -->
+      <div class="poppover" id="poppover-distance">
+        <label for="distance">Distance</label>
+        <form class="flex mt-3">
+          <input type="number" class="form-control" value="" id="distance-value">
+          <button class="btn btn-primary ml-3">Submit</button>
+        </form>
+        <span class="text-muted text-xs mb-3">Leave blank to set dynamic distance</span>
+      </div>
+      
 
       <!-- Add node modal -->
       <div class="modal modal-add">
