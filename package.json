@@ -6,10 +6,11 @@
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",
     "play:build": "pnpm -C playground run build",
-    "js:dev": "pnpm  js:build --watch",
+    "js:dev": "pnpm run -r --filter ./packages dev",
     "js:build": "pnpm run -r --filter ./packages build",
     "dev": "nr play:dev",
     "build": "nr js:build",
+    "lint": "eslint --ext .ts --ignore-path .gitignore .",
     "release": "bumpp package.json packages/*/package.json --tag --commit --push && pnpm -r publish --access public"
   },
   "repository": {
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.16.1",
+    "@antfu/eslint-config-ts": "^0.26.0",
     "@antfu/ni": "^0.16.2",
     "bumpp": "^7.1.1",
     "eslint": "^8.16.0",
