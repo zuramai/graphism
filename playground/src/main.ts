@@ -1,10 +1,10 @@
 import './assets/scss/main.scss'
-import type { Graphism } from 'graphism'
+import type { Graphism, NodeInterface } from 'graphism'
 import { createGraphism } from 'graphism'
 import { saveCanvasToImg } from '../../packages/graphism/src/utils'
 import { camelToSnakeCase } from './utils'
 import { createNotification } from './components/notification'
-import { toggleModalFromSelector } from './ui'
+import { showPoppover, toggleModalFromSelector } from './ui'
 
 const customizations = {
   fontSize: 22,
@@ -33,10 +33,10 @@ window.onload = () => {
   customizationHandler(proxy)
 
   // Initial state EXAMPLE
-  //   const a = graphism.createNode('a', { x: 300, y: 300 })
-  //   const b = graphism.createNode('b', { x: 500, y: 400 })
-  //   const c = graphism.createNode('c', { x: 900, y: 400 })
-  //   const d = graphism.createNode('d', { x: 200, y: 500 })
+    const a = graphism.createNode('a', { x: 300, y: 300 })
+    const b = graphism.createNode('b', { x: 500, y: 400 })
+    const c = graphism.createNode('c', { x: 900, y: 400 })
+    const d = graphism.createNode('d', { x: 200, y: 500 })
   //   graphism.addNodeNeighbor(a, b, 100)
   //   graphism.addNodeNeighbor(a, c)
   //   graphism.addNodeNeighbor(a, d)
@@ -92,7 +92,28 @@ function addNode(graphism: Graphism) {
 function connectNode(graphism: Graphism) {
   graphism.setMode('connecting')
   showHelperText('Click any node to connect')
+  graphism.clearSelectedNode()
+  graphism.on('node:select', (node1: NodeInterface) => {
+    // On node 1 selected
+    graphism.on('node:select', (node2: NodeInterface) => {
+      // On node 2 selected
+      // Show the poppover for user to input distance
+      const poppoverEl = showPoppover('poppover-distance', {
+        x: node2.position.x,
+        y: node2.position.y,
+      })
 
+      const distanceForm = poppoverEl.querySelector('form')
+      distanceForm.addEventListener('submit', (e: SubmitEvent) => {
+        e.preventDefault()
+        const distance = (document.getElementById('distance-value') as HTMLInputElement).value
+        graphism.addNodeNeighbor(node1, node2, distance === '' ? null : ~~distance)
+        graphism.clearSelectedNode()
+        graphism.mode = 'normal'
+        poppoverEl.style.display = 'none'
+      }, { once: true })
+    }, true)
+  }, true)
   graphism.on('node:connect', () => {
     hideHelperText()
   }, true)

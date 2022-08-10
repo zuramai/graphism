@@ -212,29 +212,6 @@ export class Graphism {
 
   setMode(mode: CanvasMode) {
     this.mode = mode
-
-    switch (mode) {
-      case 'connecting':
-        this.clearSelectedNode()
-        this.on(
-          'node:select',
-          (node1: NodeInterface) => {
-            this.on(
-              'node:select',
-              (node2: NodeInterface) => {
-                this.addNodeNeighbor(node1, node2, 0)
-                this.clearSelectedNode()
-                this.mode = 'normal'
-              },
-              true,
-            )
-          },
-          true,
-        )
-        break
-      default:
-        break
-    }
   }
 
   addNodeNeighbor(from: NodeInterface, to: NodeInterface, distance?: number) {

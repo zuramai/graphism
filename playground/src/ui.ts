@@ -1,5 +1,7 @@
 // This file contains controls for user interfaces
 
+import type { Coordinate } from 'graphism'
+
 window.addEventListener('DOMContentLoaded', () => {
   modalControls()
   navbarSubmenuTogglers()
@@ -39,4 +41,12 @@ export function toggleModalFromSelector(modal: HTMLElement, toggler: HTMLElement
   toggler.addEventListener('click', (e) => {
     modal.classList.toggle('modal-open')
   })
+}
+
+export function showPoppover(id: string, position: Coordinate): HTMLElement {
+  const poppoverEl = document.getElementById(id)
+  poppoverEl.style.left = `${position.x}px`
+  poppoverEl.style.top = `${position.y}px`
+  poppoverEl.style.display = 'block'
+  return poppoverEl
 }
