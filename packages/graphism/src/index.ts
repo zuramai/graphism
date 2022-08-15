@@ -49,13 +49,13 @@ export class Graphism {
     this.mount(config.el)
   }
 
-  resolveSelector<T>(selector: string | T | null | undefined): T | null {
+  private resolveSelector<T>(selector: string | T | null | undefined): T | null {
     if (typeof selector === 'string')
       return document.querySelector(selector) as unknown as T
     else return selector || null
   }
 
-  mount(el: string | HTMLCanvasElement) {
+  private mount(el: string | HTMLCanvasElement) {
     if (this.canvas) throw new Error('[graphism] already mounted, unmount previous target first')
 
     this.canvas = this.resolveSelector(el)
