@@ -28,17 +28,17 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.16.1",
-    "@antfu/eslint-config-ts": "^0.26.0",
+    "@antfu/eslint-config-ts": "^0.26.1",
     "@antfu/ni": "^0.16.3",
     "bumpp": "^7.2.0",
-    "eslint": "^8.21.0",
+    "eslint": "^8.22.0",
     "jsdom": "^20.0.0",
     "nanoevents": "^6.0.2",
     "pnpm": "^6.34.0",
     "sass": "^1.54.4",
     "tsup": "^5.12.9",
     "typescript": "^4.7.4",
-    "vite": "^2.9.14",
+    "vite": "^2.9.15",
     "vitest": "^0.21.1"
   }
 }
