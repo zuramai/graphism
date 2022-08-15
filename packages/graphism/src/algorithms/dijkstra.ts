@@ -1,5 +1,5 @@
 import type { NodeInterface } from 'graphism'
-import type { ShortestPathAlgorithm, SolveOptions } from '../types'
+import type { ShortestPathAlgorithm, SolveOptions } from '../types/algorithm'
 import { GraphAlgorithm } from '.'
 
 export default class DijkstraAlgorithm extends GraphAlgorithm implements ShortestPathAlgorithm {

@@ -16,8 +16,7 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "graphism": ["./packages/graphism/src/index.ts"],
-      "@graphism/algorithms": ["./packages/algorithms/src/index.ts"]
+      "graphism": ["./packages/graphism/src/index.ts"]
     }
   }
 }

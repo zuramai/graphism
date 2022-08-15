@@ -1,4 +1,5 @@
-import type { LineInterface, NodeInterface } from 'graphism'
+import type { LineInterface } from './line'
+import type { NodeInterface } from './node'
 
 export interface ProgressStack {
   el: NodeInterface | LineInterface
@@ -6,9 +7,9 @@ export interface ProgressStack {
 }
 
 export interface AlgorithmInterface {
-  nodes: NodeInterface[][]
+  nodes: NodeInterface[]
   startNode: NodeInterface
-  path: (NodeInterface|LineInterface)[]
+  path: (NodeInterface | LineInterface)[]
 
   progressStack: ProgressStack[]
 
