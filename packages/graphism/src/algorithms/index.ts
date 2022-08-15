@@ -16,6 +16,6 @@ export const AvailableAlgorithms = {
   kruskal: KruskalAlgorithm,
 }
 
-export function newAlgorithm<T extends keyof typeof AvailableAlgorithms>(nodes: NodeInterface[], algorithm: T): AlgorithmInterface {
-  return new AvailableAlgorithms[algorithm](nodes)
+export function newAlgorithm<T extends keyof typeof AvailableAlgorithms>(algorithm: T, nodes: NodeInterface[], startNode: NodeInterface, endNode: NodeInterface): AlgorithmInterface {
+  return new AvailableAlgorithms[algorithm](nodes, startNode, endNode)
 }

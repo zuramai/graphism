@@ -1,5 +1,5 @@
-import type { NodeInterface } from '../types'
-import type { ProgressStack, ShortestPathAlgorithm, SolveOptions } from '../types/algorithm'
+import type { NeighborInterface, NodeInterface } from '../types'
+import type { DistanceMap, ProgressStack, ShortestPathAlgorithm, SolveOptions } from '../types/algorithm'
 
 export default class DijkstraAlgorithm implements ShortestPathAlgorithm {
   endNode: NodeInterface
@@ -8,11 +8,54 @@ export default class DijkstraAlgorithm implements ShortestPathAlgorithm {
   startNode: NodeInterface
   progressStack: ProgressStack[] = []
 
-  constructor(nodes: NodeInterface[]) {
+  constructor(nodes: NodeInterface[], startNode: NodeInterface, endNode: NodeInterface) {
     this.nodes = nodes
+    this.startNode = startNode
+    this.endNode = endNode
   }
 
   solve(solveOptions: SolveOptions) {
-    console.log("running dijkstra")
+    const fromId = this.startNode.id
+    const distanceSet: Record<number, DistanceMap> = {}
+    const isVisited: Record<number, boolean> = {}
+
+    this.nodes.forEach((node) => {
+      isVisited[node.id] = false
+      distanceSet[node.id] = {
+        distance: node.id === fromId ? 0 : Infinity,
+        parent: null,
+      }
+    })
+
+    let currentNode = this.startNode
+    for (let i = 0; i < Object.keys(isVisited).length; i++) {
+      let shortestNeighborDistance: Number = Infinity
+      let shortestNeighbor: NeighborInterface = null
+      currentNode.neighbors.forEach((neighbor) => {
+        if (!isVisited[neighbor.node.id]
+          && neighbor.distance + distanceSet[currentNode.id].distance < distanceSet[neighbor.node.id].distance) {
+          distanceSet[neighbor.node.id].distance = neighbor.distance + distanceSet[currentNode.id].distance
+          distanceSet[neighbor.node.id].parent = currentNode.id
+        }
+
+        if (neighbor.distance < shortestNeighborDistance) {
+          shortestNeighbor = neighbor
+          shortestNeighborDistance = shortestNeighbor.distance
+        }
+      })
+
+      isVisited[currentNode.id] = true
+
+      currentNode = shortestNeighbor.node
+    }
+
+    const path = [this.endNode.text]
+    let endNode = distanceSet[this.endNode.id].parent
+    while (endNode) {
+      const node = this.nodes.find(n => n.id === endNode)
+      path.push(node.text)
+      endNode = distanceSet[endNode].parent
+    }
+    return path.reverse()
   }
 }

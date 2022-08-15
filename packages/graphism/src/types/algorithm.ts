@@ -6,6 +6,11 @@ export interface ProgressStack {
   status: 'PROGRESS' | 'CANCEL' | 'SUCCESS'
 }
 
+export interface DistanceMap {
+  distance: number
+  parent: number
+}
+
 export interface AlgorithmInterface {
   nodes: NodeInterface[]
   startNode: NodeInterface

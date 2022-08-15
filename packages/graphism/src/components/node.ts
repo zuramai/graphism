@@ -35,7 +35,7 @@ export class Nodee extends Component implements NodeInterface {
 
   constructor(name: string, position: Coordinate, config?: NodeConfig) {
     super()
-    this.id = performance.now()
+    this.id = Math.floor(Math.random() * Date.now())
     this.name = 'node'
     this.text = name
     this.position = position

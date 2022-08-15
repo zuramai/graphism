@@ -14,6 +14,8 @@ import type { NodeConfig, NodeInterface } from './types/node'
 import Line from './components/line'
 import type { Component } from './components/abstract'
 import { getDistance } from './utils'
+import { newAlgorithm } from './algorithms'
+import type { AvailableAlgorithms } from './algorithms'
 
 const defaultConfig: CanvasConfig = {
   lineColor: '#555',
@@ -209,6 +211,14 @@ export class Graphism {
 
     this.selectedNode = []
     console.log('clearing selected line')
+  }
+
+  runAlgorithm<T extends keyof typeof AvailableAlgorithms>(algorithmName: T, from: NodeInterface, to: NodeInterface) {
+    const algo = newAlgorithm(algorithmName, this.nodes, from, to)
+
+    return algo.solve({
+      speed: 1,
+    })
   }
 
   setMode(mode: CanvasMode) {
