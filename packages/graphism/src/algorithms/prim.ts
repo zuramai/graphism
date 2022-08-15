@@ -1,8 +1,12 @@
-import type { SolveOptions, SpanningTreeAlgorithm } from '../types/algorithm'
-import { GraphAlgorithm } from '.'
-export default class PrimAlgorithm extends GraphAlgorithm implements SpanningTreeAlgorithm {
+import type { ProgressStack, SolveOptions, SpanningTreeAlgorithm } from '../types/algorithm'
+import type { NodeInterface } from '../types'
+export default class PrimAlgorithm implements SpanningTreeAlgorithm {
+  nodes: NodeInterface[] = []
+  path: NodeInterface[] = []
+  startNode: NodeInterface
+  progressStack: ProgressStack[] = []
+
   constructor() {
-    super()
   }
 
   solve(solveOptions: SolveOptions) {

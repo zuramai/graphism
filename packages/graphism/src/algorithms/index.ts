@@ -1,5 +1,5 @@
 import type { NodeInterface } from '../types'
-import type { AlgorithmInterface, ProgressStack, SolveOptions } from '../types/algorithm'
+import type { AlgorithmInterface } from '../types/algorithm'
 import AStarAlgorithm from './aStar'
 import BFSAlgorithm from './bfs'
 import DFSAlgorithm from './dfs'
@@ -16,15 +16,6 @@ export const AvailableAlgorithms = {
   kruskal: KruskalAlgorithm,
 }
 
-export abstract class GraphAlgorithm implements AlgorithmInterface {
-  nodes: NodeInterface[] = []
-  path: NodeInterface[] = []
-  startNode: NodeInterface
-  progressStack: ProgressStack[] = []
-
-  abstract solve(solveOptions: SolveOptions): void
-
-  static new<T extends keyof typeof AvailableAlgorithms>(nodes: NodeInterface[], algorithm: T): GraphAlgorithm {
-    return new AvailableAlgorithms[algorithm](nodes)
-  }
+export function newAlgorithm<T extends keyof typeof AvailableAlgorithms>(nodes: NodeInterface[], algorithm: T): AlgorithmInterface {
+  return new AvailableAlgorithms[algorithm](nodes)
 }

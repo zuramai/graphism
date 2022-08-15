@@ -1,11 +1,13 @@
 import type { NodeInterface } from '../types'
-import type { ShortestPathAlgorithm, SolveOptions } from '../types/algorithm'
-import { GraphAlgorithm } from '.'
-export default class AStarAlgorithm extends GraphAlgorithm implements ShortestPathAlgorithm {
+import type { ProgressStack, ShortestPathAlgorithm, SolveOptions } from '../types/algorithm'
+export default class AStarAlgorithm implements ShortestPathAlgorithm {
   endNode: NodeInterface
+  nodes: NodeInterface[] = []
+  path: NodeInterface[] = []
+  startNode: NodeInterface
+  progressStack: ProgressStack[] = []
 
   constructor() {
-    super()
   }
 
   solve(solveOptions: SolveOptions) {

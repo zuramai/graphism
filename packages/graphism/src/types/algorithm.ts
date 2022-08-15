@@ -16,11 +16,11 @@ export interface AlgorithmInterface {
   solve: (solveOptions: SolveOptions) => void
 }
 
-export interface ShortestPathAlgorithm {
+export interface ShortestPathAlgorithm extends AlgorithmInterface {
   endNode: NodeInterface
 }
 
-export interface SearchAlgorithm {
+export interface SearchAlgorithm extends AlgorithmInterface {
   findValue: string
 }
 
