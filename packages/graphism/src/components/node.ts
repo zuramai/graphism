@@ -18,6 +18,7 @@ const defaultNodeConfig: NodeConfig = {
 }
 
 export class Nodee extends Component implements NodeInterface {
+  id: number
   neighbors?: NeighborInterface[] = []
   nodeConfig: NodeConfig = {}
   text: string
@@ -34,6 +35,7 @@ export class Nodee extends Component implements NodeInterface {
 
   constructor(name: string, position: Coordinate, config?: NodeConfig) {
     super()
+    this.id = performance.now()
     this.name = 'node'
     this.text = name
     this.position = position

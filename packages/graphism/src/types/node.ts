@@ -2,6 +2,7 @@ import type { LineInterface } from './line'
 import type { CanvasMode, ComponentInterface, Coordinate } from './index'
 
 export interface NodeInterface extends ComponentInterface {
+  id: number
   text: string
   neighbors?: NeighborInterface[]
   mode: CanvasMode
