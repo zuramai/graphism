@@ -86,7 +86,18 @@ function graphismEventListeners(graphism: Graphism, canvas: HTMLCanvasElement) {
 
 function algorithmEventListeners(graphism: Graphism) {
   onClick('solve-dijkstra', () => {
-    graphism.runAlgorithm('dijkstra')
+    graphism.setMode('connecting')
+    showHelperText('Select starting node..')
+    graphism.clearSelectedNode()
+
+    graphism.on('node:select', (node1: NodeInterface) => {
+      showHelperText('Select ending node..')
+      graphism.on('node:select', (node2: NodeInterface) => {
+        graphism.runAlgorithm('dijkstra', node1, node2)
+        hideHelperText()
+        graphism.setMode('normal')
+      }, true)
+    }, true)
   })
 }
 
