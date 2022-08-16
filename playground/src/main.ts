@@ -70,6 +70,7 @@ function graphismEventListeners(graphism: Graphism, canvas: HTMLCanvasElement) {
   onClick('create-new', createNewGraph)
   onClick('connectNode', connectNode.bind(null, graphism))
   onClick('saveToImage', () => saveCanvasToImg(canvas))
+  onClick('clear', () => graphism.clear())
 
   toggleModalFromSelector(document.querySelector('.modal-add'), document.getElementById('openAddModal'))
   algorithmEventListeners(graphism)

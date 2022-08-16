@@ -192,6 +192,12 @@ export class Graphism {
     return node
   }
 
+  clear() {
+    this.lines = []
+    this.nodes = []
+    this.mode = 'normal'
+  }
+
   clearSelectedNode() {
     for (let i = 0; i < this.nodes.length; i++) {
       this.nodes[i].isSelected = false
