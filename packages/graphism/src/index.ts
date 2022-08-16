@@ -187,8 +187,6 @@ export class Graphism {
     this.setMode('normal')
     this.clearSelectedNode()
 
-    console.log('creating new node ', name, ' at ', coordinate)
-
     return node
   }
 
@@ -206,7 +204,6 @@ export class Graphism {
     }
     this._emitter.emit('node:clearSelect')
     this.selectedNode = []
-    console.log('clearing selected node')
   }
 
   clearSelectedLine() {
@@ -216,7 +213,6 @@ export class Graphism {
     this._emitter.emit('line:clearSelect')
 
     this.selectedNode = []
-    console.log('clearing selected line')
   }
 
   runAlgorithm<T extends keyof typeof AvailableAlgorithms>(algorithmName: T, from: NodeInterface, to: NodeInterface) {

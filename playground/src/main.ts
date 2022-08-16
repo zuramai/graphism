@@ -75,11 +75,9 @@ function graphismEventListeners(graphism: Graphism, canvas: HTMLCanvasElement) {
   toggleModalFromSelector(document.querySelector('.modal-add'), document.getElementById('openAddModal'))
   algorithmEventListeners(graphism)
   graphism.on('line:select', () => {
-    console.log('line selected')
     document.getElementById('options-line').classList.remove('disabled')
   })
   graphism.on('line:clearSelect', () => {
-    console.log('line clearerd')
     document.getElementById('options-line').classList.add('disabled')
   })
 }
@@ -217,7 +215,6 @@ function createProxy<T extends object>(graphism: Graphism, target: T): T {
       input.value = value
 
       // Change the configuration in the node
-      console.log('Changing: ', graphism.selectedNode[0])
       graphism.selectedNode[0].nodeConfig[prop] = value
 
       return true
@@ -227,7 +224,6 @@ function createProxy<T extends object>(graphism: Graphism, target: T): T {
 
 function customizationHandler<T extends object>(obj: T) {
   Object.keys(obj).forEach((key) => {
-    console.log(`querying: custom-${camelToSnakeCase(key)}`)
     let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(key)}`)
     if (!input) input = document.querySelector<HTMLInputElement>(key)
 

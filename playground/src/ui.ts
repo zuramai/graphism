@@ -45,7 +45,6 @@ export function toggleModalFromSelector(modal: HTMLElement, toggler: HTMLElement
 
 export function showPoppover(id: string, position: Coordinate): HTMLElement {
   const poppoverEl = document.getElementById(id)
-  console.log(position.y, poppoverEl.clientHeight, document.body.clientHeight)
   if (position.y + poppoverEl.clientHeight > document.body.clientHeight) position.y -= poppoverEl.clientHeight
   if (position.x + poppoverEl.clientWidth > document.body.clientWidth) position.x -= poppoverEl.clientWidth
   poppoverEl.style.left = `${position.x}px`
