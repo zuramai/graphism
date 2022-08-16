@@ -2,7 +2,7 @@ import './assets/scss/main.scss'
 import type { Graphism, NodeInterface } from 'graphism'
 import { createGraphism } from 'graphism'
 import { saveCanvasToImg } from '../../packages/graphism/src/utils'
-import { camelToSnakeCase } from './utils'
+import { camelToSnakeCase, onClick } from './utils'
 import { createNotification } from './components/notification'
 import { showPoppover, toggleModalFromSelector } from './ui'
 
@@ -64,11 +64,13 @@ window.onload = () => {
  */
 function graphismEventListeners(graphism: Graphism, canvas: HTMLCanvasElement) {
   window.addEventListener('resize', resizeCanvas.bind(null, canvas))
-  document.getElementById('node-add').addEventListener('click', addNode.bind(null, graphism))
-  document.getElementById('generate-graph').addEventListener('click', generateGraphEvent.bind(null, graphism))
-  document.getElementById('create-new').addEventListener('click', createNewGraph)
-  document.getElementById('connectNode').addEventListener('click', connectNode.bind(null, graphism))
-  document.getElementById('saveToImage').addEventListener('click', () => saveCanvasToImg(canvas))
+
+  onClick('node-add', addNode.bind(null, graphism))
+  onClick('generate-graph', generateGraphEvent.bind(null, graphism))
+  onClick('create-new', createNewGraph)
+  onClick('connectNode', connectNode.bind(null, graphism))
+  onClick('saveToImage', () => saveCanvasToImg(canvas))
+
   toggleModalFromSelector(document.querySelector('.modal-add'), document.getElementById('openAddModal'))
   algorithmEventListeners(graphism)
   graphism.on('line:select', () => {
@@ -82,7 +84,9 @@ function graphismEventListeners(graphism: Graphism, canvas: HTMLCanvasElement) {
 }
 
 function algorithmEventListeners(graphism: Graphism) {
-  document.getElementById('solve-dijkstra').addEventListener('click', () => graphism.runAlgorithm('dijkstra'))
+  onClick('solve-dijkstra', () => {
+    graphism.runAlgorithm('dijkstra')
+  })
 }
 
 /**
