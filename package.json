@@ -30,7 +30,7 @@
     "@antfu/eslint-config": "^0.26.1",
     "@antfu/eslint-config-ts": "^0.26.1",
     "@antfu/ni": "^0.17.2",
-    "@vitest/coverage-c8": "^0.22.0",
+    "@vitest/coverage-c8": "^0.22.1",
     "bumpp": "^8.2.1",
     "c8": "^7.12.0",
     "canvas": "^2.9.3",
@@ -38,10 +38,10 @@
     "jsdom": "^20.0.0",
     "nanoevents": "^7.0.1",
     "pnpm": "^6.34.0",
-    "sass": "^1.54.4",
+    "sass": "^1.54.5",
     "tsup": "^6.2.2",
-    "typescript": "^4.7.4",
-    "vite": "^3.0.7",
-    "vitest": "^0.22.0"
+    "typescript": "^4.8.2",
+    "vite": "^3.0.9",
+    "vitest": "^0.22.1"
   }
 }
