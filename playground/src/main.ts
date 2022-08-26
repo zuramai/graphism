@@ -225,7 +225,8 @@ function createProxy<T extends object>(graphism: Graphism, target: T): T {
 function customizationHandler<T extends object>(obj: T) {
   Object.keys(obj).forEach((key) => {
     let input = <HTMLInputElement>document.getElementById(`custom-${camelToSnakeCase(key)}`)
-    if (!input) input = document.querySelector<HTMLInputElement>(key)
+    if (!input)
+      input = document.querySelector<HTMLInputElement>(key)
 
     input.addEventListener('input', () => obj[key] = input.value)
   })

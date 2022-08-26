@@ -1,4 +1,3 @@
-
 /**
  * Create popup notification
  * @param type The notification type (primary, danger, warning)

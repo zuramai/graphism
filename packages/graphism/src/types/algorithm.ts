@@ -18,7 +18,7 @@ export interface AlgorithmInterface {
 
   progressStack: ProgressStack[]
 
-  solve: (solveOptions: SolveOptions) => void
+  solve: (solveOptions?: SolveOptions) => void
 }
 
 export interface ShortestPathAlgorithm extends AlgorithmInterface {
@@ -33,5 +33,5 @@ export interface SpanningTreeAlgorithm {
 }
 
 export interface SolveOptions {
-  speed: number
+  speed?: number
 }

@@ -27,7 +27,7 @@ graphism.addNodeNeighbor(c, h, 300)
 graphism.addNodeNeighbor(h, f, 250)
 graphism.addNodeNeighbor(h, e, 200)
 
-describe('dijkstra algorithm', async() => {
+describe('dijkstra algorithm', async () => {
   test('algorithm is correct', () => {
     const aToF = graphism.runAlgorithm('dijkstra', a, f)
     expect(aToF).toStrictEqual(['a', 'b', 'e', 'f'])

@@ -56,11 +56,13 @@ export class Graphism {
   }
 
   private mount(el: string | HTMLCanvasElement) {
-    if (this.canvas) throw new Error('[graphism] already mounted, unmount previous target first')
+    if (this.canvas)
+      throw new Error('[graphism] already mounted, unmount previous target first')
 
     this.canvas = this.resolveSelector(el)
 
-    if (!this.canvas) throw new Error('[graphism] target element not found')
+    if (!this.canvas)
+      throw new Error('[graphism] target element not found')
 
     this.ctx = this.canvas.getContext('2d')
 
@@ -81,8 +83,9 @@ export class Graphism {
 
   on<E extends keyof EventsMap>(event: E, callback: any, once = false) {
     const unbind = this._emitter.on(event, (...args) => {
-      if (once) unbind()
-      callback(...args) // eslint-disable-line n/no-callback-literal
+      if (once)
+        unbind()
+      callback(...args)
     })
     return unbind
   }
@@ -218,19 +221,20 @@ export class Graphism {
   runAlgorithm<T extends keyof typeof AvailableAlgorithms>(algorithmName: T, from: NodeInterface, to: NodeInterface) {
     const algo = newAlgorithm(algorithmName, this.nodes, from, to)
 
-    return algo.solve({
-      speed: 1,
-    })
+    const path = algo.solve()
+    console.log(path)
   }
 
   setMode(mode: CanvasMode) {
     this.mode = mode
+    this.clearSelectedNode()
   }
 
   addNodeNeighbor(from: NodeInterface, to: NodeInterface, distance?: number) {
     let line: LineInterface
     const lineConfig: LineConfig = {}
-    if (distance === null || distance === undefined) lineConfig.dynamicDistance = true
+    if (distance === null || distance === undefined)
+      lineConfig.dynamicDistance = true
 
     distance ??= Math.round(getDistance(from.position, to.position))
     // Check if the line exists from the other way around
@@ -238,7 +242,8 @@ export class Graphism {
       l => (l.from === from && l.to === to) || (l.from === to && l.to === from),
     )
 
-    if (createdLine) line = createdLine
+    if (createdLine)
+      line = createdLine
     else {
       line = new Line(from, to, distance, lineConfig)
       this.lines.push(line)
@@ -246,7 +251,8 @@ export class Graphism {
 
     from.addNeighbor(to, distance, line)
 
-    if (!this.isDirectedGraph) to.addNeighbor(from, distance, line)
+    if (!this.isDirectedGraph)
+      to.addNeighbor(from, distance, line)
 
     this._emitter.emit('node:connect', from, to)
   }
@@ -310,7 +316,8 @@ export class Graphism {
       element.isHovered = true
     }
 
-    if (!this.nodes.length || !this.holdingNode) return
+    if (!this.nodes.length || !this.holdingNode)
+      return
     const dx = position.x - this.dragFrom.x
     const dy = position.y - this.dragFrom.y
 
@@ -341,7 +348,8 @@ export class Graphism {
         const node = this.nodes[i]
 
         if (node.isOnCoordinate(position)) {
-          if (!e.ctrlKey) this.clearSelectedNode()
+          if (!e.ctrlKey)
+            this.clearSelectedNode()
           this.selectNode(node, this.mode)
           isNodeClicked = true
           this._emitter.emit('node:select', node)
@@ -359,8 +367,10 @@ export class Graphism {
         }
       }
 
-      if (!isLineClicked) this.clearSelectedLine()
-      if (!isNodeClicked) this.clearSelectedNode()
+      if (!isLineClicked)
+        this.clearSelectedLine()
+      if (!isNodeClicked)
+        this.clearSelectedNode()
     }
   }
 

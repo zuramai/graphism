@@ -8,5 +8,5 @@ export abstract class Component implements ComponentInterface {
   moveFrom: Coordinate
 
   abstract isOnCoordinate(coordinate: Coordinate): boolean
-  abstract move (x?: number, y?: number): void
+  abstract move(x?: number, y?: number): void
 }

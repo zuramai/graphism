@@ -45,7 +45,8 @@ export class Nodee extends Component implements NodeInterface {
 
   addNeighbor(node: NodeInterface, distance: number, line: LineInterface) {
     // If the neighbor already exists
-    if (this.neighbors.find(n => n.node === node)) return
+    if (this.neighbors.find(n => n.node === node))
+      return
 
     this.neighbors.push({
       node,
@@ -69,8 +70,10 @@ export class Nodee extends Component implements NodeInterface {
     ctx.lineWidth = this.nodeConfig.hoverBorderSize
     ctx.setLineDash(this.mode === 'connecting' ? [50, 10] : [0])
     ctx.lineDashOffset = this._borderOffset
-    if (this.isHovered && !this.isSelected) ctx.fill()
-    if (this.isSelected) ctx.stroke()
+    if (this.isHovered && !this.isSelected)
+      ctx.fill()
+    if (this.isSelected)
+      ctx.stroke()
     ctx.closePath()
 
     // Create the node shape
@@ -104,12 +107,15 @@ export class Nodee extends Component implements NodeInterface {
   select() {
     this.isSelected = !this.isSelected
 
-    if (!this.isSelected) this._borderOffset = 0
+    if (!this.isSelected)
+      this._borderOffset = 0
   }
 
   move(x?: number, y?: number) {
-    if (x) this.position.x = x
-    if (y) this.position.y = y
+    if (x)
+      this.position.x = x
+    if (y)
+      this.position.y = y
     this.neighbors.forEach((neighbor) => {
       neighbor.line.updateDistance()
     })
