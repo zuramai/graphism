@@ -1,10 +1,11 @@
+import type { LineInterface } from '../../dist'
 import type { NeighborInterface, NodeInterface } from '../types'
-import type { DistanceMap, ProgressStack, ShortestPathAlgorithm, SolveOptions } from '../types/algorithm'
+import type { DistanceMap, ProgressStack, ShortestPathAlgorithm } from '../types/algorithm'
 
 export default class DijkstraAlgorithm implements ShortestPathAlgorithm {
   endNode: NodeInterface
   nodes: NodeInterface[] = []
-  path: NodeInterface[] = []
+  path: (NodeInterface | LineInterface)[] = []
   startNode: NodeInterface
   progressStack: ProgressStack[] = []
 
@@ -14,7 +15,7 @@ export default class DijkstraAlgorithm implements ShortestPathAlgorithm {
     this.endNode = endNode
   }
 
-  solve(solveOptions: SolveOptions) {
+  solve() {
     const fromId = this.startNode.id
     const distanceSet: Record<number, DistanceMap> = {}
     const isVisited: Record<number, boolean> = {}
@@ -36,6 +37,7 @@ export default class DijkstraAlgorithm implements ShortestPathAlgorithm {
           && neighbor.distance + distanceSet[currentNode.id].distance < distanceSet[neighbor.node.id].distance) {
           distanceSet[neighbor.node.id].distance = neighbor.distance + distanceSet[currentNode.id].distance
           distanceSet[neighbor.node.id].parent = currentNode.id
+          distanceSet[neighbor.node.id].line = neighbor.line
         }
 
         if (neighbor.distance < shortestNeighborDistance) {
@@ -49,13 +51,14 @@ export default class DijkstraAlgorithm implements ShortestPathAlgorithm {
       currentNode = shortestNeighbor.node
     }
 
-    const path = [this.endNode.text]
+    this.path = [this.endNode]
     let endNode = distanceSet[this.endNode.id].parent
     while (endNode) {
       const node = this.nodes.find(n => n.id === endNode)
-      path.push(node.text)
+      this.path.push(node)
+      this.path.push(distanceSet[this.endNode.id].line)
       endNode = distanceSet[endNode].parent
     }
-    return path.reverse()
+    return this.path.reverse()
   }
 }

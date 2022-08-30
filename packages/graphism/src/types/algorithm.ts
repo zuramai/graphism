@@ -9,6 +9,7 @@ export interface ProgressStack {
 export interface DistanceMap {
   distance: number
   parent: number
+  line?: LineInterface
 }
 
 export interface AlgorithmInterface {
@@ -18,7 +19,7 @@ export interface AlgorithmInterface {
 
   progressStack: ProgressStack[]
 
-  solve: (solveOptions?: SolveOptions) => void
+  solve: (solveOptions?: SolveOptions) => (NodeInterface | LineInterface)[]
 }
 
 export interface ShortestPathAlgorithm extends AlgorithmInterface {

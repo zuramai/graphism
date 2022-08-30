@@ -232,6 +232,16 @@ export class Graphism {
 
     const path = algo.solve()
     console.log(path)
+
+    path.forEach((element) => {
+      if (element instanceof Line) {
+        element.lineConfig.color = 'blue'
+      }
+      else if (element instanceof Nodee) {
+        element.nodeConfig.backgroundColor = 'blue'
+        element.nodeConfig.textColor = 'white'
+      }
+    })
   }
 
   setMode(mode: CanvasMode) {
