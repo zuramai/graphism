@@ -97,17 +97,26 @@ export class Graphism {
    */
   generateGraph() {
     // Create new node
-    const nodeJakarta = this.createNode('Jakarta', { x: 130, y: 274 })
-    const nodeBandung = this.createNode('Bandung', { x: 390, y: 200 })
-
-    this.addNodeNeighbor(nodeBandung, nodeJakarta, 100)
-    this.addNodeNeighbor(nodeJakarta, nodeBandung, 100)
-
-    const nodes = [nodeJakarta, nodeBandung]
-
-    this.nodes = nodes
-
-    return nodes
+    const a = this.createNode('a', { x: 300, y: 300 })
+    const b = this.createNode('b', { x: 500, y: 450 })
+    const c = this.createNode('c', { x: 550, y: 200 })
+    const d = this.createNode('d', { x: 200, y: 500 })
+    const e = this.createNode('e', { x: 700, y: 420 })
+    const f = this.createNode('f', { x: 1000, y: 420 })
+    const g = this.createNode('g', { x: 500, y: 620 })
+    const h = this.createNode('h', { x: 800, y: 300 })
+    this.addNodeNeighbor(a, b, 100)
+    this.addNodeNeighbor(a, c, 150)
+    this.addNodeNeighbor(a, d, 250)
+    this.addNodeNeighbor(b, e, 50)
+    this.addNodeNeighbor(c, e, 250)
+    this.addNodeNeighbor(f, e, 250)
+    this.addNodeNeighbor(g, d, 1250)
+    this.addNodeNeighbor(g, e, 300)
+    this.addNodeNeighbor(g, f, 400)
+    this.addNodeNeighbor(c, h, 300)
+    this.addNodeNeighbor(h, f, 250)
+    this.addNodeNeighbor(h, e, 200)
   }
 
   private draw() {
