@@ -14,6 +14,7 @@ export interface CanvasConfig {
   canvasBackground?: string | CanvasPattern | HTMLImageElement
   lineColor?: string
   nodeBackground?: string
+  grid?: boolean
   nodeTextColor?: string
 }
 

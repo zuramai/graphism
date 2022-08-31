@@ -18,7 +18,6 @@ const customizations = {
   hoverBorderColor: 'rgba(120, 118, 240, .6)',
   hoverBackgroundColor: 'white',
 }
-
 window.onload = () => {
   const el = document.querySelector<HTMLCanvasElement>('#canvas')
 
@@ -120,7 +119,7 @@ function connectNode(graphism: Graphism) {
         const distance = (document.getElementById('distance-value') as HTMLInputElement).value
         graphism.addNodeNeighbor(node1, node2, distance === '' ? null : ~~distance)
         graphism.clearSelectedNode()
-        graphism.mode = 'normal'
+        graphism.setMode('normal')
         poppoverEl.style.visibility = 'hidden'
       }, { once: true })
     }, true)
@@ -134,8 +133,7 @@ function connectNode(graphism: Graphism) {
  * Create new and start with random graph
  */
 function generateGraphEvent(graphism: Graphism) {
-  const nodes = graphism.generateGraph()
-  graphism.nodes = nodes
+  graphism.generateGraph()
   hideTitleScreen()
 }
 
@@ -195,7 +193,7 @@ function createProxy<T extends object>(graphism: Graphism, target: T): T {
       input.value = value
 
       // Change the configuration in the node
-      graphism.selectedNode[0].nodeConfig[prop] = value
+      graphism.getSelectedNode()[0].nodeConfig[prop] = value
 
       return true
     },
