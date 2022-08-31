@@ -27,7 +27,7 @@ const defaultConfig: CanvasConfig = {
 }
 
 export class Graphism {
-  private canvas: HTMLCanvasElement
+  canvas: HTMLCanvasElement
   private ctx: CanvasRenderingContext2D
 
   private nodes: NodeInterface[] = []
