@@ -10,7 +10,8 @@ export default class AStarAlgorithm implements ShortestPathAlgorithm {
   constructor() {
   }
 
-  solve(solveOptions: SolveOptions) {
+  solve(_: SolveOptions) {
     // Unimplemented
+    return []
   }
 }

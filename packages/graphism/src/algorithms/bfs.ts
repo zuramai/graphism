@@ -10,7 +10,8 @@ export default class BFSAlgorithm implements SearchAlgorithm {
   constructor() {
   }
 
-  solve(solveOptions: SolveOptions) {
+  solve(_: SolveOptions) {
     // Unimplemented
+    return []
   }
 }

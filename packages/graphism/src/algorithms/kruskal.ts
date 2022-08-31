@@ -8,7 +8,8 @@ export default class KruskalAlgorithm implements SpanningTreeAlgorithm {
   constructor() {
   }
 
-  solve(solveOptions: SolveOptions) {
+  solve(_: SolveOptions) {
     // Unimplemented
+    return []
   }
 }

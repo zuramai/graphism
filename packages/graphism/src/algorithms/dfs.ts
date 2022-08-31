@@ -10,7 +10,8 @@ export default class DFSAlgorithm implements SearchAlgorithm {
   constructor() {
   }
 
-  solve(solveOptions: SolveOptions) {
+  solve(_: SolveOptions) {
     // Unimplemented
+    return []
   }
 }

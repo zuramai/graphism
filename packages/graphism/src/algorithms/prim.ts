@@ -9,7 +9,8 @@ export default class PrimAlgorithm implements SpanningTreeAlgorithm {
   constructor() {
   }
 
-  solve(solveOptions: SolveOptions) {
+  solve(_: SolveOptions) {
     // Unimplemented
+    return []
   }
 }

@@ -22,6 +22,7 @@ const defaultConfig: CanvasConfig = {
   nodeBackground: 'white',
   nodeTextColor: '#555',
   canvasBackground: '#ccc',
+  grid: true,
 }
 
 export class Graphism {
@@ -71,6 +72,7 @@ export class Graphism {
     this.canvas.height = this.canvas.clientHeight
 
     // Event listeners
+    this.canvas.addEventListener('keypress', this.keypress.bind(this))
     this.canvas.addEventListener('mousedown', this.mouseDown.bind(this))
     this.canvas.addEventListener('mousemove', this.mouseMove.bind(this))
     this.canvas.addEventListener('mouseup', this.mouseUp.bind(this))
@@ -284,6 +286,18 @@ export class Graphism {
     }
   }
 
+  private keypress(e: KeyboardEvent) {
+    e.preventDefault()
+    switch (e.key) {
+      case 'a':
+        if (e.ctrlKey)
+          this.selectAllNode()
+        break
+      default:
+        break
+    }
+  }
+
   private mouseUp() {
     this.holdingNode = null
   }
@@ -397,6 +411,12 @@ export class Graphism {
     node.select()
     node.mode = !node.isSelected ? 'normal' : mode
     this.selectedNode.push(node)
+  }
+
+  selectAllNode() {
+    for (let i = 0; i < this.nodes.length; i++) {
+      this.selectNode(this.nodes[i])
+    }
   }
 
   getCursorPosition(e) {

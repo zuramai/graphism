@@ -1,4 +1,4 @@
-import type { LineInterface } from '../../dist'
+import type { LineInterface } from '../types/line'
 import type { NeighborInterface, NodeInterface } from '../types'
 import type { DistanceMap, ProgressStack, ShortestPathAlgorithm } from '../types/algorithm'
 
