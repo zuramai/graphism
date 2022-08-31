@@ -51,12 +51,12 @@ export default class DijkstraAlgorithm implements ShortestPathAlgorithm {
       currentNode = shortestNeighbor.node
     }
 
-    this.path = [this.endNode]
+    this.path = [this.endNode, distanceSet[this.endNode.id].line]
     let endNode = distanceSet[this.endNode.id].parent
     while (endNode) {
       const node = this.nodes.find(n => n.id === endNode)
       this.path.push(node)
-      this.path.push(distanceSet[this.endNode.id].line)
+      this.path.push(distanceSet[endNode].line)
       endNode = distanceSet[endNode].parent
     }
     return this.path.reverse()
