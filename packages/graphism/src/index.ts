@@ -16,6 +16,7 @@ import type { Component } from './components/abstract'
 import { getDistance } from './utils'
 import { newAlgorithm } from './algorithms'
 import type { AvailableAlgorithms } from './algorithms'
+import { createBackground } from './components/background'
 
 const defaultConfig: CanvasConfig = {
   lineColor: '#555',
@@ -26,15 +27,18 @@ const defaultConfig: CanvasConfig = {
 }
 
 export class Graphism {
-  canvas: HTMLCanvasElement
-  ctx: CanvasRenderingContext2D
-  nodes: NodeInterface[] = []
-  dragFrom: Coordinate
-  isDirectedGraph = false
-  lines: LineInterface[] = []
-  selectedNode: NodeInterface[] = []
-  holdingNode: NodeInterface = null
-  mode: CanvasMode = 'normal'
+  private canvas: HTMLCanvasElement
+  private ctx: CanvasRenderingContext2D
+
+  private nodes: NodeInterface[] = []
+  private lines: LineInterface[] = []
+  private selectedNode: NodeInterface[] = []
+  private holdingNode: NodeInterface = null
+  private background
+
+  private dragFrom: Coordinate
+  private isDirectedGraph = false
+  private mode: CanvasMode = 'normal'
 
   private _hoveredElement: Component = null
   private _emitter = createNanoEvents<EventsMap>()
@@ -48,6 +52,7 @@ export class Graphism {
   constructor(public config: CanvasConfig = {}) {
     this.config = Object.assign(defaultConfig, config)
     this.mount(config.el)
+    this.background = createBackground(this.ctx, 'grid')
   }
 
   private resolveSelector<T>(selector: string | T | null | undefined): T | null {
@@ -123,6 +128,7 @@ export class Graphism {
 
   private draw() {
     this.drawBackground()
+    this.drawMode()
     this.drawLines()
     this.drawNodes()
   }
@@ -138,24 +144,10 @@ export class Graphism {
   }
 
   private drawBackground() {
-    // Background
-    if (
-      typeof this.config.canvasBackground == 'string'
-      || this.config.canvasBackground instanceof CanvasPattern
-    ) {
-      this.ctx.fillStyle = this.config.canvasBackground
-      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-    }
-    else if (this.config.canvasBackground instanceof HTMLImageElement) {
-      this.ctx.drawImage(
-        this.config.canvasBackground,
-        0,
-        0,
-        this.canvas.width,
-        this.canvas.height,
-      )
-    }
+    this.background.draw()
+  }
 
+  drawMode() {
     if (['creating', 'connecting'].includes(this.mode)) {
       // Running border
       this.ctx.save()
@@ -249,6 +241,10 @@ export class Graphism {
   setMode(mode: CanvasMode) {
     this.mode = mode
     this.clearSelectedNode()
+  }
+
+  getSelectedNode() {
+    return this.selectedNode
   }
 
   addNodeNeighbor(from: NodeInterface, to: NodeInterface, distance?: number) {
