@@ -283,10 +283,10 @@ export class Graphism {
   }
 
   private keypress(e: KeyboardEvent) {
-    e.preventDefault()
     console.log('keypress')
     switch (e.key) {
       case 'a':
+        e.preventDefault()
         if (e.ctrlKey)
           this.selectAllNode()
         break
