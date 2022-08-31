@@ -72,7 +72,7 @@ export class Graphism {
     this.canvas.height = this.canvas.clientHeight
 
     // Event listeners
-    this.canvas.addEventListener('keypress', this.keypress.bind(this))
+    window.addEventListener('keydown', this.keypress.bind(this))
     this.canvas.addEventListener('mousedown', this.mouseDown.bind(this))
     this.canvas.addEventListener('mousemove', this.mouseMove.bind(this))
     this.canvas.addEventListener('mouseup', this.mouseUp.bind(this))
@@ -288,6 +288,7 @@ export class Graphism {
 
   private keypress(e: KeyboardEvent) {
     e.preventDefault()
+    console.log('keypress')
     switch (e.key) {
       case 'a':
         if (e.ctrlKey)
