@@ -47,6 +47,8 @@ export interface NodeConfig {
   hoverBorderColor?: string
   hoverBorderSize?: number
   hoverBackgroundColor?: string
+  selectedBorderColor?: string
+  selectedBorderSize?: number
 }
 
 export interface NodeEventsMap {

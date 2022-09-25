@@ -15,6 +15,8 @@ const defaultNodeConfig: NodeConfig = {
   fontFamily: 'Lora',
   hoverBorderColor: 'rgba(120, 118, 240, .6)',
   hoverBackgroundColor: 'white',
+  selectedBorderColor: 'rgba(120, 118, 240, .8)',
+  selectedBorderSize: 5,
 }
 
 export class Nodee extends Component implements NodeInterface {
@@ -65,15 +67,19 @@ export class Nodee extends Component implements NodeInterface {
       0,
       Math.PI * 2,
     )
-    ctx.strokeStyle = this.nodeConfig.hoverBorderColor
     ctx.fillStyle = this.nodeConfig.hoverBackgroundColor
-    ctx.lineWidth = this.nodeConfig.hoverBorderSize
     ctx.setLineDash(this.mode === 'connecting' ? [50, 10] : [0])
     ctx.lineDashOffset = this._borderOffset
-    if (this.isHovered && !this.isSelected)
-      ctx.fill()
-    if (this.isSelected)
+    if (this.isSelected) {
+      ctx.lineWidth = this.nodeConfig.selectedBorderSize
+      ctx.strokeStyle = this.nodeConfig.selectedBorderColor
       ctx.stroke()
+    }
+    else if (this.isHovered && !this.isSelected) {
+      ctx.lineWidth = this.nodeConfig.hoverBorderSize
+      ctx.strokeStyle = this.nodeConfig.hoverBorderColor
+      ctx.stroke()
+    }
     ctx.closePath()
 
     // Create the node shape
