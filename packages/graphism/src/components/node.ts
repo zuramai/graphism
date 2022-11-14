@@ -1,4 +1,4 @@
-import type { CanvasMode, Coordinate } from '../types'
+import type { Mode, Coordinate } from '../types'
 import type { LineInterface } from '../types/line'
 import type { NeighborInterface, NodeConfig, NodeInterface } from '../types/node'
 import { createElementNS } from '../utils/dom'
@@ -29,7 +29,7 @@ export class GraphNode extends Component implements NodeInterface {
   movable = false
   isHovered = false
   isSelected = false
-  mode: CanvasMode = 'normal'
+  mode: Mode = 'normal'
   gCost = 0
 
   _borderOffset?: number = 0
@@ -148,15 +148,4 @@ export class GraphNode extends Component implements NodeInterface {
     })
   }
 
-  isOnCoordinate(coordinate: Coordinate): boolean {
-    if (
-      coordinate.x > this.position.x - this.nodeConfig.size
-      && coordinate.x <= this.position.x + this.nodeConfig.size
-      && coordinate.y > this.position.y - this.nodeConfig.size
-      && coordinate.y <= this.position.y + this.nodeConfig.size
-    )
-      return true
-
-    return false
-  }
 }

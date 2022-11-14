@@ -1,6 +1,7 @@
 import type { Coordinate, NodeInterface } from '../types'
 import type { LineConfig, LineInterface } from '../types/line'
 import { getDistance } from '../utils'
+import { createElement, createElementNS } from '../utils/dom'
 import { Component } from './abstract'
 
 const defaultLineConfig = {
@@ -29,41 +30,45 @@ export default class Line extends Component implements LineInterface {
     this.distance = distance
   }
 
-  draw(ctx) {
-    ctx.strokeStyle = this.lineConfig.color
+  draw(root: SVGGElement) {
+    const g = createElementNS('g', { class: "lines" })
+    const line = createElementNS("line", {
+      x1: this.from.position.x,
+      x2: this.to.position.x,
+      y1: this.from.position.y,
+      y2: this.to.position.y,
+      "stroke-width": this.lineConfig.width,
+      "stroke": this.lineConfig.selectedColor
+    })
+    
+    const text = this.drawText()
 
-    if (this.isSelected)
-      ctx.strokeStyle = this.lineConfig.selectedColor
-    else if (this.isHovered)
-      ctx.strokeStyle = this.lineConfig.hoverColor
-
-    ctx.lineWidth = this.lineConfig.width
-    ctx.beginPath()
-    ctx.moveTo(this.from.position.x, this.from.position.y)
-    ctx.lineTo(this.to.position.x, this.to.position.y)
-    ctx.stroke()
-    ctx.closePath()
-
-    this.drawText(ctx)
+    g.append(line, text)
+    root.append(g)
+    
+    return g 
   }
 
-  drawText(ctx: CanvasRenderingContext2D) {
+  drawText() {
     const middlePosition: Coordinate = {
       x: (this.from.position.x + this.to.position.x) / 2,
       y: (this.from.position.y + this.to.position.y) / 2,
     }
-    ctx.fillStyle = this.lineConfig.selectedColor
-    ctx.font = '18px Arial bold'
 
-    if (!this.lineConfig.text) {
-      // If text doesn't exists, draw the distance
-      if (this.distance === 0)
-        return
-      ctx.fillText(this.distance.toString(), middlePosition.x, middlePosition.y)
-      return
-    }
+    const text = createElementNS('text', {
+      x: middlePosition.x,
+      y: middlePosition.y,
+      fill: this.lineConfig.selectedColor
+    }, el => el.innerHTML = this.lineConfig.text)
 
-    ctx.fillText(this.lineConfig.text, middlePosition.x, middlePosition.y)
+    // if (!this.lineConfig.text) {
+    //   // If text doesn't exists, draw the distance
+    //   if (this.distance === 0)
+    //     return
+    //   ctx.fillText(this.distance.toString(), middlePosition.x, middlePosition.y)
+    //   return
+    // }
+    return text
   }
 
   updateDistance() {

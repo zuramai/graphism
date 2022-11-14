@@ -140,14 +140,16 @@ export class Graphism {
   }
 
   private draw() {
+    this.drawLines()
     this.drawNodes()
     // this.drawMode()
-    // this.drawLines()
   }
 
   private drawLines() {
+    const g = createElementNS('g', { class: "lines" })
     for (let i = 0; i < this.lines.length; i++)
-      this.lines[i].draw()
+      this.lines[i].draw(g)
+    this.root.append(g)
   }
 
   private drawNodes() {
@@ -349,12 +351,12 @@ export class Graphism {
     this.root.style.cursor = 'grab'
 
     // Change cursor on node hover
-    if ((element = elements.find(el => el.isOnCoordinate(position)))) {
-      this.root.style.cursor = 'pointer'
-      this._emitter.emit(`${element.name}:mouseover`, element as LineInterface)
-      this._hoveredElement = element
-      element.isHovered = true
-    }
+    // if ((element = elements.find(el => el.isOnCoordinate(position)))) {
+    //   this.root.style.cursor = 'pointer'
+    //   this._emitter.emit(`${element.name}:mouseover`, element as LineInterface)
+    //   this._hoveredElement = element
+    //   element.isHovered = true
+    // }
 
     if (!this.nodes.length || !this.holdingNode)
       return

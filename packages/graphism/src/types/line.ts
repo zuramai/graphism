@@ -16,7 +16,7 @@ export interface LineInterface extends ComponentInterface {
   to: NodeInterface
   isHovered: boolean
   updateDistance: () => void
-  draw: (ctx: CanvasRenderingContext2D) => void
+  draw: (root: SVGGElement) => void
 }
 
 export interface LineEventsMap {
