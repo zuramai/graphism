@@ -31,6 +31,10 @@ export class GraphNode extends Component implements NodeInterface {
   isSelected = false
   mode: Mode = 'normal'
   gCost = 0
+  elements = {
+    circle: null,
+    text: null
+  }
 
   _borderOffset?: number = 0
 
@@ -62,8 +66,8 @@ export class GraphNode extends Component implements NodeInterface {
     // Node group
     const g = createElementNS('g', { class: "node" })
 
-    const circle = createElementNS("circle", { 
-      class: "node-circles",
+    this.elements.circle = createElementNS("circle", { 
+      class: "node-circle",
       cx: this.position.x, 
       cy: this.position.y,
       r: this.nodeConfig.size,
@@ -71,15 +75,26 @@ export class GraphNode extends Component implements NodeInterface {
       stroke: this.nodeConfig.borderColor,
       "stroke-width": this.nodeConfig.borderSize
     })
-    const text = createElementNS("text", {
+
+    
+    this.elements.text = createElementNS("text", {
       x: this.position.x, 
       y: this.position.y
     }, el => {
       el.innerHTML = this.text
     })
 
-    g.append(circle, text)
+    this.nodeConfig = new Proxy(this.nodeConfig, this.proxyHandler())
+
+    g.append(this.elements.circle, this.elements.text)
     root.append(g)
+
+
+    // Add hover state
+    g.addEventListener('mouseover', e => this.onhover(e))
+    g.addEventListener('mouseleave', e => this.unhover(e))
+    g.addEventListener('mouseover', e => this.mouseover(e))
+
     // ctx.beginPath()
     // ctx.arc(
     //   this.position.x,
@@ -125,6 +140,31 @@ export class GraphNode extends Component implements NodeInterface {
     // ctx.textBaseline = 'middle'
     // ctx.textAlign = 'center'
     // ctx.fillText(this.text, this.position.x, this.position.y)
+  }
+
+  proxyHandler() {
+    const _this = this
+    return {
+      set(obj, prop, value) {
+        if(prop == 'size') _this.elements.circle.setAttribute('r', value)
+        else if(prop == 'backgroundColor') _this.elements.circle.setAttribute('fill', value) 
+        else if(prop == 'borderColor') _this.elements.circle.setAttribute('stroke', value) 
+        else if(prop == 'borderSize') _this.elements.circle.setAttribute('stroke-width', value) 
+        return true
+      }
+    } as ProxyHandler<NodeConfig>
+  }
+
+  onhover(e: MouseEvent) {
+    this.nodeConfig.borderColor = this.nodeConfig.hoverBorderColor
+  }
+
+  unhover(e: MouseEvent) {
+    this.nodeConfig.borderColor = this.nodeConfig.borderColor
+  }
+
+  mouseover(e: MouseEvent) {
+
   }
 
   update() {

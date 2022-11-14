@@ -18,6 +18,7 @@ import { newAlgorithm } from './algorithms'
 import type { AvailableAlgorithms } from './algorithms'
 import { createBackground } from './components/background'
 import { createElementNS } from './utils/dom'
+import "./css/graphism.css"
 
 const defaultConfig: GraphismOptions = {
   lineColor: '#555',
@@ -316,39 +317,33 @@ export class Graphism {
 
     this.dragFrom = position
 
-    for (let i = 0; i < this.nodes.length; i++) {
-      const node = this.nodes[i]
+    // for (let i = 0; i < this.nodes.length; i++) {
+    //   const node = this.nodes[i]
 
-      // if the node is clicked
-      if (node.isOnCoordinate(position)) {
-        this.holdingNode = node
-        node.moveFrom = {
-          x: node.position.x,
-          y: node.position.y,
-        }
+    //   // if the node is clicked
+    //   if (node.isOnCoordinate(position)) {
+    //     this.holdingNode = node
+    //     node.moveFrom = {
+    //       x: node.position.x,
+    //       y: node.position.y,
+    //     }
 
-        for (let j = 0; j < this.selectedNode.length; j++) {
-          const s = this.selectedNode[j]
-          s.moveFrom = {
-            x: s.position.x,
-            y: s.position.y,
-          }
-        }
-      }
-    }
+    //     for (let j = 0; j < this.selectedNode.length; j++) {
+    //       const s = this.selectedNode[j]
+    //       s.moveFrom = {
+    //         x: s.position.x,
+    //         y: s.position.y,
+    //       }
+    //     }
+    //   }
+    // }
   }
 
   private mouseMove(e: MouseEvent) {
     const position = this.getCursorPosition(e)
     let element: Component
-    const elements: Component[] = [...this.nodes, ...this.lines]
-
-    if (this._hoveredElement != null) {
-      this._hoveredElement.isHovered = false
-      this._hoveredElement = null
-    }
-
-    this.root.style.cursor = 'grab'
+    
+    
 
     // Change cursor on node hover
     // if ((element = elements.find(el => el.isOnCoordinate(position)))) {
@@ -389,24 +384,24 @@ export class Graphism {
       for (let i = this.nodes.length - 1; i >= 0; i--) {
         const node = this.nodes[i]
 
-        if (node.isOnCoordinate(position)) {
-          if (!e.ctrlKey)
-            this.clearSelectedNode()
-          this.selectNode(node, this.mode)
-          isNodeClicked = true
-          this._emitter.emit('node:select', node)
-          break
-        }
+        // if (node.isOnCoordinate(position)) {
+        //   if (!e.ctrlKey)
+        //     this.clearSelectedNode()
+        //   this.selectNode(node, this.mode)
+        //   isNodeClicked = true
+        //   this._emitter.emit('node:select', node)
+        //   break
+        // }
       }
 
       // Check if a line is clicked
       for (let i = 0; i < this.lines.length; i++) {
         const line = this.lines[i]
-        if (line.isOnCoordinate(position)) {
-          line.isSelected = true
-          isLineClicked = true
-          this._emitter.emit('line:select', line)
-        }
+        // if (line.isOnCoordinate(position)) {
+        //   line.isSelected = true
+        //   isLineClicked = true
+        //   this._emitter.emit('line:select', line)
+        // }
       }
 
       if (!isLineClicked)
