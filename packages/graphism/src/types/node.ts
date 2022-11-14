@@ -20,7 +20,7 @@ export interface NodeInterface extends ComponentInterface {
   move: (x?: number, y?: number) => void
   update: () => void
   select: () => void
-  draw: (ctx: CanvasRenderingContext2D) => void
+  draw: (root: SVGGElement) => void
   addNeighbor: (
     node: NodeInterface,
     distance: number,
