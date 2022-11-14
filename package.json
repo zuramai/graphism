@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/zuramai/graph-algorithms.git"
   },
-  "author": "",
+  "author": "zuramai <saugi.dev@gmail.com>",
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",
     "play:build": "pnpm -C playground run build",

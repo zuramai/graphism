@@ -40,16 +40,16 @@ importers:
 
   packages/graphism:
     specifiers:
-      typescript: ^4.8.2
+      typescript: ^4.8.4
       vite: ^2.9.15
     devDependencies:
-      typescript: 4.8.2
+      typescript: 4.8.4
       vite: 2.9.15
 
   playground:
     specifiers:
       cross-env: ^7.0.3
-      graphism: workspace:0.2.0
+      graphism: workspace:~
     dependencies:
       graphism: link:../packages/graphism
     devDependencies:
@@ -3724,12 +3724,6 @@ packages:
   /type-fest/0.8.1:
     resolution: {integrity: sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==}
     engines: {node: '>=8'}
-    dev: true
-
-  /typescript/4.8.2:
-    resolution: {integrity: sha512-C0I1UsrrDHo2fYI5oaCGbSejwX4ch+9Y5jTQELvovfmFkK3HHSZJB8MSJcWLmCUBzQBchCrZ9rMRV6GuNrvGtw==}
-    engines: {node: '>=4.2.0'}
-    hasBin: true
     dev: true
 
   /typescript/4.8.4:
