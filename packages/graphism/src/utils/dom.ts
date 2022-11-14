@@ -5,7 +5,7 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(tagName: K,
 
   return el
 }
-export function createElementNS(tagName: string, props?: Record<string, string>, cb?: (el: SVGElement) => void): SVGElement {
+export function createElementNS<K extends keyof SVGElementTagNameMap>(tagName: K, props?: Record<string, any>, cb?: (el: SVGElement) => void): SVGElementTagNameMap[K] {
   const ns = 'http://www.w3.org/2000/svg'
   const el = document.createElementNS(ns, tagName)
   for (const prop in props)
@@ -14,3 +14,4 @@ export function createElementNS(tagName: string, props?: Record<string, string>,
     cb(el)
   return el
 }
+document.createElementNS

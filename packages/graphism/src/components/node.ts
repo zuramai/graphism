@@ -1,6 +1,7 @@
 import type { CanvasMode, Coordinate } from '../types'
 import type { LineInterface } from '../types/line'
 import type { NeighborInterface, NodeConfig, NodeInterface } from '../types/node'
+import { createElementNS } from '../utils/dom'
 import { Component } from './abstract'
 
 const defaultNodeConfig: NodeConfig = {
@@ -57,53 +58,73 @@ export class GraphNode extends Component implements NodeInterface {
     })
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
-    // Hover state outer border
-    ctx.beginPath()
-    ctx.arc(
-      this.position.x,
-      this.position.y,
-      this.nodeConfig.size + 5,
-      0,
-      Math.PI * 2,
-    )
-    ctx.fillStyle = this.nodeConfig.hoverBackgroundColor
-    ctx.setLineDash(this.mode === 'connecting' ? [50, 10] : [0])
-    ctx.lineDashOffset = this._borderOffset
-    if (this.isSelected) {
-      ctx.lineWidth = this.nodeConfig.selectedBorderSize
-      ctx.strokeStyle = this.nodeConfig.selectedBorderColor
-      ctx.stroke()
-    }
-    else if (this.isHovered && !this.isSelected) {
-      ctx.lineWidth = this.nodeConfig.hoverBorderSize
-      ctx.strokeStyle = this.nodeConfig.hoverBorderColor
-      ctx.stroke()
-    }
-    ctx.closePath()
+  draw(root: SVGGElement) {
+    // Node group
+    const g = createElementNS('g', { class: "node" })
+
+    const circle = createElementNS("circle", { 
+      class: "node-circles",
+      cx: this.position.x, 
+      cy: this.position.y,
+      r: this.nodeConfig.size,
+      fill: this.nodeConfig.backgroundColor,
+      stroke: this.nodeConfig.borderColor,
+      "stroke-width": this.nodeConfig.borderSize
+    })
+    const text = createElementNS("text", {
+      x: this.position.x, 
+      y: this.position.y
+    }, el => {
+      el.innerHTML = this.text
+    })
+
+    g.append(circle, text)
+    root.append(g)
+    // ctx.beginPath()
+    // ctx.arc(
+    //   this.position.x,
+    //   this.position.y,
+    //   this.nodeConfig.size + 5,
+    //   0,
+    //   Math.PI * 2,
+    // )
+    // ctx.fillStyle = this.nodeConfig.hoverBackgroundColor
+    // ctx.setLineDash(this.mode === 'connecting' ? [50, 10] : [0])
+    // ctx.lineDashOffset = this._borderOffset
+    // if (this.isSelected) {
+    //   ctx.lineWidth = this.nodeConfig.selectedBorderSize
+    //   ctx.strokeStyle = this.nodeConfig.selectedBorderColor
+    //   ctx.stroke()
+    // }
+    // else if (this.isHovered && !this.isSelected) {
+    //   ctx.lineWidth = this.nodeConfig.hoverBorderSize
+    //   ctx.strokeStyle = this.nodeConfig.hoverBorderColor
+    //   ctx.stroke()
+    // }
+    // ctx.closePath()
 
     // Create the node shape
-    ctx.beginPath()
-    ctx.fillStyle = this.nodeConfig.backgroundColor
-    ctx.arc(
-      this.position.x,
-      this.position.y,
-      this.nodeConfig.size,
-      0,
-      Math.PI * 2,
-    )
-    ctx.strokeStyle = this.nodeConfig.borderColor
-    ctx.lineWidth = this.nodeConfig.borderSize
-    ctx.stroke()
-    ctx.fill()
-    ctx.closePath()
+    // ctx.beginPath()
+    // ctx.fillStyle = this.nodeConfig.backgroundColor
+    // ctx.arc(
+    //   this.position.x,
+    //   this.position.y,
+    //   this.nodeConfig.size,
+    //   0,
+    //   Math.PI * 2,
+    // // )
+    // ctx.strokeStyle = this.nodeConfig.borderColor
+    // ctx.lineWidth = this.nodeConfig.borderSize
+    // ctx.stroke()
+    // ctx.fill()
+    // ctx.closePath()
 
     // Draw text
-    ctx.fillStyle = this.nodeConfig.textColor
-    ctx.font = `${this.nodeConfig.fontSize}px ${this.nodeConfig.fontFamily}`
-    ctx.textBaseline = 'middle'
-    ctx.textAlign = 'center'
-    ctx.fillText(this.text, this.position.x, this.position.y)
+    // ctx.fillStyle = this.nodeConfig.textColor
+    // ctx.font = `${this.nodeConfig.fontSize}px ${this.nodeConfig.fontFamily}`
+    // ctx.textBaseline = 'middle'
+    // ctx.textAlign = 'center'
+    // ctx.fillText(this.text, this.position.x, this.position.y)
   }
 
   update() {

@@ -10,13 +10,10 @@ class Background {
   constructor(root: SVGElement, type: BackgroundType) {
     this.root = root
     this.type = type
-
-    if (this.type === 'grid')
-      this.createGrid()
   }
 
   createGrid() {
-    const svg = createElementNS('svg', { xmlns: 'http://www.w3.org/2000/svg' }, (svgEl) => {
+    const svg = createElementNS('svg', { xmlns: 'http://www.w3.org/2000/svg', class: "background" }, (svgEl) => {
       const defs = createElementNS('defs', {}, (defsEl) => {
         const smallGridPattern = createElementNS('pattern', { id: 'smallGrid', width: '8', height: '8', patternUnits: 'userSpaceOnUse' }, (smallGridEl) => {
           const path = createElementNS('path', { 'd': 'M 8 0 L 0 0 0 8', 'fill': 'none', 'stroke': 'rgb(203 213 225)', 'stroke-width': '.5' })

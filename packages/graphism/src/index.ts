@@ -80,7 +80,7 @@ export class Graphism {
 
     this._emitter.emit('mounted')
 
-    // requestAnimationFrame(() => this.render())
+    requestAnimationFrame(() => this.render())
   }
 
   init() {
@@ -92,6 +92,13 @@ export class Graphism {
 
     this.background = createBackground(this.root, 'grid')
     this.background.draw()
+
+    this.render()
+  }
+
+  render() {
+    this.draw()
+    this.update()
   }
 
   on<E extends keyof EventsMap>(event: E, callback: any, once = false) {
@@ -133,10 +140,9 @@ export class Graphism {
   }
 
   private draw() {
-    this.drawBackground()
-    this.drawMode()
-    this.drawLines()
     this.drawNodes()
+    // this.drawMode()
+    // this.drawLines()
   }
 
   private drawLines() {
@@ -145,12 +151,10 @@ export class Graphism {
   }
 
   private drawNodes() {
+    const g = createElementNS('g', { class: "nodes" })
     for (let i = 0; i < this.nodes.length; i++)
-      this.nodes[i].draw()
-  }
-
-  private drawBackground() {
-    this.background.draw()
+      this.nodes[i].draw(g)
+    this.root.append(g)
   }
 
   drawMode() {
@@ -430,12 +434,6 @@ export class Graphism {
     }
   }
 
-  render() {
-    this.ctx.clearRect(0, 0, this.root.width, this.root.height)
-    this.draw()
-    this.update()
-    requestAnimationFrame(() => this.render())
-  }
 }
 
 export * from './types'
