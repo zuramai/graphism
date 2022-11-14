@@ -9,8 +9,8 @@ export interface Coordinate {
   y: number
 }
 
-export interface CanvasConfig {
-  el?: HTMLCanvasElement | string
+export interface GraphismOptions {
+  el?: HTMLDivElement | string
   canvasBackground?: string | CanvasPattern | HTMLImageElement
   lineColor?: string
   nodeBackground?: string
@@ -18,7 +18,7 @@ export interface CanvasConfig {
   nodeTextColor?: string
 }
 
-export type CanvasMode = 'normal' | 'connecting' | 'creating'
+export type Mode = 'normal' | 'connecting' | 'creating'
 
 export interface EventsMap extends NodeEventsMap, LineEventsMap {
   grab: () => void
@@ -34,6 +34,5 @@ export interface ComponentInterface {
   moveFrom: Coordinate
   name: 'node' | 'line'
 
-  isOnCoordinate: (point: Coordinate) => boolean
   move: (x?: number, y?: number) => void
 }

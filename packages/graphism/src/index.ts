@@ -1,12 +1,12 @@
 /* eslint-disable no-cond-assign */
 /* eslint-disable curly */
 import { createNanoEvents } from 'nanoevents'
-import { Nodee } from './components/node'
+import { GraphNode } from './components/node'
 import type {
-  CanvasConfig,
-  CanvasMode,
+  Mode,
   Coordinate,
   EventsMap,
+  GraphismOptions,
   LineConfig,
   LineInterface,
 } from './types'
@@ -17,8 +17,9 @@ import { getDistance } from './utils'
 import { newAlgorithm } from './algorithms'
 import type { AvailableAlgorithms } from './algorithms'
 import { createBackground } from './components/background'
+import { createElementNS } from './utils/dom'
 
-const defaultConfig: CanvasConfig = {
+const defaultConfig: GraphismOptions = {
   lineColor: '#555',
   nodeBackground: 'white',
   nodeTextColor: '#555',
@@ -27,8 +28,7 @@ const defaultConfig: CanvasConfig = {
 }
 
 export class Graphism {
-  canvas: HTMLCanvasElement
-  private ctx: CanvasRenderingContext2D
+  root: SVGElement
 
   private nodes: NodeInterface[] = []
   private lines: LineInterface[] = []
@@ -38,7 +38,7 @@ export class Graphism {
 
   private dragFrom: Coordinate
   private isDirectedGraph = false
-  private mode: CanvasMode = 'normal'
+  private mode: Mode = 'normal'
 
   private _hoveredElement: Component = null
   private _emitter = createNanoEvents<EventsMap>()
@@ -49,10 +49,10 @@ export class Graphism {
    * Rendering canvas to visualize algorithms
    * @param config The canvas configuration
    */
-  constructor(public config: CanvasConfig = {}) {
+  constructor(public config: GraphismOptions = {}) {
     this.config = Object.assign(defaultConfig, config)
     this.mount(config.el)
-    this.background = createBackground(this.ctx, 'grid')
+    this.init()
   }
 
   private resolveSelector<T>(selector: string | T | null | undefined): T | null {
@@ -61,31 +61,37 @@ export class Graphism {
     else return selector || null
   }
 
-  private mount(el: string | HTMLCanvasElement) {
-    if (this.canvas)
+  private mount(el: string | HTMLDivElement) {
+    if (this.root)
       throw new Error('[graphism] already mounted, unmount previous target first')
 
-    this.canvas = this.resolveSelector(el)
+    const element = this.resolveSelector(el)
+    this.root = element.appendChild(createElementNS('svg', {}))
 
-    if (!this.canvas)
+    if (!this.root)
       throw new Error('[graphism] target element not found')
-
-    this.ctx = this.canvas.getContext('2d')
-
-    // Set canvas size
-    this.canvas.width = this.canvas.clientWidth
-    this.canvas.height = this.canvas.clientHeight
 
     // Event listeners
     window.addEventListener('keydown', this.keypress.bind(this))
-    this.canvas.addEventListener('mousedown', this.mouseDown.bind(this))
-    this.canvas.addEventListener('mousemove', this.mouseMove.bind(this))
-    this.canvas.addEventListener('mouseup', this.mouseUp.bind(this))
-    this.canvas.addEventListener('click', this.mouseClick.bind(this))
+    this.root.addEventListener('mousedown', this.mouseDown.bind(this))
+    this.root.addEventListener('mousemove', this.mouseMove.bind(this))
+    this.root.addEventListener('mouseup', this.mouseUp.bind(this))
+    this.root.addEventListener('click', this.mouseClick.bind(this))
 
     this._emitter.emit('mounted')
 
-    requestAnimationFrame(() => this.render())
+    // requestAnimationFrame(() => this.render())
+  }
+
+  init() {
+    // Set canvas size
+    this.root.style.width = "100%"
+    this.root.style.height = "100vh"
+    this.root.setAttribute("width", this.root.clientWidth.toString())
+    this.root.setAttribute("height", this.root.clientHeight.toString())
+
+    this.background = createBackground(this.root, 'grid')
+    this.background.draw()
   }
 
   on<E extends keyof EventsMap>(event: E, callback: any, once = false) {
@@ -135,12 +141,12 @@ export class Graphism {
 
   private drawLines() {
     for (let i = 0; i < this.lines.length; i++)
-      this.lines[i].draw(this.ctx)
+      this.lines[i].draw()
   }
 
   private drawNodes() {
     for (let i = 0; i < this.nodes.length; i++)
-      this.nodes[i].draw(this.ctx)
+      this.nodes[i].draw()
   }
 
   private drawBackground() {
@@ -150,19 +156,19 @@ export class Graphism {
   drawMode() {
     if (['creating', 'connecting'].includes(this.mode)) {
       // Running border
-      this.ctx.save()
-      this.ctx.beginPath()
+      // this.ctx.save()
+      // this.ctx.beginPath()
 
-      this.ctx.strokeStyle = 'rgb(120, 118, 240)'
-      this.ctx.rect(0, 0, this.canvas.width, this.canvas.height)
-      this.ctx.lineWidth = 10
-      this.ctx.setLineDash([0, 25, 50])
-      this.ctx.lineDashOffset = this._runningBorderOffset
-      this.ctx.stroke()
+      // this.ctx.strokeStyle = 'rgb(120, 118, 240)'
+      // this.ctx.rect(0, 0, this.root.width, this.root.height)
+      // this.ctx.lineWidth = 10
+      // this.ctx.setLineDash([0, 25, 50])
+      // this.ctx.lineDashOffset = this._runningBorderOffset
+      // this.ctx.stroke()
 
-      this.ctx.closePath()
+      // this.ctx.closePath()
 
-      this.ctx.restore()
+      // this.ctx.restore()
     }
   }
 
@@ -170,7 +176,7 @@ export class Graphism {
     return new Promise((resolve) => {
       this.mode = 'creating'
 
-      this.canvas.addEventListener(
+      this.root.addEventListener(
         'click',
         (e) => {
           const position = this.getCursorPosition(e)
@@ -186,7 +192,7 @@ export class Graphism {
     coordinate: Coordinate,
     config?: NodeConfig,
   ): NodeInterface {
-    const node = new Nodee(name, coordinate, config)
+    const node = new GraphNode(name, coordinate, config)
     this.nodes.push(node)
 
     this._emitter.emit('node:created', node)
@@ -231,14 +237,14 @@ export class Graphism {
       if (element instanceof Line) {
         element.lineConfig.color = 'blue'
       }
-      else if (element instanceof Nodee) {
+      else if (element instanceof GraphNode) {
         element.nodeConfig.backgroundColor = 'blue'
         element.nodeConfig.textColor = 'white'
       }
     })
   }
 
-  setMode(mode: CanvasMode) {
+  setMode(mode: Mode) {
     this.mode = mode
     this.clearSelectedNode()
   }
@@ -336,11 +342,11 @@ export class Graphism {
       this._hoveredElement = null
     }
 
-    this.canvas.style.cursor = 'grab'
+    this.root.style.cursor = 'grab'
 
     // Change cursor on node hover
     if ((element = elements.find(el => el.isOnCoordinate(position)))) {
-      this.canvas.style.cursor = 'pointer'
+      this.root.style.cursor = 'pointer'
       this._emitter.emit(`${element.name}:mouseover`, element as LineInterface)
       this._hoveredElement = element
       element.isHovered = true
@@ -404,7 +410,7 @@ export class Graphism {
     }
   }
 
-  selectNode(node: NodeInterface, mode: CanvasMode = 'normal') {
+  selectNode(node: NodeInterface, mode: Mode = 'normal') {
     node.select()
     node.mode = !node.isSelected ? 'normal' : mode
     this.selectedNode.push(node)
@@ -417,7 +423,7 @@ export class Graphism {
   }
 
   getCursorPosition(e) {
-    const rect = this.canvas.getBoundingClientRect()
+    const rect = this.root.getBoundingClientRect()
     return {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
@@ -425,7 +431,7 @@ export class Graphism {
   }
 
   render() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    this.ctx.clearRect(0, 0, this.root.width, this.root.height)
     this.draw()
     this.update()
     requestAnimationFrame(() => this.render())
@@ -433,6 +439,6 @@ export class Graphism {
 }
 
 export * from './types'
-export function createGraphism(config?: CanvasConfig): Graphism {
+export function createGraphism(config?: GraphismOptions): Graphism {
   return new Graphism(config)
 }

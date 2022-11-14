@@ -19,7 +19,7 @@ const defaultNodeConfig: NodeConfig = {
   selectedBorderSize: 5,
 }
 
-export class Nodee extends Component implements NodeInterface {
+export class GraphNode extends Component implements NodeInterface {
   id: number
   neighbors?: NeighborInterface[] = []
   nodeConfig: NodeConfig = {}
