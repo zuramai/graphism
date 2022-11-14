@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/zuramai/graphism#readme",
   "scripts": {
-    "dev": "nr build -- --watch",
+    "dev": "nr build --watch",
     "build": "tsup src/index.ts --format esm,cjs,iife --dts --no-splitting --clean --dts-resolve"
   },
   "devDependencies": {
