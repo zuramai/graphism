@@ -1,6 +1,7 @@
 import './assets/scss/main.scss'
 import type { Graphism, NodeInterface } from 'graphism'
 import { createGraphism } from 'graphism'
+import "graphism/dist/index.css"
 import { saveCanvasToImg } from '../../packages/graphism/src/utils'
 import { camelToSnakeCase, onClick } from './utils'
 import { createNotification } from './components/notification'
@@ -40,14 +41,14 @@ window.onload = () => {
  * @param graphism Graphism instance
  * @param canvas HTML canvas element
  */
-function graphismEventListeners(graphism: Graphism, canvas: HTMLCanvasElement) {
+function graphismEventListeners(graphism: Graphism, canvas: HTMLDivElement) {
   window.addEventListener('resize', resizeCanvas.bind(null, canvas))
 
   onClick('node-add', addNode.bind(null, graphism))
   onClick('generate-graph', generateGraphEvent.bind(null, graphism))
   onClick('create-new', createNewGraph)
   onClick('connectNode', connectNode.bind(null, graphism))
-  onClick('saveToImage', () => saveCanvasToImg(canvas))
+  // onClick('saveToImage', () => saveCanvasToImg(canvas))
   onClick('clear', () => graphism.clear())
 
   toggleModalFromSelector(document.querySelector('.modal-add'), document.getElementById('openAddModal'))

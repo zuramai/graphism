@@ -17,7 +17,6 @@ export interface NodeInterface extends ComponentInterface {
   // For Dijkstra
   gCost: number
 
-  move: (x?: number, y?: number) => void
   update: () => void
   select: () => void
   draw: (root: SVGGElement) => void
@@ -26,7 +25,6 @@ export interface NodeInterface extends ComponentInterface {
     distance: number,
     line: LineInterface
   ) => void
-  isOnCoordinate: (coordinate: Coordinate) => boolean
 }
 
 export interface NeighborInterface {
