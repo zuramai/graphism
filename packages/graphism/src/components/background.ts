@@ -3,12 +3,12 @@ import { createElementNS } from '../utils/dom'
 type BackgroundType = 'grid' | HTMLImageElement | CanvasPattern
 
 class Background {
-  ctx: CanvasRenderingContext2D
+  root: SVGElement
   type: BackgroundType = 'grid'
   grid: HTMLImageElement
 
-  constructor(ctx: CanvasRenderingContext2D, type: BackgroundType) {
-    this.ctx = ctx
+  constructor(root: SVGElement, type: BackgroundType) {
+    this.root = root
     this.type = type
 
     if (this.type === 'grid')
@@ -39,57 +39,24 @@ class Background {
     svg.setAttribute('width', document.body.clientWidth.toString())
     svg.setAttribute('height', document.body.clientHeight.toString())
 
-    const xml = new XMLSerializer().serializeToString(svg)
-    const svg64 = btoa(xml)
-    const b64Start = 'data:image/svg+xml;base64,'
-    const image64 = b64Start + svg64
-    const img = new Image()
-    img.src = image64
-    this.grid = img
-    console.log(img)
-
-    this.ctx.drawImage(
-      img,
-      0,
-      0,
-      this.ctx.canvas.width,
-      this.ctx.canvas.height,
-    )
+    console.log('drawing background');
+    
+    return svg
   }
 
   draw() {
-    const canvas = this.ctx.canvas
-
     if (this.type === 'grid') {
-      this.ctx.drawImage(
-        this.grid,
-        0,
-        0,
-        canvas.width,
-        canvas.height,
-      )
-      return
+      this.root.append(this.createGrid())
     }
-
-    if (
-      typeof this.type == 'string'
-      || this.type instanceof CanvasPattern
-    ) {
-      this.ctx.fillStyle = this.type
-      this.ctx.fillRect(0, 0, canvas.width, canvas.height)
+    else if (typeof this.type == 'string' || this.type instanceof CanvasPattern) {
+      
     }
     else if (this.type instanceof HTMLImageElement) {
-      this.ctx.drawImage(
-        this.type,
-        0,
-        0,
-        canvas.width,
-        canvas.height,
-      )
+      
     }
   }
 }
 
-export const createBackground = (ctx: CanvasRenderingContext2D, type: BackgroundType) => {
-  return new Background(ctx, type)
+export const createBackground = (root: SVGElement, type: BackgroundType) => {
+  return new Background(root, type)
 }

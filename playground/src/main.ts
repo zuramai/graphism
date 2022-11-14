@@ -19,12 +19,11 @@ const customizations = {
   hoverBackgroundColor: 'white',
 }
 window.onload = () => {
-  const el = document.querySelector<HTMLCanvasElement>('#canvas')
+  const el = document.querySelector<HTMLDivElement>('#graphism')
 
   // Create the canvas instance
   const graphism = createGraphism({
     el,
-    canvasBackground: '#efefef',
   })
 
   // Customization provider
