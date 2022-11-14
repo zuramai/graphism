@@ -6,7 +6,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "graphism": "workspace:0.2.0"
+    "graphism": "workspace:*"
   },
   "devDependencies": {
     "cross-env": "^7.0.3"

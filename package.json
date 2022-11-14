@@ -27,21 +27,21 @@
     "url": "https://github.com/zuramai/graph-algorithms/issues"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.26.1",
-    "@antfu/eslint-config-ts": "^0.26.1",
+    "@antfu/eslint-config": "^0.26.3",
+    "@antfu/eslint-config-ts": "^0.26.3",
     "@antfu/ni": "^0.17.2",
     "@vitest/coverage-c8": "^0.22.1",
     "bumpp": "^8.2.1",
     "c8": "^7.12.0",
-    "canvas": "^2.9.3",
-    "eslint": "^8.22.0",
-    "jsdom": "^20.0.0",
+    "canvas": "^2.10.2",
+    "eslint": "^8.27.0",
+    "jsdom": "^20.0.2",
     "nanoevents": "^7.0.1",
-    "pnpm": "^6.34.0",
-    "sass": "^1.54.5",
-    "tsup": "^6.2.2",
-    "typescript": "^4.8.2",
-    "vite": "^3.0.9",
+    "pnpm": "^6.35.1",
+    "sass": "^1.56.1",
+    "tsup": "^6.4.0",
+    "typescript": "^4.8.4",
+    "vite": "^3.2.3",
     "vitest": "^0.22.1"
   }
 }
