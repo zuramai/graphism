@@ -7,7 +7,7 @@ export interface NodeInterface extends ComponentInterface {
   neighbors?: NeighborInterface[]
   mode: CanvasMode
   position: Coordinate
-  nodeConfig: NodeConfig
+  config: NodeConfig
   movable: boolean
   moveFrom: Coordinate
 
@@ -18,7 +18,6 @@ export interface NodeInterface extends ComponentInterface {
   gCost: number
 
   update: () => void
-  select: () => void
   draw: (root: SVGGElement) => void
   addNeighbor: (
     node: NodeInterface,
