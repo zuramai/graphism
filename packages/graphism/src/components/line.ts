@@ -14,6 +14,7 @@ const defaultLineConfig = {
 }
 
 export default class Line extends Component implements LineInterface {
+  id: number
   name: 'node' | 'line' = 'line'
   lineConfig: LineConfig = defaultLineConfig
   from: NodeInterface
@@ -24,6 +25,7 @@ export default class Line extends Component implements LineInterface {
 
   constructor(from: NodeInterface, to: NodeInterface, distance: number, config?: LineConfig) {
     super()
+    this.id = Math.floor(Math.random() * Date.now())
     this.lineConfig = { ...defaultLineConfig, ...config }
     this.from = from
     this.to = to
@@ -31,7 +33,7 @@ export default class Line extends Component implements LineInterface {
   }
 
   draw(root: SVGGElement) {
-    const g = createElementNS('g', { class: "lines" })
+    const g = createElementNS('g', { class: "line" })
     const line = createElementNS("line", {
       x1: this.from.position.x,
       x2: this.to.position.x,
