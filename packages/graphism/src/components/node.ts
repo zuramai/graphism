@@ -68,6 +68,7 @@ export class GraphNode extends Component implements NodeInterface {
 
     this.elements.circle = createElementNS("circle", { 
       class: "node-circle",
+      "data-id": this.id,
       cx: this.position.x, 
       cy: this.position.y,
       r: this.nodeConfig.size,
