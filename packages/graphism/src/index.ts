@@ -31,9 +31,9 @@ const defaultConfig: GraphismOptions = {
 export class Graphism {
   root: SVGElement
 
-  private nodes: NodeInterface[] = []
-  private lines: LineInterface[] = []
-  private selectedNode: NodeInterface[] = []
+  private nodes: Record<string, NodeInterface> = {}
+  private lines: Record<string, LineInterface> = {}
+  private selectedNodes: Record<string, NodeInterface> = {}
   private holdingNode: NodeInterface = null
   private background
 
@@ -81,7 +81,7 @@ export class Graphism {
 
     this._emitter.emit('mounted')
 
-    requestAnimationFrame(() => this.render())
+    requestAnimationFrame(() => this.render()) 
   }
 
   init() {
@@ -94,7 +94,6 @@ export class Graphism {
     this.background = createBackground(this.root, 'grid')
     this.background.draw()
 
-    this.render()
   }
 
   render() {
@@ -148,20 +147,25 @@ export class Graphism {
 
   private drawLines() {
     const g = createElementNS('g', { class: "lines" })
-    for (let i = 0; i < this.lines.length; i++)
-      this.lines[i].draw(g)
+    for(const lineId in this.lines) 
+      this.lines[lineId].draw(g)
     this.root.append(g)
+    console.log(this.root, 'while drawing', this.lines.length)
   }
 
   private drawNodes() {
     const g = createElementNS('g', { class: "nodes" })
-    for (let i = 0; i < this.nodes.length; i++)
-      this.nodes[i].draw(g)
+    for(const node in this.nodes) {
+      this.nodes[node].draw(g)
+    }
     this.root.append(g)
   }
 
   drawMode() {
     if (['creating', 'connecting'].includes(this.mode)) {
+      const g = createElementNS('g', { class: "nodes" })
+
+
       // Running border
       // this.ctx.save()
       // this.ctx.beginPath()
@@ -200,42 +204,42 @@ export class Graphism {
     config?: NodeConfig,
   ): NodeInterface {
     const node = new GraphNode(name, coordinate, config)
-    this.nodes.push(node)
+    this.nodes[node.id] = node
 
     this._emitter.emit('node:created', node)
     this.setMode('normal')
-    this.clearSelectedNode()
+    this.clearSelectedNodes()
 
     return node
   }
 
   clear() {
-    this.lines = []
-    this.nodes = []
+    this.lines = {}
+    this.nodes = {}
     this.mode = 'normal'
   }
 
-  clearSelectedNode() {
-    for (let i = 0; i < this.nodes.length; i++) {
-      this.nodes[i].isSelected = false
-      this.nodes[i].mode = 'normal'
-      this.nodes[i].movable = false
+  clearSelectedNodes() {
+    for(const id in this.selectedNodes) {
+      const node = this.nodes[id]
+      node.isSelected = false
+      node.mode = 'normal'
+      node.movable = false
     }
     this._emitter.emit('node:clearSelect')
-    this.selectedNode = []
+    this.selectedNodes = {}
   }
 
   clearSelectedLine() {
-    for (let i = 0; i < this.lines.length; i++)
-      this.lines[i].isSelected = false
+    for (const lineId in this.lines)
+      this.lines[lineId].isSelected = false
 
     this._emitter.emit('line:clearSelect')
-
-    this.selectedNode = []
+    this.selectedNodes = {}
   }
 
   runAlgorithm<T extends keyof typeof AvailableAlgorithms>(algorithmName: T, from: NodeInterface, to: NodeInterface) {
-    const algo = newAlgorithm(algorithmName, this.nodes, from, to)
+    const algo = newAlgorithm(algorithmName, Object.values(this.nodes), from, to)
 
     const path = algo.solve()
     console.log(path)
@@ -253,11 +257,11 @@ export class Graphism {
 
   setMode(mode: Mode) {
     this.mode = mode
-    this.clearSelectedNode()
+    this.clearSelectedNodes()
   }
 
-  getSelectedNode() {
-    return this.selectedNode
+  getSelectedNodes() {
+    return this.selectedNodes
   }
 
   addNodeNeighbor(from: NodeInterface, to: NodeInterface, distance?: number) {
@@ -268,7 +272,7 @@ export class Graphism {
 
     distance ??= Math.round(getDistance(from.position, to.position))
     // Check if the line exists from the other way around
-    const createdLine = this.lines.find(
+    const createdLine = Object.values(this.lines).find(
       l => (l.from === from && l.to === to) || (l.from === to && l.to === from),
     )
 
@@ -276,7 +280,7 @@ export class Graphism {
       line = createdLine
     else {
       line = new Line(from, to, distance, lineConfig)
-      this.lines.push(line)
+      this.lines[line.id] = line
     }
 
     from.addNeighbor(to, distance, line)
@@ -288,7 +292,10 @@ export class Graphism {
   }
 
   private update() {
-    for (let i = 0; i < this.nodes.length; i++) this.nodes[i].update()
+    // for (let i = 0; i < this.nodes.length; i++) 
+    for(const nodeId in this.nodes) 
+      this.nodes[nodeId].update()
+    
 
     if (['creating', 'connecting'].includes(this.mode)) {
       this._runningBorderOffset++
@@ -328,8 +335,8 @@ export class Graphism {
     //       y: node.position.y,
     //     }
 
-    //     for (let j = 0; j < this.selectedNode.length; j++) {
-    //       const s = this.selectedNode[j]
+    //     for (let j = 0; j < this.selectedNodes.length; j++) {
+    //       const s = this.selectedNodes[j]
     //       s.moveFrom = {
     //         x: s.position.x,
     //         y: s.position.y,
@@ -359,9 +366,9 @@ export class Graphism {
     const dy = position.y - this.dragFrom.y
 
     // If selected more than one nodes, move all selected node
-    if (this.selectedNode.length > 1 && this.holdingNode.isSelected) {
-      for (let i = 0; i < this.selectedNode.length; i++) {
-        element = this.nodes[i]
+    if (Object.keys(this.selectedNodes).length > 1 && this.holdingNode.isSelected) {
+      for(const selectedNodeId in this.selectedNodes) {
+        element = this.nodes[selectedNodeId]
         element.move(element.moveFrom.x + dx, element.moveFrom.y + dy)
       }
     }
@@ -373,6 +380,11 @@ export class Graphism {
 
   private mouseClick(e: MouseEvent) {
     const position = this.getCursorPosition(e)
+    const target = e.target as HTMLElement
+    if(target.classList.contains('node-circle')) {
+      let nodeId = target.getAttribute('data-id')
+      this.selectedNodes[nodeId] = this.nodes[nodeId]
+    }
 
     // If the click is instant click (not moving or dragging)
     if (position.x === this.dragFrom.x && position.y === this.dragFrom.y) {
@@ -381,12 +393,13 @@ export class Graphism {
       let isLineClicked = false
 
       // Check if a node is clicked
-      for (let i = this.nodes.length - 1; i >= 0; i--) {
-        const node = this.nodes[i]
+      console.log(e.target)
+      for(const nodeId in this.nodes) {
+        const node = this.nodes[nodeId]
 
         // if (node.isOnCoordinate(position)) {
         //   if (!e.ctrlKey)
-        //     this.clearSelectedNode()
+        //     this.clearSelectedNodes()
         //   this.selectNode(node, this.mode)
         //   isNodeClicked = true
         //   this._emitter.emit('node:select', node)
@@ -394,9 +407,10 @@ export class Graphism {
         // }
       }
 
+
       // Check if a line is clicked
-      for (let i = 0; i < this.lines.length; i++) {
-        const line = this.lines[i]
+      for(const lineId in this.lines) {
+        const line = this.lines[lineId]
         // if (line.isOnCoordinate(position)) {
         //   line.isSelected = true
         //   isLineClicked = true
@@ -407,19 +421,19 @@ export class Graphism {
       if (!isLineClicked)
         this.clearSelectedLine()
       if (!isNodeClicked)
-        this.clearSelectedNode()
+        this.clearSelectedNodes()
     }
   }
 
   selectNode(node: NodeInterface, mode: Mode = 'normal') {
     node.select()
     node.mode = !node.isSelected ? 'normal' : mode
-    this.selectedNode.push(node)
+    this.selectedNodes[node.id] = node
   }
 
   selectAllNode() {
-    for (let i = 0; i < this.nodes.length; i++) {
-      this.selectNode(this.nodes[i])
+    for(const nodeId in this.nodes) {
+      this.selectNode(this.nodes[nodeId])
     }
   }
 
