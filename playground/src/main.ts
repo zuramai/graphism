@@ -193,7 +193,7 @@ function createProxy<T extends object>(graphism: Graphism, target: T): T {
       input.value = value
 
       // Change the configuration in the node
-      graphism.getSelectedNode()[0].nodeConfig[prop] = value
+      graphism.getSelectedNodes()[0].config[prop] = value
 
       return true
     },

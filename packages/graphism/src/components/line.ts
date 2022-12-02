@@ -22,6 +22,10 @@ export default class Line extends Component implements LineInterface {
   isHovered = false
   isSelected = false
   distance: number
+  elements = {
+    line: null,
+    text: null
+  }
 
   constructor(from: NodeInterface, to: NodeInterface, distance: number, config?: LineConfig) {
     super()
@@ -35,15 +39,18 @@ export default class Line extends Component implements LineInterface {
   draw(root: SVGGElement) {
     const g = createElementNS('g', { class: "line" })
     const line = createElementNS("line", {
+      class: "graphism-line",
       x1: this.from.position.x,
       x2: this.to.position.x,
       y1: this.from.position.y,
       y2: this.to.position.y,
+      "data-id": this.id,
       "stroke-width": this.lineConfig.width,
       "stroke": this.lineConfig.selectedColor
     })
     
     const text = this.drawText()
+    this.elements = { line, text }
 
     g.append(line, text)
     root.append(g)
@@ -71,6 +78,16 @@ export default class Line extends Component implements LineInterface {
     //   return
     // }
     return text
+  }
+  
+  select() {
+    this.isSelected = true
+    this.elements.line.classList.add('selected')
+  }
+  
+  deselect() {
+    this.isSelected = false
+    this.elements.line.classList.remove('selected')
   }
 
   updateDistance() {

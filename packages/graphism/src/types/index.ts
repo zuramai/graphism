@@ -34,5 +34,7 @@ export interface ComponentInterface {
   moveFrom: Coordinate
   name: 'node' | 'line'
 
+  select(): void
+  deselect(): void
   move: (x?: number, y?: number) => void
 }

@@ -34,6 +34,7 @@ export class Graphism {
   private nodes: Record<string, NodeInterface> = {}
   private lines: Record<string, LineInterface> = {}
   private selectedNodes: Record<string, NodeInterface> = {}
+  private selectedLines: Record<string, LineInterface> = {}
   private holdingNode: NodeInterface = null
   private background
 
@@ -230,12 +231,13 @@ export class Graphism {
     this.selectedNodes = {}
   }
 
-  clearSelectedLine() {
+  clearSelectedLines() {
+    console.log('cleared')
     for (const lineId in this.lines)
-      this.lines[lineId].isSelected = false
+      this.lines[lineId].deselect()
 
     this._emitter.emit('line:clearSelect')
-    this.selectedNodes = {}
+    this.selectedLines = {}
   }
 
   runAlgorithm<T extends keyof typeof AvailableAlgorithms>(algorithmName: T, from: NodeInterface, to: NodeInterface) {
@@ -249,8 +251,8 @@ export class Graphism {
         element.lineConfig.color = 'blue'
       }
       else if (element instanceof GraphNode) {
-        element.nodeConfig.backgroundColor = 'blue'
-        element.nodeConfig.textColor = 'white'
+        element.config.backgroundColor = 'blue'
+        element.config.textColor = 'white'
       }
     })
   }
@@ -381,54 +383,46 @@ export class Graphism {
   private mouseClick(e: MouseEvent) {
     const position = this.getCursorPosition(e)
     const target = e.target as HTMLElement
-    if(target.classList.contains('node-circle')) {
-      let nodeId = target.getAttribute('data-id')
-      this.selectedNodes[nodeId] = this.nodes[nodeId]
-    }
+    let isLineClicked, isNodeClicked = false
+    this._emitter.emit('canvas:click', position)
 
-    // If the click is instant click (not moving or dragging)
-    if (position.x === this.dragFrom.x && position.y === this.dragFrom.y) {
-      this._emitter.emit('canvas:click', position)
-      let isNodeClicked = false
-      let isLineClicked = false
-
-      // Check if a node is clicked
-      console.log(e.target)
-      for(const nodeId in this.nodes) {
-        const node = this.nodes[nodeId]
-
-        // if (node.isOnCoordinate(position)) {
-        //   if (!e.ctrlKey)
-        //     this.clearSelectedNodes()
-        //   this.selectNode(node, this.mode)
-        //   isNodeClicked = true
-        //   this._emitter.emit('node:select', node)
-        //   break
-        // }
-      }
-
-
-      // Check if a line is clicked
-      for(const lineId in this.lines) {
-        const line = this.lines[lineId]
-        // if (line.isOnCoordinate(position)) {
-        //   line.isSelected = true
-        //   isLineClicked = true
-        //   this._emitter.emit('line:select', line)
-        // }
-      }
-
-      if (!isLineClicked)
-        this.clearSelectedLine()
-      if (!isNodeClicked)
+    console.log(target)
+    if(target.classList.contains('graphism-node')) {
+      console.log('line selected', this.selectedLines)
+      if (!e.ctrlKey)
         this.clearSelectedNodes()
+      let nodeId = target.getAttribute('data-id')
+      const node = this.nodes[nodeId]
+      
+      isNodeClicked = true
+      this.selectNode(node, this.mode)
+      console.log('selected nodes: ', this.selectedNodes)
     }
+    else if(target.classList.contains('graphism-line')) {
+      if (!e.ctrlKey)
+        this.clearSelectedLines()
+
+      let lineId = target.getAttribute('data-id')
+      const line = this.lines[lineId]
+      this._emitter.emit('line:select', line)
+      line.select()
+      this.selectedLines[lineId] = line
+      
+      console.log(e.ctrlKey, 'selected lines: ', this.selectedLines)
+      isLineClicked = true
+    }
+
+    if (!isLineClicked)
+      this.clearSelectedLines()
+    if (!isNodeClicked)
+      this.clearSelectedNodes()
   }
 
   selectNode(node: NodeInterface, mode: Mode = 'normal') {
     node.select()
     node.mode = !node.isSelected ? 'normal' : mode
     this.selectedNodes[node.id] = node
+    this._emitter.emit('node:select', node)
   }
 
   selectAllNode() {

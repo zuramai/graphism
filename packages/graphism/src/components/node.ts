@@ -23,7 +23,7 @@ const defaultNodeConfig: NodeConfig = {
 export class GraphNode extends Component implements NodeInterface {
   id: number
   neighbors?: NeighborInterface[] = []
-  nodeConfig: NodeConfig = {}
+  config: NodeConfig = {}
   text: string
   position: Coordinate
   movable = false
@@ -31,7 +31,7 @@ export class GraphNode extends Component implements NodeInterface {
   isSelected = false
   mode: Mode = 'normal'
   gCost = 0
-  elements = {
+  elements: Record<string, SVGCircleElement|SVGTextElement> = {
     circle: null,
     text: null
   }
@@ -46,8 +46,8 @@ export class GraphNode extends Component implements NodeInterface {
     this.name = 'node'
     this.text = name
     this.position = position
-    this.nodeConfig = Object.assign(this.nodeConfig, defaultNodeConfig)
-    this.nodeConfig = Object.assign(this.nodeConfig, config)
+    this.config = Object.assign(this.config, defaultNodeConfig)
+    this.config = Object.assign(this.config, config)
   }
 
   addNeighbor(node: NodeInterface, distance: number, line: LineInterface) {
@@ -67,14 +67,14 @@ export class GraphNode extends Component implements NodeInterface {
     const g = createElementNS('g', { class: "node" })
 
     this.elements.circle = createElementNS("circle", { 
-      class: "node-circle",
+      class: "graphism-node node-circle",
       "data-id": this.id,
       cx: this.position.x, 
       cy: this.position.y,
-      r: this.nodeConfig.size,
-      fill: this.nodeConfig.backgroundColor,
-      stroke: this.nodeConfig.borderColor,
-      "stroke-width": this.nodeConfig.borderSize
+      r: this.config.size,
+      fill: this.config.backgroundColor,
+      stroke: this.config.borderColor,
+      "stroke-width": this.config.borderSize
     })
 
     
@@ -85,7 +85,7 @@ export class GraphNode extends Component implements NodeInterface {
       el.innerHTML = this.text
     })
 
-    this.nodeConfig = new Proxy(this.nodeConfig, this.proxyHandler())
+    this.config = new Proxy(this.config, this.proxyHandler())
 
     g.append(this.elements.circle, this.elements.text)
     root.append(g)
@@ -100,44 +100,44 @@ export class GraphNode extends Component implements NodeInterface {
     // ctx.arc(
     //   this.position.x,
     //   this.position.y,
-    //   this.nodeConfig.size + 5,
+    //   this.config.size + 5,
     //   0,
     //   Math.PI * 2,
     // )
-    // ctx.fillStyle = this.nodeConfig.hoverBackgroundColor
+    // ctx.fillStyle = this.config.hoverBackgroundColor
     // ctx.setLineDash(this.mode === 'connecting' ? [50, 10] : [0])
     // ctx.lineDashOffset = this._borderOffset
     // if (this.isSelected) {
-    //   ctx.lineWidth = this.nodeConfig.selectedBorderSize
-    //   ctx.strokeStyle = this.nodeConfig.selectedBorderColor
+    //   ctx.lineWidth = this.config.selectedBorderSize
+    //   ctx.strokeStyle = this.config.selectedBorderColor
     //   ctx.stroke()
     // }
     // else if (this.isHovered && !this.isSelected) {
-    //   ctx.lineWidth = this.nodeConfig.hoverBorderSize
-    //   ctx.strokeStyle = this.nodeConfig.hoverBorderColor
+    //   ctx.lineWidth = this.config.hoverBorderSize
+    //   ctx.strokeStyle = this.config.hoverBorderColor
     //   ctx.stroke()
     // }
     // ctx.closePath()
 
     // Create the node shape
     // ctx.beginPath()
-    // ctx.fillStyle = this.nodeConfig.backgroundColor
+    // ctx.fillStyle = this.config.backgroundColor
     // ctx.arc(
     //   this.position.x,
     //   this.position.y,
-    //   this.nodeConfig.size,
+    //   this.config.size,
     //   0,
     //   Math.PI * 2,
     // // )
-    // ctx.strokeStyle = this.nodeConfig.borderColor
-    // ctx.lineWidth = this.nodeConfig.borderSize
+    // ctx.strokeStyle = this.config.borderColor
+    // ctx.lineWidth = this.config.borderSize
     // ctx.stroke()
     // ctx.fill()
     // ctx.closePath()
 
     // Draw text
-    // ctx.fillStyle = this.nodeConfig.textColor
-    // ctx.font = `${this.nodeConfig.fontSize}px ${this.nodeConfig.fontFamily}`
+    // ctx.fillStyle = this.config.textColor
+    // ctx.font = `${this.config.fontSize}px ${this.config.fontFamily}`
     // ctx.textBaseline = 'middle'
     // ctx.textAlign = 'center'
     // ctx.fillText(this.text, this.position.x, this.position.y)
@@ -157,11 +157,11 @@ export class GraphNode extends Component implements NodeInterface {
   }
 
   onhover(e: MouseEvent) {
-    this.nodeConfig.borderColor = this.nodeConfig.hoverBorderColor
+    this.config.borderColor = this.config.hoverBorderColor
   }
 
   unhover(e: MouseEvent) {
-    this.nodeConfig.borderColor = this.nodeConfig.borderColor
+    this.config.borderColor = this.config.borderColor
   }
 
   mouseover(e: MouseEvent) {
@@ -173,10 +173,17 @@ export class GraphNode extends Component implements NodeInterface {
   }
 
   select() {
-    this.isSelected = !this.isSelected
+    this.isSelected = true
 
-    if (!this.isSelected)
-      this._borderOffset = 0
+    this.elements.circle.setAttribute('stroke', this.config.selectedBorderColor)
+    this.elements.circle.classList.add('selected')
+  }
+
+  deselect() {
+    this.isSelected =false
+    this._borderOffset = 0
+
+    this.elements.circle.classList.remove('selected')
   }
 
   move(x?: number, y?: number) {
