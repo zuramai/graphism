@@ -1,3 +1,4 @@
+import { Position } from 'vitest'
 import type { Mode, Coordinate } from '../types'
 import type { LineInterface } from '../types/line'
 import type { NeighborInterface, NodeConfig, NodeInterface } from '../types/node'
@@ -45,7 +46,7 @@ export class GraphNode extends Component implements NodeInterface {
     this.id = Math.floor(Math.random() * Date.now())
     this.name = 'node'
     this.text = name
-    this.position = position
+    this.position = new Proxy(position, this.positionProxy())
     this.config = Object.assign(this.config, defaultNodeConfig)
     this.config = Object.assign(this.config, config)
   }
@@ -140,6 +141,25 @@ export class GraphNode extends Component implements NodeInterface {
     // ctx.textBaseline = 'middle'
     // ctx.textAlign = 'center'
     // ctx.fillText(this.text, this.position.x, this.position.y)
+  }
+  
+  positionProxy() {
+    const _this = this
+    return {
+      set(obj, prop, value) {
+        console.log('changed position', prop)
+        if(prop == 'x') {
+          _this.elements.circle.setAttribute('cx', value)
+          _this.elements.text.setAttribute('x', value)
+        } 
+        else if(prop == 'y') {
+          _this.elements.circle.setAttribute('cy', value)
+          _this.elements.text.setAttribute('y', value)
+        } 
+        obj[prop] = value
+        return true
+      }
+    } as ProxyHandler<Position>
   }
 
   proxyHandler() {

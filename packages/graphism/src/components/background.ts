@@ -28,7 +28,7 @@ class Background {
         defsEl.append(smallGridPattern)
         defsEl.append(gridPattern)
       })
-      svgEl.append(createElementNS('rect', { width: '100%', height: '100%', fill: 'url(#grid)' }))
+      svgEl.append(createElementNS('rect', { width: '100%', height: '100%', fill: 'url(#grid)', id: 'bg-grid-rect' }))
       svgEl.appendChild(defs)
     })
 
