@@ -12,7 +12,7 @@ export interface LineConfig {
 
 export interface LineInterface extends ComponentInterface {
   id: number
-  lineConfig?: LineConfig
+  config?: LineConfig
   from: NodeInterface
   to: NodeInterface
   isHovered: boolean

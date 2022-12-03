@@ -19,7 +19,7 @@ class Background {
           const path = createElementNS('path', { 'd': 'M 8 0 L 0 0 0 8', 'fill': 'none', 'stroke': 'rgb(203 213 225)', 'stroke-width': '.5' })
           smallGridEl.append(path)
         })
-        const gridPattern = createElementNS('pattern', { id: 'grid', width: '80', height: '80', patternUnits: 'userSpaceOnUse' }, (smallGridEl) => {
+        const gridPattern = createElementNS('pattern', { id: 'grid', width: '80', height: '80', patternUnits: 'userSpaceOnUse'}, (smallGridEl) => {
           const rect = createElementNS('rect', { width: '80', height: '80', fill: 'url(#smallGrid)' })
           const path2 = createElementNS('path', { 'd': 'M 80 0 L 0 0 0 80', 'fill': 'none', 'stroke': 'rgb(148 163 184)', 'stroke-width': '.5' })
           smallGridEl.append(rect)
@@ -37,7 +37,7 @@ class Background {
     svg.setAttribute('height', document.body.clientHeight.toString())
 
     console.log('drawing background');
-    
+
     return svg
   }
 

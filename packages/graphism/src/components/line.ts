@@ -5,8 +5,8 @@ import { createElement, createElementNS } from '../utils/dom'
 import { Component } from './abstract'
 
 const defaultLineConfig = {
-  color: '#777',
-  width: 5,
+  color: '#404258',
+  width: 3,
   hoverColor: 'rgba(120, 118, 240, .6)',
   selectedColor: '#2f5ea8',
   text: null,
@@ -16,7 +16,7 @@ const defaultLineConfig = {
 export default class Line extends Component implements LineInterface {
   id: number
   name: 'node' | 'line' = 'line'
-  lineConfig: LineConfig = defaultLineConfig
+  config: LineConfig = defaultLineConfig
   from: NodeInterface
   to: NodeInterface
   isHovered = false
@@ -30,7 +30,7 @@ export default class Line extends Component implements LineInterface {
   constructor(from: NodeInterface, to: NodeInterface, distance: number, config?: LineConfig) {
     super()
     this.id = Math.floor(Math.random() * Date.now())
-    this.lineConfig = { ...defaultLineConfig, ...config }
+    this.config = { ...defaultLineConfig, ...config }
     this.from = from
     this.to = to
     this.distance = distance
@@ -45,8 +45,8 @@ export default class Line extends Component implements LineInterface {
       y1: this.from.position.y,
       y2: this.to.position.y,
       "data-id": this.id,
-      "stroke-width": this.lineConfig.width,
-      "stroke": this.lineConfig.selectedColor
+      "stroke-width": this.config.width,
+      "stroke": this.config.color
     })
     
     const text = this.drawText()
@@ -54,7 +54,13 @@ export default class Line extends Component implements LineInterface {
 
     g.append(line, text)
     root.append(g)
-    
+
+    this.config = new Proxy(this.config, this.proxyHandler())
+
+    // Add hover state
+    g.addEventListener('mouseenter', () => this.hover())
+    g.addEventListener('mouseleave', () => this.unhover())
+
     return g 
   }
 
@@ -67,19 +73,24 @@ export default class Line extends Component implements LineInterface {
     const text = createElementNS('text', {
       x: middlePosition.x,
       y: middlePosition.y,
-      fill: this.lineConfig.selectedColor
-    }, el => el.innerHTML = this.lineConfig.text)
+      fill: this.config.color
+    }, el => el.innerHTML = this.config.text)
 
-    // if (!this.lineConfig.text) {
-    //   // If text doesn't exists, draw the distance
-    //   if (this.distance === 0)
-    //     return
-    //   ctx.fillText(this.distance.toString(), middlePosition.x, middlePosition.y)
-    //   return
-    // }
     return text
   }
   
+  proxyHandler() {
+    const _this = this
+    return {
+      set(obj, prop, value) {
+        if(prop == 'width') _this.elements.line.setAttribute('width', value) 
+        else if(prop == 'color') _this.elements.line.setAttribute('stroke', value) 
+        else if(prop == 'text') _this.elements.text.innerText = value 
+        return true
+      }
+    } as ProxyHandler<LineConfig>
+  }
+
   select() {
     this.isSelected = true
     this.elements.line.classList.add('selected')
@@ -90,9 +101,12 @@ export default class Line extends Component implements LineInterface {
     this.elements.line.classList.remove('selected')
   }
 
-  updateDistance() {
-    if (this.lineConfig.dynamicDistance)
-      this.distance = Math.round(getDistance(this.from.position, this.to.position))
+  hover() {
+    this.config.color = this.config.hoverColor
+  }
+
+  unhover() {
+    this.config.color = this.config.color
   }
 
   move(x?: number, y?: number) {
