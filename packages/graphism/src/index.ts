@@ -223,6 +223,7 @@ export class Graphism {
   clearSelectedNodes() {
     for(const id in this.selectedNodes) {
       const node = this.nodes[id]
+      node.deselect()
       node.isSelected = false
       node.mode = 'normal'
       node.movable = false
@@ -294,7 +295,6 @@ export class Graphism {
   }
 
   private update() {
-    // for (let i = 0; i < this.nodes.length; i++) 
     for(const nodeId in this.nodes) 
       this.nodes[nodeId].update()
     
@@ -383,7 +383,8 @@ export class Graphism {
   private mouseClick(e: MouseEvent) {
     const position = this.getCursorPosition(e)
     const target = e.target as HTMLElement
-    let isLineClicked, isNodeClicked = false
+    let isLineClicked = false, 
+        isNodeClicked = false
     this._emitter.emit('canvas:click', position)
 
     console.log(target)
@@ -404,11 +405,11 @@ export class Graphism {
 
       let lineId = target.getAttribute('data-id')
       const line = this.lines[lineId]
-      this._emitter.emit('line:select', line)
       line.select()
       this.selectedLines[lineId] = line
       
       console.log(e.ctrlKey, 'selected lines: ', this.selectedLines)
+      this._emitter.emit('line:select', line)
       isLineClicked = true
     }
 
