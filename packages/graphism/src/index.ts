@@ -39,6 +39,7 @@ export class Graphism {
   private selectedLines: Record<string, LineInterface> = {}
   private holdingNode: NodeInterface = null
   private background
+  private translate: Coordinate = { x: 0, y: 0}
 
   private dragFrom: Coordinate
   private isDirectedGraph = false
@@ -98,6 +99,7 @@ export class Graphism {
     this.background = createBackground(this.root, 'grid')
     this.background.draw()
 
+    this.root.appendChild(createElementNS("g", { class: "g-components" }))
   }
 
   render() {
@@ -154,7 +156,7 @@ export class Graphism {
     const g = createElementNS('g', { class: "lines" })
     for(const lineId in this.lines) 
       this.lines[lineId].draw(g)
-    this.root.append(g)
+    this.root.querySelector('.g-components').append(g)
   }
 
   private drawNodes() {
@@ -162,7 +164,7 @@ export class Graphism {
     for(const node in this.nodes) {
       this.nodes[node].draw(g)
     }
-    this.root.append(g)
+    this.root.querySelector('.g-components').append(g)
   }
 
   drawMode() {
@@ -300,7 +302,6 @@ export class Graphism {
     for(const nodeId in this.nodes) 
       this.nodes[nodeId].update()
     
-
     if (['creating', 'connecting'].includes(this.mode)) {
       this._runningBorderOffset++
     }
@@ -325,20 +326,21 @@ export class Graphism {
   }
 
   private makeDraggable() {
-    let holdingComponent: NodeInterface = null 
+    let holdingComponent: NodeInterface|HTMLElement = null 
 
-    // Offsets for every selected nodes
+    // Mouse-to-node offsets for every selected nodes
     let offsets: Record<number, Coordinate> = {}
 
     const startDrag = (e: MouseEvent) => {
       const target = (e.target as HTMLElement)
-      console.log('dragging', e.target);
       
       let mousePos = getMousePosition(e, this.root as SVGGraphicsElement);
       
       if(target.classList.contains('graphism-node')) {
+        // Start dragging the node
         const clickedNode = this.nodes[target.getAttribute('data-id')]
         holdingComponent = clickedNode
+        
         for(const nodeId in this.selectedNodes) {
           const currentNode = this.nodes[nodeId]
           offsets[nodeId] = {
@@ -348,7 +350,8 @@ export class Graphism {
         }
   
        } else if(target.id == 'bg-grid-rect') {
-        // Move the entire svg canvas
+        // Move the entire canvas
+        holdingComponent = target
        }
        
     }
@@ -357,10 +360,16 @@ export class Graphism {
 
       const coord = getMousePosition(e, this.root as SVGGraphicsElement)
 
-      for(const nodeId in this.selectedNodes) {
-        const currentNode = this.nodes[nodeId]
-        currentNode.position.x = coord.x - offsets[nodeId].x
-        currentNode.position.y = coord.y - offsets[nodeId].y
+      if(holdingComponent instanceof GraphNode) {
+        for(const nodeId in this.selectedNodes) {
+          const currentNode = this.nodes[nodeId]
+          currentNode.position.x = coord.x - offsets[nodeId].x
+          currentNode.position.y = coord.y - offsets[nodeId].y
+        }
+      }
+      else if(holdingComponent instanceof HTMLElement) {
+        // Move the grid
+        
       }
 
       this.dragSelectedNodes()
@@ -401,43 +410,12 @@ export class Graphism {
     const position = this.getCursorPosition(e)
 
     this.dragFrom = position
-
-    // for (let i = 0; i < this.nodes.length; i++) {
-    //   const node = this.nodes[i]
-
-    //   // if the node is clicked
-    //   if (node.isOnCoordinate(position)) {
-    //     this.holdingNode = node
-    //     node.moveFrom = {
-    //       x: node.position.x,
-    //       y: node.position.y,
-    //     }
-
-    //     for (let j = 0; j < this.selectedNodes.length; j++) {
-    //       const s = this.selectedNodes[j]
-    //       s.moveFrom = {
-    //         x: s.position.x,
-    //         y: s.position.y,
-    //       }
-    //     }
-    //   }
-    // }
   }
 
   private mouseMove(e: MouseEvent) {
     const position = this.getCursorPosition(e)
     let element: Component
     
-    
-
-    // Change cursor on node hover
-    // if ((element = elements.find(el => el.isOnCoordinate(position)))) {
-    //   this.root.style.cursor = 'pointer'
-    //   this._emitter.emit(`${element.name}:mouseover`, element as LineInterface)
-    //   this._hoveredElement = element
-    //   element.isHovered = true
-    // }
-
     if (!this.nodes.length || !this.holdingNode)
       return
     const dx = position.x - this.dragFrom.x

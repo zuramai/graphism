@@ -96,51 +96,6 @@ export class GraphNode extends Component implements NodeInterface {
     g.addEventListener('mouseenter', e => this.hover(e))
     g.addEventListener('mouseleave', e => this.unhover(e))
 
-    // ctx.beginPath()
-    // ctx.arc(
-    //   this.position.x,
-    //   this.position.y,
-    //   this.config.size + 5,
-    //   0,
-    //   Math.PI * 2,
-    // )
-    // ctx.fillStyle = this.config.hoverBackgroundColor
-    // ctx.setLineDash(this.mode === 'connecting' ? [50, 10] : [0])
-    // ctx.lineDashOffset = this._borderOffset
-    // if (this.isSelected) {
-    //   ctx.lineWidth = this.config.selectedBorderSize
-    //   ctx.strokeStyle = this.config.selectedBorderColor
-    //   ctx.stroke()
-    // }
-    // else if (this.isHovered && !this.isSelected) {
-    //   ctx.lineWidth = this.config.hoverBorderSize
-    //   ctx.strokeStyle = this.config.hoverBorderColor
-    //   ctx.stroke()
-    // }
-    // ctx.closePath()
-
-    // Create the node shape
-    // ctx.beginPath()
-    // ctx.fillStyle = this.config.backgroundColor
-    // ctx.arc(
-    //   this.position.x,
-    //   this.position.y,
-    //   this.config.size,
-    //   0,
-    //   Math.PI * 2,
-    // // )
-    // ctx.strokeStyle = this.config.borderColor
-    // ctx.lineWidth = this.config.borderSize
-    // ctx.stroke()
-    // ctx.fill()
-    // ctx.closePath()
-
-    // Draw text
-    // ctx.fillStyle = this.config.textColor
-    // ctx.font = `${this.config.fontSize}px ${this.config.fontFamily}`
-    // ctx.textBaseline = 'middle'
-    // ctx.textAlign = 'center'
-    // ctx.fillText(this.text, this.position.x, this.position.y)
   }
   
   positionProxy() {
@@ -216,9 +171,6 @@ export class GraphNode extends Component implements NodeInterface {
       this.position.x = x
     if (y)
       this.position.y = y
-    this.neighbors.forEach((neighbor) => {
-      neighbor.line.updateDistance()
-    })
   }
 
 }
