@@ -17,7 +17,6 @@ export interface LineInterface extends ComponentInterface {
   to: NodeInterface
   isHovered: boolean
   updateLinePosition: () => void
-  updateDistance: () => void
   draw: (root: SVGGElement) => void
 }
 
