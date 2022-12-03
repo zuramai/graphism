@@ -6,7 +6,7 @@ import { Component } from './abstract'
 
 const defaultNodeConfig: NodeConfig = {
   backgroundColor: 'white',
-  borderColor: '#ddd',
+  borderColor: '#9ba3ab',
   borderSize: 2,
   shape: 'circle',
   size: 50,
@@ -92,9 +92,8 @@ export class GraphNode extends Component implements NodeInterface {
 
 
     // Add hover state
-    g.addEventListener('mouseover', e => this.onhover(e))
+    g.addEventListener('mouseenter', e => this.hover(e))
     g.addEventListener('mouseleave', e => this.unhover(e))
-    g.addEventListener('mouseover', e => this.mouseover(e))
 
     // ctx.beginPath()
     // ctx.arc(
@@ -156,7 +155,7 @@ export class GraphNode extends Component implements NodeInterface {
     } as ProxyHandler<NodeConfig>
   }
 
-  onhover(e: MouseEvent) {
+  hover(e: MouseEvent) {
     if(!this.isSelected) { 
       this.config.borderSize = this.config.hoverBorderSize
       this.config.borderColor = this.config.hoverBorderColor
@@ -172,15 +171,13 @@ export class GraphNode extends Component implements NodeInterface {
     }
   }
 
-  mouseover(e: MouseEvent) {
-
-  }
-
   update() {
     this._borderOffset++
   }
 
   select() {
+    console.log('selected',this.isSelected)
+    if(this.isSelected) return this.deselect()
     console.log('select', this.config.borderColor);
     this.isSelected = true
 
@@ -190,7 +187,9 @@ export class GraphNode extends Component implements NodeInterface {
   }
 
   deselect() {
-    this.isSelected =false
+    console.trace()
+    console.log('deselect',this.isSelected)
+    this.isSelected = false
     this._borderOffset = 0
 
     this.config.borderSize = this.config.borderSize
