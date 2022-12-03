@@ -249,7 +249,7 @@ export class Graphism {
 
     path.forEach((element) => {
       if (element instanceof Line) {
-        element.lineConfig.color = 'blue'
+        element.config.color = 'blue'
       }
       else if (element instanceof GraphNode) {
         element.config.backgroundColor = 'blue'
@@ -389,11 +389,12 @@ export class Graphism {
 
     console.log(target)
     if(target.classList.contains('graphism-node')) {
-      console.log('line selected', this.selectedLines)
-      if (!e.ctrlKey)
-        this.clearSelectedNodes()
       let nodeId = target.getAttribute('data-id')
       const node = this.nodes[nodeId]
+      const nodeIsNotSelected = () => Object.keys(this.selectedNodes).every(n => n !== node.id.toString())
+
+      if (!e.ctrlKey && nodeIsNotSelected())
+        this.clearSelectedNodes()
       
       isNodeClicked = true
       this.selectNode(node, this.mode)
