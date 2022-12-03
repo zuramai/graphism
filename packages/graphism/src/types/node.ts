@@ -10,6 +10,7 @@ export interface NodeInterface extends ComponentInterface {
   config: NodeConfig
   movable: boolean
   moveFrom: Coordinate
+  elements: Record<string, any>
 
   // Backtracking purpose
   parent: NodeInterface
