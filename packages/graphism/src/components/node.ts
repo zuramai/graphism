@@ -157,11 +157,19 @@ export class GraphNode extends Component implements NodeInterface {
   }
 
   onhover(e: MouseEvent) {
-    this.config.borderColor = this.config.hoverBorderColor
+    if(!this.isSelected) { 
+      this.config.borderSize = this.config.hoverBorderSize
+      this.config.borderColor = this.config.hoverBorderColor
+      console.log('hover', this.config.borderColor)
+    }
   }
-
   unhover(e: MouseEvent) {
-    this.config.borderColor = this.config.borderColor
+    console.log('unhover', this.config.borderColor);
+    
+    if(!this.isSelected) {
+      this.config.borderSize = this.config.borderSize
+      this.config.borderColor = this.config.borderColor
+    }
   }
 
   mouseover(e: MouseEvent) {
@@ -173,9 +181,11 @@ export class GraphNode extends Component implements NodeInterface {
   }
 
   select() {
+    console.log('select', this.config.borderColor);
     this.isSelected = true
 
-    this.elements.circle.setAttribute('stroke', this.config.selectedBorderColor)
+    this.config.borderColor = this.config.selectedBorderColor
+    this.config.borderSize = this.config.selectedBorderSize
     this.elements.circle.classList.add('selected')
   }
 
@@ -183,6 +193,8 @@ export class GraphNode extends Component implements NodeInterface {
     this.isSelected =false
     this._borderOffset = 0
 
+    this.config.borderSize = this.config.borderSize
+    this.config.borderColor = this.config.borderColor
     this.elements.circle.classList.remove('selected')
   }
 
