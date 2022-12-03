@@ -64,6 +64,18 @@ export default class Line extends Component implements LineInterface {
     return g 
   }
 
+  updateLinePosition() {
+    const line = this.elements.line 
+    const attrs = {
+      x1: this.from.position.x,
+      x2: this.to.position.x,
+      y1: this.from.position.y,
+      y2: this.to.position.y
+    }
+    for(const attr in attrs)
+      line.setAttribute(attr, attrs[attr])
+  }
+
   drawText() {
     const middlePosition: Coordinate = {
       x: (this.from.position.x + this.to.position.x) / 2,

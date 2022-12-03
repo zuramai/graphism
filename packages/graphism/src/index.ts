@@ -310,8 +310,18 @@ export class Graphism {
 
   }
 
-  private dragComponents() {
+  private dragSelectedNodes() {
 
+    for(const nodeId in this.selectedNodes) {
+      const currentNode = this.nodes[nodeId]
+
+      // Move the line that connected to the node
+      currentNode.neighbors.forEach(neighbor => {
+        neighbor.line.updateLinePosition()
+      })
+
+      this._emitter.emit("node:move", currentNode)
+    }
   }
 
   private makeDraggable() {
@@ -353,7 +363,7 @@ export class Graphism {
         currentNode.position.y = coord.y - offsets[nodeId].y
       }
 
-      this.dragComponents()
+      this.dragSelectedNodes()
     }
     const endDrag = () => {
       holdingComponent = null

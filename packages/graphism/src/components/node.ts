@@ -147,7 +147,6 @@ export class GraphNode extends Component implements NodeInterface {
     const _this = this
     return {
       set(obj, prop, value) {
-        console.log('changed position', prop)
         if(prop == 'x') {
           _this.elements.circle.setAttribute('cx', value)
           _this.elements.text.setAttribute('x', value)
@@ -159,7 +158,7 @@ export class GraphNode extends Component implements NodeInterface {
         obj[prop] = value
         return true
       }
-    } as ProxyHandler<Position>
+    } as ProxyHandler<Coordinate>
   }
 
   proxyHandler() {
@@ -203,6 +202,7 @@ export class GraphNode extends Component implements NodeInterface {
   }
 
   deselect() {
+    console.trace('deselected')
     this.isSelected = false
     this._borderOffset = 0
 
