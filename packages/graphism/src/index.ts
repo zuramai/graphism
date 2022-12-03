@@ -9,11 +9,12 @@ import type {
   GraphismOptions,
   LineConfig,
   LineInterface,
+  ComponentInterface,
 } from './types'
 import type { NodeConfig, NodeInterface } from './types/node'
 import Line from './components/line'
 import type { Component } from './components/abstract'
-import { getDistance } from './utils'
+import { getDistance, getMousePosition } from './utils'
 import { newAlgorithm } from './algorithms'
 import type { AvailableAlgorithms } from './algorithms'
 import { createBackground } from './components/background'
@@ -313,14 +314,35 @@ export class Graphism {
   }
 
   private makeDraggable() {
-    const startDrag = () => {
+    let holdingComponent: NodeInterface = null 
+    let offset = { x: null, y: null }
 
+    const startDrag = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement)
+      console.log('dragging', e.target);
+      
+      offset = getMousePosition(e, this.root as SVGGraphicsElement);
+      offset.x -= parseFloat(target.getAttribute("cx"));
+      offset.y -= parseFloat(target.getAttribute("cy"));
+
+      if(target.classList.contains('graphism-node')) {
+        const node = this.nodes[target.getAttribute('data-id')]
+        holdingComponent = node
+        
+       } else if(target.id == 'bg-grid-rect') {
+        // Move the entire svg canvas
+       }
+       
     }
-    const drag = () => {
+    const drag = (e: MouseEvent) => {
+      if(!holdingComponent) return 
 
+      const coord = getMousePosition(e, this.root as SVGGraphicsElement)
+      holdingComponent.position.x = coord.x - offset.x
+      holdingComponent.position.y = coord.y - offset.y
     }
     const endDrag = () => {
-
+      holdingComponent = null
     }
     this.root.addEventListener('mousedown', startDrag)
     this.root.addEventListener('mousemove', drag)
