@@ -87,6 +87,7 @@ export class Graphism {
 
   init() {
     // Set canvas size
+    this.root.classList.add("graphism-container")
     this.root.style.width = "100%"
     this.root.style.height = "100vh"
     this.root.setAttribute("width", this.root.clientWidth.toString())
@@ -100,6 +101,7 @@ export class Graphism {
   render() {
     this.draw()
     this.update()
+    this.makeDraggable()
   }
 
   on<E extends keyof EventsMap>(event: E, callback: any, once = false) {
@@ -151,7 +153,6 @@ export class Graphism {
     for(const lineId in this.lines) 
       this.lines[lineId].draw(g)
     this.root.append(g)
-    console.log(this.root, 'while drawing', this.lines.length)
   }
 
   private drawNodes() {
@@ -233,7 +234,6 @@ export class Graphism {
   }
 
   clearSelectedLines() {
-    console.log('cleared')
     for (const lineId in this.lines)
       this.lines[lineId].deselect()
 
@@ -304,8 +304,31 @@ export class Graphism {
     }
   }
 
+  private dragScreen() {
+
+  }
+
+  private dragComponents() {
+
+  }
+
+  private makeDraggable() {
+    const startDrag = () => {
+
+    }
+    const drag = () => {
+
+    }
+    const endDrag = () => {
+
+    }
+    this.root.addEventListener('mousedown', startDrag)
+    this.root.addEventListener('mousemove', drag)
+    this.root.addEventListener('mouseleave', endDrag)
+    this.root.addEventListener('mouseup', endDrag)
+  }
+
   private keypress(e: KeyboardEvent) {
-    console.log('keypress')
     switch (e.key) {
       case 'a':
         e.preventDefault()
@@ -387,7 +410,6 @@ export class Graphism {
         isNodeClicked = false
     this._emitter.emit('canvas:click', position)
 
-    console.log(target)
     if(target.classList.contains('graphism-node')) {
       let nodeId = target.getAttribute('data-id')
       const node = this.nodes[nodeId]
@@ -409,7 +431,6 @@ export class Graphism {
       line.select()
       this.selectedLines[lineId] = line
       
-      console.log(e.ctrlKey, 'selected lines: ', this.selectedLines)
       this._emitter.emit('line:select', line)
       isLineClicked = true
     }

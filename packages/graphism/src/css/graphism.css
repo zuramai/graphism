@@ -1,3 +1,6 @@
-.node-circle {
+.graphism-container .graphism-node {
     cursor: pointer;
+}
+.graphism-container .node text {
+    pointer-events: none;
 }

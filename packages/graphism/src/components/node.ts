@@ -159,11 +159,9 @@ export class GraphNode extends Component implements NodeInterface {
     if(!this.isSelected) { 
       this.config.borderSize = this.config.hoverBorderSize
       this.config.borderColor = this.config.hoverBorderColor
-      console.log('hover', this.config.borderColor)
     }
   }
   unhover(e: MouseEvent) {
-    console.log('unhover', this.config.borderColor);
     
     if(!this.isSelected) {
       this.config.borderSize = this.config.borderSize
@@ -176,9 +174,7 @@ export class GraphNode extends Component implements NodeInterface {
   }
 
   select() {
-    console.log('selected',this.isSelected)
     if(this.isSelected) return this.deselect()
-    console.log('select', this.config.borderColor);
     this.isSelected = true
 
     this.config.borderColor = this.config.selectedBorderColor
@@ -187,8 +183,6 @@ export class GraphNode extends Component implements NodeInterface {
   }
 
   deselect() {
-    console.trace()
-    console.log('deselect',this.isSelected)
     this.isSelected = false
     this._borderOffset = 0
 
