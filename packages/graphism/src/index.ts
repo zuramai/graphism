@@ -20,6 +20,7 @@ import type { AvailableAlgorithms } from './algorithms'
 import { createBackground } from './components/background'
 import { createElementNS } from './utils/dom'
 import "./css/graphism.css"
+import { Position } from 'vitest'
 
 const defaultConfig: GraphismOptions = {
   lineColor: '#555',
@@ -315,20 +316,27 @@ export class Graphism {
 
   private makeDraggable() {
     let holdingComponent: NodeInterface = null 
-    let offset = { x: null, y: null }
+
+    // Offsets for every selected nodes
+    let offsets: Record<number, Coordinate> = {}
 
     const startDrag = (e: MouseEvent) => {
       const target = (e.target as HTMLElement)
       console.log('dragging', e.target);
       
-      offset = getMousePosition(e, this.root as SVGGraphicsElement);
-      offset.x -= parseFloat(target.getAttribute("cx"));
-      offset.y -= parseFloat(target.getAttribute("cy"));
-
+      let mousePos = getMousePosition(e, this.root as SVGGraphicsElement);
+      
       if(target.classList.contains('graphism-node')) {
-        const node = this.nodes[target.getAttribute('data-id')]
-        holdingComponent = node
-        
+        const clickedNode = this.nodes[target.getAttribute('data-id')]
+        holdingComponent = clickedNode
+        for(const nodeId in this.selectedNodes) {
+          const currentNode = this.nodes[nodeId]
+          offsets[nodeId] = {
+            x: mousePos.x - parseFloat(currentNode.elements.circle.getAttribute("cx")),
+            y: mousePos.y - parseFloat(currentNode.elements.circle.getAttribute("cy"))
+          }
+        }
+  
        } else if(target.id == 'bg-grid-rect') {
         // Move the entire svg canvas
        }
@@ -338,8 +346,14 @@ export class Graphism {
       if(!holdingComponent) return 
 
       const coord = getMousePosition(e, this.root as SVGGraphicsElement)
-      holdingComponent.position.x = coord.x - offset.x
-      holdingComponent.position.y = coord.y - offset.y
+
+      for(const nodeId in this.selectedNodes) {
+        const currentNode = this.nodes[nodeId]
+        currentNode.position.x = coord.x - offsets[nodeId].x
+        currentNode.position.y = coord.y - offsets[nodeId].y
+      }
+
+      this.dragComponents()
     }
     const endDrag = () => {
       holdingComponent = null
@@ -348,6 +362,13 @@ export class Graphism {
     this.root.addEventListener('mousemove', drag)
     this.root.addEventListener('mouseleave', endDrag)
     this.root.addEventListener('mouseup', endDrag)
+    this.root.addEventListener('touchstart', startDrag);
+    this.root.addEventListener('touchmove', drag);
+    this.root.addEventListener('touchend', endDrag);
+    this.root.addEventListener('touchleave', endDrag);
+    this.root.addEventListener('touchcancel', endDrag);
+
+
   }
 
   private keypress(e: KeyboardEvent) {
