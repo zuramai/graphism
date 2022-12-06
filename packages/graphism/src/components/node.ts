@@ -96,6 +96,7 @@ export class GraphNode extends Component implements NodeInterface {
     g.addEventListener('mouseenter', e => this.hover(e))
     g.addEventListener('mouseleave', e => this.unhover(e))
 
+
   }
   
   positionProxy() {
@@ -157,7 +158,6 @@ export class GraphNode extends Component implements NodeInterface {
   }
 
   deselect() {
-    console.trace('deselected')
     this.isSelected = false
     this._borderOffset = 0
 

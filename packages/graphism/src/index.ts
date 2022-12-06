@@ -443,6 +443,7 @@ export class Graphism {
     const target = e.target as HTMLElement
     let isLineClicked = false, 
         isNodeClicked = false
+    
     this._emitter.emit('canvas:click', position)
 
 

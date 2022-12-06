@@ -43,11 +43,10 @@ window.onload = () => {
  */
 function graphismEventListeners(graphism: Graphism, canvas: HTMLDivElement) {
   window.addEventListener('resize', resizeCanvas.bind(null, canvas))
-
-  onSubmit('form-add-node', (e)=>{
-    e.preventDefault()
-    addNode.bind(null, graphism)()
-  })
+  // onSubmit('form-add-node', (e)=>{
+  //   e.preventDefault()
+  //   addNode.bind(null, graphism)()
+  // })
   onClick('node-add', addNode.bind(null, graphism))
   onClick('generate-graph', generateGraphEvent.bind(null, graphism))
   onClick('create-new', createNewGraph)
@@ -93,7 +92,7 @@ function addNode(graphism: Graphism) {
 
   graphism.setMode('creating')
   graphism.on('canvas:click', (coordinate: Coordinate) => {
-    console.log("CREATE NODE! on", coordinate)
+    console.log("canvas:click")
     const nameVal = name ? name.value : ''
     graphism.createNode(nameVal, coordinate)
     createNotification('success', `Node ${nameVal} created`)
