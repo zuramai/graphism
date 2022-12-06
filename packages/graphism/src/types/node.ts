@@ -22,14 +22,14 @@ export interface NodeInterface extends ComponentInterface {
   draw: (root: SVGGElement) => void
   addNeighbor: (
     node: NodeInterface,
-    distance: number,
+    text: string,
     line: LineInterface
   ) => void
 }
 
 export interface NeighborInterface {
   node: NodeInterface
-  distance: number
+  text: string
   line: LineInterface
 }
 

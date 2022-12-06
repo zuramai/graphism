@@ -51,14 +51,14 @@ export class GraphNode extends Component implements NodeInterface {
     this.config = Object.assign(this.config, config)
   }
 
-  addNeighbor(node: NodeInterface, distance: number, line: LineInterface) {
+  addNeighbor(node: NodeInterface, text: string, line: LineInterface) {
     // If the neighbor already exists
     if (this.neighbors.find(n => n.node === node))
       return
 
     this.neighbors.push({
       node,
-      distance,
+      text,
       line,
     })
   }

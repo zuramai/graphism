@@ -21,19 +21,19 @@ export default class Line extends Component implements LineInterface {
   to: NodeInterface
   isHovered = false
   isSelected = false
-  distance: number
+  text: string
   elements = {
     line: null,
     text: null
   }
 
-  constructor(from: NodeInterface, to: NodeInterface, distance: number, config?: LineConfig) {
+  constructor(from: NodeInterface, to: NodeInterface, text: string, config?: LineConfig) {
     super()
     this.id = Math.floor(Math.random() * Date.now())
     this.config = { ...defaultLineConfig, ...config }
     this.from = from
     this.to = to
-    this.distance = distance
+    this.text = text
   }
 
   draw(root: SVGGElement) {

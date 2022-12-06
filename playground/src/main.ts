@@ -106,23 +106,25 @@ function addNode(graphism: Graphism) {
 function connectNode(graphism: Graphism) {
   graphism.setMode('connecting')
   showHelperText('Click any node to connect')
-  graphism.clearSelectedNode()
+  graphism.clearSelectedNodes()
   graphism.on('node:select', (node1: NodeInterface) => {
     // On node 1 selected
     graphism.on('node:select', (node2: NodeInterface) => {
+      console.log("connecting two node");
+      
       // On node 2 selected
-      // Show the poppover for user to input distance
-      const poppoverEl = showPoppover('poppover-distance', {
+      // Show the poppover for user to input line text
+      const poppoverEl = showPoppover('poppover-text', {
         x: node2.position.x,
         y: node2.position.y,
       })
 
-      const distanceForm = poppoverEl.querySelector('form')
-      distanceForm.addEventListener('submit', (e: SubmitEvent) => {
+      const textForm = poppoverEl.querySelector('form')
+      textForm.addEventListener('submit', (e: SubmitEvent) => {
         e.preventDefault()
-        const distance = (document.getElementById('distance-value') as HTMLInputElement).value
-        graphism.addNodeNeighbor(node1, node2, distance === '' ? null : ~~distance)
-        graphism.clearSelectedNode()
+        const text = (document.getElementById('distance-value') as HTMLInputElement).value
+        graphism.addNodeNeighbor(node1, node2, text === '' ? null : ~~text)
+        graphism.clearSelectedNodes()
         graphism.setMode('normal')
         poppoverEl.style.visibility = 'hidden'
       }, { once: true })
