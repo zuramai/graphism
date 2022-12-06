@@ -90,6 +90,7 @@ export class Graphism {
 
   init() {
     // Set canvas size
+
     this.root.classList.add("graphism-container")
     this.root.style.width = "100%"
     this.root.style.height = "100vh"
@@ -98,12 +99,12 @@ export class Graphism {
 
     this.background = createBackground(this.root, 'grid')
     this.background.draw()
-
+    
     this.root.appendChild(createElementNS("g", { class: "g-components" }))
+    this.draw()
   }
 
   render() {
-    this.draw()
     this.update()
     this.makeDraggable()
   }
@@ -147,24 +148,21 @@ export class Graphism {
   }
 
   private draw() {
-    this.drawLines()
-    this.drawNodes()
-    // this.drawMode()
+    const gNodes = createElementNS('g', { class: "nodes" })
+    const gLines = createElementNS('g', { class: "lines" })
+
+    this.root.querySelector('.g-components').append(gLines)
+    this.root.querySelector('.g-components').append(gNodes)
   }
 
-  private drawLines() {
-    const g = createElementNS('g', { class: "lines" })
-    for(const lineId in this.lines) 
-      this.lines[lineId].draw(g)
-    this.root.querySelector('.g-components').append(g)
+  private drawLine(line: LineInterface) {
+    const g = document.querySelector('.lines') as SVGGElement
+    line.draw(g)
   }
 
-  private drawNodes() {
-    const g = createElementNS('g', { class: "nodes" })
-    for(const node in this.nodes) {
-      this.nodes[node].draw(g)
-    }
-    this.root.querySelector('.g-components').append(g)
+  private drawNode(node: NodeInterface) {
+    const g = document.querySelector('.nodes') as SVGGElement
+    node.draw(g)
   }
 
   drawMode() {
@@ -211,11 +209,11 @@ export class Graphism {
   ): NodeInterface {
     const node = new GraphNode(name, coordinate, config)
     this.nodes[node.id] = node
-
+    this.drawNode(node)
     this._emitter.emit('node:created', node)
     this.setMode('normal')
     this.clearSelectedNodes()
-
+    
     return node
   }
 
@@ -294,6 +292,8 @@ export class Graphism {
 
     if (!this.isDirectedGraph)
       to.addNeighbor(from, distance, line)
+    
+    this.drawLine(line)
 
     this._emitter.emit('node:connect', from, to)
   }
@@ -352,6 +352,10 @@ export class Graphism {
        } else if(target.id == 'bg-grid-rect') {
         // Move the entire canvas
         holdingComponent = target
+        offsets[0] = {
+          x: mousePos.x,
+          y: mousePos.y,
+        }
        }
        
     }
@@ -366,13 +370,13 @@ export class Graphism {
           currentNode.position.x = coord.x - offsets[nodeId].x
           currentNode.position.y = coord.y - offsets[nodeId].y
         }
+        this.dragSelectedNodes()
       }
       else if(holdingComponent instanceof HTMLElement) {
         // Move the grid
-        
+        this.dragScreen()
       }
 
-      this.dragSelectedNodes()
     }
     const endDrag = () => {
       holdingComponent = null
@@ -440,6 +444,7 @@ export class Graphism {
     let isLineClicked = false, 
         isNodeClicked = false
     this._emitter.emit('canvas:click', position)
+
 
     if(target.classList.contains('graphism-node')) {
       let nodeId = target.getAttribute('data-id')
