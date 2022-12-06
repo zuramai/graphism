@@ -7,7 +7,6 @@ export interface LineConfig {
   selectedColor?: string
   width?: number
   text?: string
-  dynamicDistance?: boolean
 }
 
 export interface LineInterface extends ComponentInterface {

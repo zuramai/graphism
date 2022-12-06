@@ -269,29 +269,28 @@ export class Graphism {
     return this.selectedNodes
   }
 
-  addNodeNeighbor(from: NodeInterface, to: NodeInterface, distance?: number) {
+  addNodeNeighbor(from: NodeInterface, to: NodeInterface, text?: string|number) {
     let line: LineInterface
     const lineConfig: LineConfig = {}
-    if (distance === null || distance === undefined)
-      lineConfig.dynamicDistance = true
 
-    distance ??= Math.round(getDistance(from.position, to.position))
     // Check if the line exists from the other way around
     const createdLine = Object.values(this.lines).find(
       l => (l.from === from && l.to === to) || (l.from === to && l.to === from),
     )
 
+    const lineText = typeof text == 'number' ? text.toString() : text
+
     if (createdLine)
       line = createdLine
     else {
-      line = new Line(from, to, distance, lineConfig)
+      line = new Line(from, to, lineText, lineConfig)
       this.lines[line.id] = line
     }
 
-    from.addNeighbor(to, distance, line)
+    from.addNeighbor(to, lineText, line)
 
     if (!this.isDirectedGraph)
-      to.addNeighbor(from, distance, line)
+      to.addNeighbor(from, lineText, line)
     
     this.drawLine(line)
 
@@ -397,9 +396,10 @@ export class Graphism {
   private keypress(e: KeyboardEvent) {
     switch (e.key) {
       case 'a':
-        e.preventDefault()
-        if (e.ctrlKey)
+        if (e.ctrlKey) {
+          e.preventDefault()
           this.selectAllNode()
+        }
         break
       default:
         break
