@@ -1,9 +1,9 @@
 import './assets/scss/main.scss'
-import type { Graphism, NodeInterface } from 'graphism'
+import type { Coordinate, Graphism, NodeInterface } from 'graphism'
 import { createGraphism } from 'graphism'
 import "graphism/dist/index.css"
 import { saveCanvasToImg } from '../../packages/graphism/src/utils'
-import { camelToSnakeCase, onClick } from './utils'
+import { camelToSnakeCase, onClick, onSubmit } from './utils'
 import { createNotification } from './components/notification'
 import { showPoppover, toggleModalFromSelector } from './ui'
 
@@ -44,6 +44,10 @@ window.onload = () => {
 function graphismEventListeners(graphism: Graphism, canvas: HTMLDivElement) {
   window.addEventListener('resize', resizeCanvas.bind(null, canvas))
 
+  onSubmit('form-add-node', (e)=>{
+    e.preventDefault()
+    addNode.bind(null, graphism)()
+  })
   onClick('node-add', addNode.bind(null, graphism))
   onClick('generate-graph', generateGraphEvent.bind(null, graphism))
   onClick('create-new', createNewGraph)
@@ -88,7 +92,8 @@ function addNode(graphism: Graphism) {
   showHelperText(`Click anywhere to create ${name.value} node`)
 
   graphism.setMode('creating')
-  graphism.on('canvas:click', (coordinate) => {
+  graphism.on('canvas:click', (coordinate: Coordinate) => {
+    console.log("CREATE NODE! on", coordinate)
     const nameVal = name ? name.value : ''
     graphism.createNode(nameVal, coordinate)
     createNotification('success', `Node ${nameVal} created`)
