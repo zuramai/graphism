@@ -2,7 +2,7 @@ import './assets/scss/main.scss'
 import type { Coordinate, Graphism, NodeInterface } from 'graphism'
 import { createGraphism } from 'graphism'
 import "graphism/dist/index.css"
-import { saveCanvasToImg } from '../../packages/graphism/src/utils'
+import { saveSvg } from '../../packages/graphism/src/utils'
 import { camelToSnakeCase, onClick, onSubmit } from './utils'
 import { createNotification } from './components/notification'
 import { showPoppover, toggleModalFromSelector } from './ui'
@@ -51,7 +51,7 @@ function graphismEventListeners(graphism: Graphism, canvas: HTMLDivElement) {
   onClick('generate-graph', generateGraphEvent.bind(null, graphism))
   onClick('create-new', createNewGraph)
   onClick('connectNode', connectNode.bind(null, graphism))
-  // onClick('saveToImage', () => saveCanvasToImg(canvas))
+  onClick('saveToImage', () => saveSvg(graphism.root, "graphism.png"))
   onClick('clear', () => graphism.clear())
 
   toggleModalFromSelector(document.querySelector('.modal-add'), document.getElementById('openAddModal'))
