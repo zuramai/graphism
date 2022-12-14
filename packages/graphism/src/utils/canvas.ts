@@ -1,17 +1,20 @@
-export function saveCanvasToImg(canvas: HTMLCanvasElement) {
-  const downloadLink = document.createElement('a')
-  downloadLink.setAttribute('download', 'graphism.png')
-  canvas.toBlob((blob) => {
-    const url = URL.createObjectURL(blob)
-    downloadLink.setAttribute('href', url)
-    downloadLink.click()
-  })
-}
-
 export function getMousePosition(event: MouseEvent, svg: SVGGraphicsElement) {
   const ctm = svg.getScreenCTM()
   return {
     x: (event.clientX - ctm.e) / ctm.a,
     y: (event.clientY - ctm.f) / ctm.d,
   }
+}
+export function saveSvg(svgEl: SVGElement, name: string) {
+  svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  var svgData = svgEl.outerHTML;
+  var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+  var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
+  var svgUrl = URL.createObjectURL(svgBlob);
+  var downloadLink = document.createElement("a");
+  downloadLink.href = svgUrl;
+  downloadLink.download = name;
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
 }
