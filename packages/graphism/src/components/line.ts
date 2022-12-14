@@ -31,6 +31,7 @@ export default class Line extends Component implements LineInterface {
     super()
     this.id = Math.floor(Math.random() * Date.now())
     this.config = { ...defaultLineConfig, ...config }
+    this.config.text = text
     this.from = from
     this.to = to
     this.text = text
@@ -74,17 +75,43 @@ export default class Line extends Component implements LineInterface {
     }
     for(const attr in attrs)
       line.setAttribute(attr, attrs[attr])
+    this.updateText()
+
+    console.log('arst');
+    
   }
 
-  drawText() {
+  getTextPosition() {
     const middlePosition: Coordinate = {
       x: (this.from.position.x + this.to.position.x) / 2,
       y: (this.from.position.y + this.to.position.y) / 2,
     }
+    return middlePosition
+  }
+
+  getTextAttributes() {
+    const position = this.getTextPosition()
+    return {
+      x: position.x,
+      y: position.y,
+      fill: this.config.color
+    } 
+  }
+
+  updateText() {
+    const attrs = this.getTextAttributes()
+
+    for(const attr in attrs) 
+      this.elements.text.setAttribute(attr, attrs[attr])
+    this.elements.text.innerHTML = this.config.text
+  }
+
+  drawText() {
+    const position = this.getTextPosition()
 
     const text = createElementNS('text', {
-      x: middlePosition.x,
-      y: middlePosition.y,
+      x: position.x,
+      y: position.y,
       fill: this.config.color
     }, el => el.innerHTML = this.config.text)
 
