@@ -77,8 +77,6 @@ export default class Line extends Component implements LineInterface {
       line.setAttribute(attr, attrs[attr])
     this.updateText()
 
-    console.log('arst');
-    
   }
 
   getTextPosition() {
@@ -94,7 +92,8 @@ export default class Line extends Component implements LineInterface {
     return {
       x: position.x,
       y: position.y,
-      fill: this.config.color
+      fill: this.config.color,
+      "text-anchor": 'middle'
     } 
   }
 
@@ -149,11 +148,5 @@ export default class Line extends Component implements LineInterface {
   }
 
   move(x?: number, y?: number) {
-  }
-
-  isOnCoordinate(point: Coordinate): boolean {
-    const is = Math.ceil(getDistance(this.from.position, point))
-            + Math.ceil(getDistance(this.to.position, point)) === Math.ceil(getDistance(this.from.position, this.to.position))
-    return is
   }
 }

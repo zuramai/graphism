@@ -156,12 +156,12 @@ export class Graphism {
   }
 
   private drawLine(line: LineInterface) {
-    const g = document.querySelector('.lines') as SVGGElement
+    const g = this.root.querySelector('.lines') as SVGGElement
     line.draw(g)
   }
 
   private drawNode(node: NodeInterface) {
-    const g = document.querySelector('.nodes') as SVGGElement
+    const g = this.root.querySelector('.nodes') as SVGGElement
     node.draw(g)
   }
 
@@ -218,6 +218,8 @@ export class Graphism {
   }
 
   clear() {
+    this.root.querySelector('.lines').innerHTML = ""
+    this.root.querySelector('.nodes').innerHTML = ""
     this.lines = {}
     this.nodes = {}
     this.mode = 'normal'

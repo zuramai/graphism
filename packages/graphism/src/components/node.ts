@@ -82,7 +82,8 @@ export class GraphNode extends Component implements NodeInterface {
     
     this.elements.text = createElementNS("text", {
       x: this.position.x, 
-      y: this.position.y
+      y: this.position.y,
+      "text-anchor": 'middle'
     }, el => {
       el.innerHTML = this.text
     })
