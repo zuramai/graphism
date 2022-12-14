@@ -43,10 +43,7 @@ window.onload = () => {
  */
 function graphismEventListeners(graphism: Graphism, canvas: HTMLDivElement) {
   window.addEventListener('resize', resizeCanvas.bind(null, canvas))
-  // onSubmit('form-add-node', (e)=>{
-  //   e.preventDefault()
-  //   addNode.bind(null, graphism)()
-  // })
+  onSubmit('form-add-node', e => e.preventDefault())
   onClick('node-add', addNode.bind(null, graphism))
   onClick('generate-graph', generateGraphEvent.bind(null, graphism))
   onClick('create-new', createNewGraph)

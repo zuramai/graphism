@@ -56,6 +56,7 @@ export class GraphNode extends Component implements NodeInterface {
     if (this.neighbors.find(n => n.node === node))
       return
 
+
     this.neighbors.push({
       node,
       text,
