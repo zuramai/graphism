@@ -1,7 +1,6 @@
 import type { Coordinate, NodeInterface } from '../types'
 import type { LineConfig, LineInterface } from '../types/line'
-import { getDistance } from '../utils'
-import { createElement, createElementNS } from '../utils/dom'
+import { createElementNS } from '../utils/dom'
 import { Component } from './abstract'
 
 const defaultLineConfig = {
@@ -120,11 +119,11 @@ export default class Line extends Component implements LineInterface {
     const _this = this
     return {
       set(obj, prop, value) {
-        if (prop == 'width')
+        if (prop === 'width')
           _this.elements.line.setAttribute('width', value)
-        else if (prop == 'color')
+        else if (prop === 'color')
           _this.elements.line.setAttribute('stroke', value)
-        else if (prop == 'text')
+        else if (prop === 'text')
           _this.elements.text.innerText = value
         return true
       },
@@ -132,11 +131,15 @@ export default class Line extends Component implements LineInterface {
   }
 
   select() {
+    if (this.isSelected)
+      this.deselect()
+    this.config.color = this.config.hoverColor
     this.isSelected = true
     this.elements.line.classList.add('selected')
   }
 
   deselect() {
+    this.config.color = this.config.color
     this.isSelected = false
     this.elements.line.classList.remove('selected')
   }
@@ -146,7 +149,8 @@ export default class Line extends Component implements LineInterface {
   }
 
   unhover() {
-    this.config.color = this.config.color
+    if(!this.isSelected)
+      this.config.color = this.config.color
   }
 
   move(x?: number, y?: number) {

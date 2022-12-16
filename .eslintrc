@@ -4,6 +4,8 @@
     ],
     "rules": {
       "no-callback": "off",
-      "no-console": "off"
+      "no-console": "off",
+      "no-self-assign": "off",
+      "@typescript-eslint/no-this-alias": "off"
     }
 }

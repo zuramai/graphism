@@ -2,7 +2,6 @@
 import { createNanoEvents } from 'nanoevents'
 import { GraphNode } from './components/node'
 import type {
-  ComponentInterface,
   Coordinate,
   EventsMap,
   GraphismOptions,
@@ -19,7 +18,6 @@ import type { AvailableAlgorithms } from './algorithms'
 import { createBackground } from './components/background'
 import { createElementNS } from './utils/dom'
 import './css/graphism.css'
-import { Position } from 'vitest'
 
 const defaultConfig: GraphismOptions = {
   lineColor: '#555',
@@ -347,7 +345,7 @@ export class Graphism {
           }
         }
       }
-      else if (target.id == 'bg-grid-rect') {
+      else if (target.id === 'bg-grid-rect') {
         // Move the entire canvas
         holdingComponent = target
         offsets[0] = {
@@ -462,6 +460,7 @@ export class Graphism {
       const line = this.lines[lineId]
       line.select()
       this.selectedLines[lineId] = line
+      console.log('line selected')
 
       this._emitter.emit('line:select', line)
       isLineClicked = true
