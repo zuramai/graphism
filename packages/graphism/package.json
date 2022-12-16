@@ -2,24 +2,24 @@
   "name": "graphism",
   "version": "0.2.1",
   "description": "Graph builder, visualizer, and algorithm solver ",
+  "author": "zuramai <saugi.dev@gmail.com>",
   "license": "MIT",
+  "homepage": "https://github.com/zuramai/graphism#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zuramai/graphism.git"
   },
-  "author": "zuramai <saugi.dev@gmail.com>",
-  "files": [
-    "dist"
-  ],
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "unpkg": "dist/index.global.js",
-  "jsdelivr": "dist/index.global.js",
   "bugs": {
     "url": "https://github.com/zuramai/graphism/issues"
   },
-  "homepage": "https://github.com/zuramai/graphism#readme",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "unpkg": "dist/index.global.js",
+  "jsdelivr": "dist/index.global.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "nr build --watch",
     "build": "tsup src/index.ts --format esm,cjs,iife --dts --no-splitting --clean --dts-resolve"

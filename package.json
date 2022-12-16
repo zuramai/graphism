@@ -1,15 +1,18 @@
 {
   "name": "graphism",
   "version": "0.2.1",
-  "description": "A website to create tree graph and run algorithms on top of it",
   "private": true,
-  "keywords": [],
+  "description": "A website to create tree graph and run algorithms on top of it",
+  "author": "zuramai <saugi.dev@gmail.com>",
   "license": "ISC",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zuramai/graph-algorithms.git"
   },
-  "author": "zuramai <saugi.dev@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/zuramai/graph-algorithms/issues"
+  },
+  "keywords": [],
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",
     "play:build": "pnpm -C playground run build",
@@ -23,25 +26,22 @@
     "test:coverage": "vitest run --coverage",
     "release": "bumpp package.json packages/*/package.json --tag --commit --push && pnpm -r publish --access public"
   },
-  "bugs": {
-    "url": "https://github.com/zuramai/graph-algorithms/issues"
-  },
   "devDependencies": {
     "@antfu/eslint-config": "^0.30.1",
     "@antfu/eslint-config-ts": "^0.30.1",
     "@antfu/ni": "^0.18.8",
-    "@vitest/coverage-c8": "^0.25.7",
+    "@vitest/coverage-c8": "^0.25.8",
     "bumpp": "^8.2.1",
     "c8": "^7.12.0",
     "canvas": "^2.10.2",
     "eslint": "^8.29.0",
     "jsdom": "^20.0.3",
     "nanoevents": "^7.0.1",
-    "pnpm": "^7.18.1",
+    "pnpm": "^7.18.2",
     "sass": "^1.56.2",
     "tsup": "^6.5.0",
     "typescript": "^4.9.4",
-    "vite": "^4.0.0",
-    "vitest": "^0.25.7"
+    "vite": "^4.0.1",
+    "vitest": "^0.25.8"
   }
 }

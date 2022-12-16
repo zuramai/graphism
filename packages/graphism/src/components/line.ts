@@ -1,7 +1,6 @@
 import type { Coordinate, NodeInterface } from '../types'
 import type { LineConfig, LineInterface } from '../types/line'
-import { getDistance } from '../utils'
-import { createElement, createElementNS } from '../utils/dom'
+import { createElementNS } from '../utils/dom'
 import { Component } from './abstract'
 
 const defaultLineConfig = {
@@ -24,7 +23,7 @@ export default class Line extends Component implements LineInterface {
   text: string
   elements = {
     line: null,
-    text: null
+    text: null,
   }
 
   constructor(from: NodeInterface, to: NodeInterface, text: string, config?: LineConfig) {
@@ -38,18 +37,18 @@ export default class Line extends Component implements LineInterface {
   }
 
   draw(root: SVGGElement) {
-    const g = createElementNS('g', { class: "line" })
-    const line = createElementNS("line", {
-      class: "graphism-line",
-      x1: this.from.position.x,
-      x2: this.to.position.x,
-      y1: this.from.position.y,
-      y2: this.to.position.y,
-      "data-id": this.id,
-      "stroke-width": this.config.width,
-      "stroke": this.config.color
+    const g = createElementNS('g', { class: 'line' })
+    const line = createElementNS('line', {
+      'class': 'graphism-line',
+      'x1': this.from.position.x,
+      'x2': this.to.position.x,
+      'y1': this.from.position.y,
+      'y2': this.to.position.y,
+      'data-id': this.id,
+      'stroke-width': this.config.width,
+      'stroke': this.config.color,
     })
-    
+
     const text = this.drawText()
     this.elements = { line, text }
 
@@ -62,21 +61,20 @@ export default class Line extends Component implements LineInterface {
     g.addEventListener('mouseenter', () => this.hover())
     g.addEventListener('mouseleave', () => this.unhover())
 
-    return g 
+    return g
   }
 
   updateLinePosition() {
-    const line = this.elements.line 
+    const line = this.elements.line
     const attrs = {
       x1: this.from.position.x,
       x2: this.to.position.x,
       y1: this.from.position.y,
-      y2: this.to.position.y
+      y2: this.to.position.y,
     }
-    for(const attr in attrs)
+    for (const attr in attrs)
       line.setAttribute(attr, attrs[attr])
     this.updateText()
-
   }
 
   getTextPosition() {
@@ -90,17 +88,17 @@ export default class Line extends Component implements LineInterface {
   getTextAttributes() {
     const position = this.getTextPosition()
     return {
-      x: position.x,
-      y: position.y,
-      fill: this.config.color,
-      "text-anchor": 'middle'
-    } 
+      'x': position.x,
+      'y': position.y,
+      'fill': this.config.color,
+      'text-anchor': 'middle',
+    }
   }
 
   updateText() {
     const attrs = this.getTextAttributes()
 
-    for(const attr in attrs) 
+    for (const attr in attrs)
       this.elements.text.setAttribute(attr, attrs[attr])
     this.elements.text.innerHTML = this.config.text
   }
@@ -111,30 +109,37 @@ export default class Line extends Component implements LineInterface {
     const text = createElementNS('text', {
       x: position.x,
       y: position.y,
-      fill: this.config.color
+      fill: this.config.color,
     }, el => el.innerHTML = this.config.text)
 
     return text
   }
-  
+
   proxyHandler() {
     const _this = this
     return {
       set(obj, prop, value) {
-        if(prop == 'width') _this.elements.line.setAttribute('width', value) 
-        else if(prop == 'color') _this.elements.line.setAttribute('stroke', value) 
-        else if(prop == 'text') _this.elements.text.innerText = value 
+        if (prop === 'width')
+          _this.elements.line.setAttribute('width', value)
+        else if (prop === 'color')
+          _this.elements.line.setAttribute('stroke', value)
+        else if (prop === 'text')
+          _this.elements.text.innerText = value
         return true
-      }
+      },
     } as ProxyHandler<LineConfig>
   }
 
   select() {
+    if (this.isSelected)
+      this.deselect()
+    this.config.color = this.config.hoverColor
     this.isSelected = true
     this.elements.line.classList.add('selected')
   }
-  
+
   deselect() {
+    this.config.color = this.config.color
     this.isSelected = false
     this.elements.line.classList.remove('selected')
   }
@@ -144,7 +149,8 @@ export default class Line extends Component implements LineInterface {
   }
 
   unhover() {
-    this.config.color = this.config.color
+    if(!this.isSelected)
+      this.config.color = this.config.color
   }
 
   move(x?: number, y?: number) {

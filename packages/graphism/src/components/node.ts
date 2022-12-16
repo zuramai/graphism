@@ -1,5 +1,5 @@
 import { Position } from 'vitest'
-import type { Mode, Coordinate } from '../types'
+import type { Coordinate, Mode } from '../types'
 import type { LineInterface } from '../types/line'
 import type { NeighborInterface, NodeConfig, NodeInterface } from '../types/node'
 import { createElementNS } from '../utils/dom'
@@ -32,9 +32,9 @@ export class GraphNode extends Component implements NodeInterface {
   isSelected = false
   mode: Mode = 'normal'
   gCost = 0
-  elements: Record<string, SVGCircleElement|SVGTextElement> = {
+  elements: Record<string, SVGCircleElement | SVGTextElement> = {
     circle: null,
-    text: null
+    text: null,
   }
 
   _borderOffset?: number = 0
@@ -56,7 +56,6 @@ export class GraphNode extends Component implements NodeInterface {
     if (this.neighbors.find(n => n.node === node))
       return
 
-
     this.neighbors.push({
       node,
       text,
@@ -66,25 +65,24 @@ export class GraphNode extends Component implements NodeInterface {
 
   draw(root: SVGGElement) {
     // Node group
-    const g = createElementNS('g', { class: "node" })
+    const g = createElementNS('g', { class: 'node' })
 
-    this.elements.circle = createElementNS("circle", { 
-      class: "graphism-node node-circle",
-      "data-id": this.id,
-      cx: this.position.x, 
-      cy: this.position.y,
-      r: this.config.size,
-      fill: this.config.backgroundColor,
-      stroke: this.config.borderColor,
-      "stroke-width": this.config.borderSize
+    this.elements.circle = createElementNS('circle', {
+      'class': 'graphism-node node-circle',
+      'data-id': this.id,
+      'cx': this.position.x,
+      'cy': this.position.y,
+      'r': this.config.size,
+      'fill': this.config.backgroundColor,
+      'stroke': this.config.borderColor,
+      'stroke-width': this.config.borderSize,
     })
 
-    
-    this.elements.text = createElementNS("text", {
-      x: this.position.x, 
-      y: this.position.y,
-      "text-anchor": 'middle'
-    }, el => {
+    this.elements.text = createElementNS('text', {
+      'x': this.position.x,
+      'y': this.position.y,
+      'text-anchor': 'middle',
+    }, (el) => {
       el.innerHTML = this.text
     })
 
@@ -93,29 +91,26 @@ export class GraphNode extends Component implements NodeInterface {
     g.append(this.elements.circle, this.elements.text)
     root.append(g)
 
-
     // Add hover state
     g.addEventListener('mouseenter', e => this.hover(e))
     g.addEventListener('mouseleave', e => this.unhover(e))
-
-
   }
-  
+
   positionProxy() {
     const _this = this
     return {
       set(obj, prop, value) {
-        if(prop == 'x') {
+        if (prop == 'x') {
           _this.elements.circle.setAttribute('cx', value)
           _this.elements.text.setAttribute('x', value)
-        } 
-        else if(prop == 'y') {
+        }
+        else if (prop == 'y') {
           _this.elements.circle.setAttribute('cy', value)
           _this.elements.text.setAttribute('y', value)
-        } 
+        }
         obj[prop] = value
         return true
-      }
+      },
     } as ProxyHandler<Coordinate>
   }
 
@@ -123,24 +118,28 @@ export class GraphNode extends Component implements NodeInterface {
     const _this = this
     return {
       set(obj, prop, value) {
-        if(prop == 'size') _this.elements.circle.setAttribute('r', value)
-        else if(prop == 'backgroundColor') _this.elements.circle.setAttribute('fill', value) 
-        else if(prop == 'borderColor') _this.elements.circle.setAttribute('stroke', value) 
-        else if(prop == 'borderSize') _this.elements.circle.setAttribute('stroke-width', value) 
+        if (prop == 'size')
+          _this.elements.circle.setAttribute('r', value)
+        else if (prop == 'backgroundColor')
+          _this.elements.circle.setAttribute('fill', value)
+        else if (prop == 'borderColor')
+          _this.elements.circle.setAttribute('stroke', value)
+        else if (prop == 'borderSize')
+          _this.elements.circle.setAttribute('stroke-width', value)
         return true
-      }
+      },
     } as ProxyHandler<NodeConfig>
   }
 
   hover(e: MouseEvent) {
-    if(!this.isSelected) { 
+    if (!this.isSelected) {
       this.config.borderSize = this.config.hoverBorderSize
       this.config.borderColor = this.config.hoverBorderColor
     }
   }
+
   unhover(e: MouseEvent) {
-    
-    if(!this.isSelected) {
+    if (!this.isSelected) {
       this.config.borderSize = this.config.borderSize
       this.config.borderColor = this.config.borderColor
     }
@@ -151,7 +150,8 @@ export class GraphNode extends Component implements NodeInterface {
   }
 
   select() {
-    if(this.isSelected) return this.deselect()
+    if (this.isSelected)
+      return this.deselect()
     this.isSelected = true
 
     this.config.borderColor = this.config.selectedBorderColor
@@ -174,5 +174,4 @@ export class GraphNode extends Component implements NodeInterface {
     if (y)
       this.position.y = y
   }
-
 }

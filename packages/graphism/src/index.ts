@@ -1,15 +1,13 @@
-/* eslint-disable no-cond-assign */
 /* eslint-disable curly */
 import { createNanoEvents } from 'nanoevents'
 import { GraphNode } from './components/node'
 import type {
-  Mode,
   Coordinate,
   EventsMap,
   GraphismOptions,
   LineConfig,
   LineInterface,
-  ComponentInterface,
+  Mode,
 } from './types'
 import type { NodeConfig, NodeInterface } from './types/node'
 import Line from './components/line'
@@ -19,8 +17,7 @@ import { newAlgorithm } from './algorithms'
 import type { AvailableAlgorithms } from './algorithms'
 import { createBackground } from './components/background'
 import { createElementNS } from './utils/dom'
-import "./css/graphism.css"
-import { Position } from 'vitest'
+import './css/graphism.css'
 
 const defaultConfig: GraphismOptions = {
   lineColor: '#555',
@@ -39,7 +36,7 @@ export class Graphism {
   private selectedLines: Record<string, LineInterface> = {}
   private holdingNode: NodeInterface = null
   private background
-  private translate: Coordinate = { x: 0, y: 0}
+  private translate: Coordinate = { x: 0, y: 0 }
 
   private dragFrom: Coordinate
   private isDirectedGraph = false
@@ -85,22 +82,22 @@ export class Graphism {
 
     this._emitter.emit('mounted')
 
-    requestAnimationFrame(() => this.render()) 
+    requestAnimationFrame(() => this.render())
   }
 
   init() {
     // Set canvas size
 
-    this.root.classList.add("graphism-container")
-    this.root.style.width = "100%"
-    this.root.style.height = "100vh"
-    this.root.setAttribute("width", this.root.clientWidth.toString())
-    this.root.setAttribute("height", this.root.clientHeight.toString())
+    this.root.classList.add('graphism-container')
+    this.root.style.width = '100%'
+    this.root.style.height = '100vh'
+    this.root.setAttribute('width', this.root.clientWidth.toString())
+    this.root.setAttribute('height', this.root.clientHeight.toString())
 
     this.background = createBackground(this.root, 'grid')
     this.background.draw()
-    
-    this.root.appendChild(createElementNS("g", { class: "g-components" }))
+
+    this.root.appendChild(createElementNS('g', { class: 'g-components' }))
     this.draw()
   }
 
@@ -148,8 +145,8 @@ export class Graphism {
   }
 
   private draw() {
-    const gNodes = createElementNS('g', { class: "nodes" })
-    const gLines = createElementNS('g', { class: "lines" })
+    const gNodes = createElementNS('g', { class: 'nodes' })
+    const gLines = createElementNS('g', { class: 'lines' })
 
     this.root.querySelector('.g-components').append(gLines)
     this.root.querySelector('.g-components').append(gNodes)
@@ -167,8 +164,7 @@ export class Graphism {
 
   drawMode() {
     if (['creating', 'connecting'].includes(this.mode)) {
-      const g = createElementNS('g', { class: "nodes" })
-
+      const g = createElementNS('g', { class: 'nodes' })
 
       // Running border
       // this.ctx.save()
@@ -213,20 +209,20 @@ export class Graphism {
     this._emitter.emit('node:created', node)
     this.setMode('normal')
     this.clearSelectedNodes()
-    
+
     return node
   }
 
   clear() {
-    this.root.querySelector('.lines').innerHTML = ""
-    this.root.querySelector('.nodes').innerHTML = ""
+    this.root.querySelector('.lines').innerHTML = ''
+    this.root.querySelector('.nodes').innerHTML = ''
     this.lines = {}
     this.nodes = {}
     this.mode = 'normal'
   }
 
   clearSelectedNodes() {
-    for(const id in this.selectedNodes) {
+    for (const id in this.selectedNodes) {
       const node = this.nodes[id]
       node.deselect()
       node.isSelected = false
@@ -271,7 +267,7 @@ export class Graphism {
     return this.selectedNodes
   }
 
-  addNodeNeighbor(from: NodeInterface, to: NodeInterface, text?: string|number) {
+  addNodeNeighbor(from: NodeInterface, to: NodeInterface, text?: string | number) {
     let line: LineInterface
     const lineConfig: LineConfig = {}
 
@@ -293,16 +289,16 @@ export class Graphism {
 
     if (!this.isDirectedGraph)
       to.addNeighbor(from, lineText, line)
-    
+
     this.drawLine(line)
 
     this._emitter.emit('node:connect', from, to)
   }
 
   private update() {
-    for(const nodeId in this.nodes) 
+    for (const nodeId in this.nodes)
       this.nodes[nodeId].update()
-    
+
     if (['creating', 'connecting'].includes(this.mode)) {
       this._runningBorderOffset++
     }
@@ -313,71 +309,69 @@ export class Graphism {
   }
 
   private dragSelectedNodes() {
-
-    for(const nodeId in this.selectedNodes) {
+    for (const nodeId in this.selectedNodes) {
       const currentNode = this.nodes[nodeId]
 
       // Move the line that connected to the node
-      currentNode.neighbors.forEach(neighbor => {
+      currentNode.neighbors.forEach((neighbor) => {
         neighbor.line.updateLinePosition()
       })
 
-      this._emitter.emit("node:move", currentNode)
+      this._emitter.emit('node:move', currentNode)
     }
   }
 
   private makeDraggable() {
-    let holdingComponent: NodeInterface|HTMLElement = null 
+    let holdingComponent: NodeInterface | HTMLElement = null
 
     // Mouse-to-node offsets for every selected nodes
-    let offsets: Record<number, Coordinate> = {}
+    const offsets: Record<number, Coordinate> = {}
 
     const startDrag = (e: MouseEvent) => {
       const target = (e.target as HTMLElement)
-      
-      let mousePos = getMousePosition(e, this.root as SVGGraphicsElement);
-      
-      if(target.classList.contains('graphism-node')) {
+
+      const mousePos = getMousePosition(e, this.root as SVGGraphicsElement)
+
+      if (target.classList.contains('graphism-node')) {
         // Start dragging the node
         const clickedNode = this.nodes[target.getAttribute('data-id')]
         holdingComponent = clickedNode
-        
-        for(const nodeId in this.selectedNodes) {
+
+        for (const nodeId in this.selectedNodes) {
           const currentNode = this.nodes[nodeId]
           offsets[nodeId] = {
-            x: mousePos.x - parseFloat(currentNode.elements.circle.getAttribute("cx")),
-            y: mousePos.y - parseFloat(currentNode.elements.circle.getAttribute("cy"))
+            x: mousePos.x - parseFloat(currentNode.elements.circle.getAttribute('cx')),
+            y: mousePos.y - parseFloat(currentNode.elements.circle.getAttribute('cy')),
           }
         }
-  
-       } else if(target.id == 'bg-grid-rect') {
+      }
+      else if (target.id === 'bg-grid-rect') {
         // Move the entire canvas
         holdingComponent = target
         offsets[0] = {
           x: mousePos.x,
           y: mousePos.y,
         }
-       }
-       
+      }
     }
     const drag = (e: MouseEvent) => {
-      if(!holdingComponent) return 
+      if (!holdingComponent)
+        return
 
       const coord = getMousePosition(e, this.root as SVGGraphicsElement)
 
-      if(holdingComponent instanceof GraphNode) {
-        for(const nodeId in this.selectedNodes) {
+      if (holdingComponent instanceof GraphNode) {
+        for (const nodeId in this.selectedNodes) {
           const currentNode = this.nodes[nodeId]
           currentNode.position.x = coord.x - offsets[nodeId].x
           currentNode.position.y = coord.y - offsets[nodeId].y
         }
         this.dragSelectedNodes()
       }
-      else if(holdingComponent instanceof HTMLElement) {
+      else if (holdingComponent instanceof HTMLElement) {
         // Move the grid
         this.dragScreen()
       }
-
     }
     const endDrag = () => {
       holdingComponent = null
@@ -386,13 +380,11 @@ export class Graphism {
     this.root.addEventListener('mousemove', drag)
     this.root.addEventListener('mouseleave', endDrag)
     this.root.addEventListener('mouseup', endDrag)
-    this.root.addEventListener('touchstart', startDrag);
-    this.root.addEventListener('touchmove', drag);
-    this.root.addEventListener('touchend', endDrag);
-    this.root.addEventListener('touchleave', endDrag);
-    this.root.addEventListener('touchcancel', endDrag);
-
-
+    this.root.addEventListener('touchstart', startDrag)
+    this.root.addEventListener('touchmove', drag)
+    this.root.addEventListener('touchend', endDrag)
+    this.root.addEventListener('touchleave', endDrag)
+    this.root.addEventListener('touchcancel', endDrag)
   }
 
   private keypress(e: KeyboardEvent) {
@@ -421,7 +413,7 @@ export class Graphism {
   private mouseMove(e: MouseEvent) {
     const position = this.getCursorPosition(e)
     let element: Component
-    
+
     if (!this.nodes.length || !this.holdingNode)
       return
     const dx = position.x - this.dragFrom.x
@@ -429,7 +421,7 @@ export class Graphism {
 
     // If selected more than one nodes, move all selected node
     if (Object.keys(this.selectedNodes).length > 1 && this.holdingNode.isSelected) {
-      for(const selectedNodeId in this.selectedNodes) {
+      for (const selectedNodeId in this.selectedNodes) {
         element = this.nodes[selectedNodeId]
         element.move(element.moveFrom.x + dx, element.moveFrom.y + dy)
       }
@@ -443,33 +435,33 @@ export class Graphism {
   private mouseClick(e: MouseEvent) {
     const position = this.getCursorPosition(e)
     const target = e.target as HTMLElement
-    let isLineClicked = false, 
-        isNodeClicked = false
-    
+    let isLineClicked = false
+    let isNodeClicked = false
+
     this._emitter.emit('canvas:click', position)
 
-
-    if(target.classList.contains('graphism-node')) {
-      let nodeId = target.getAttribute('data-id')
+    if (target.classList.contains('graphism-node')) {
+      const nodeId = target.getAttribute('data-id')
       const node = this.nodes[nodeId]
       const nodeIsNotSelected = () => Object.keys(this.selectedNodes).every(n => n !== node.id.toString())
 
       if (!e.ctrlKey && nodeIsNotSelected())
         this.clearSelectedNodes()
-      
+
       isNodeClicked = true
       this.selectNode(node, this.mode)
       console.log('selected nodes: ', this.selectedNodes)
     }
-    else if(target.classList.contains('graphism-line')) {
+    else if (target.classList.contains('graphism-line')) {
       if (!e.ctrlKey)
         this.clearSelectedLines()
 
-      let lineId = target.getAttribute('data-id')
+      const lineId = target.getAttribute('data-id')
       const line = this.lines[lineId]
       line.select()
       this.selectedLines[lineId] = line
-      
+      console.log('line selected')
+
       this._emitter.emit('line:select', line)
       isLineClicked = true
     }
@@ -488,7 +480,7 @@ export class Graphism {
   }
 
   selectAllNode() {
-    for(const nodeId in this.nodes) {
+    for (const nodeId in this.nodes) {
       this.selectNode(this.nodes[nodeId])
     }
   }
@@ -500,7 +492,6 @@ export class Graphism {
       y: e.clientY - rect.top,
     }
   }
-
 }
 
 export * from './types'
