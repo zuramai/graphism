@@ -53,12 +53,6 @@ function graphismEventListeners(graphism: Graphism, canvas: HTMLDivElement) {
 
   toggleModalFromSelector(document.querySelector('.modal-add'), document.getElementById('openAddModal'))
   algorithmEventListeners(graphism)
-  graphism.on('line:select', () => {
-    document.getElementById('options-line').classList.remove('disabled')
-  })
-  graphism.on('line:clearSelect', () => {
-    document.getElementById('options-line').classList.add('disabled')
-  })
 }
 
 function algorithmEventListeners(graphism: Graphism) {
