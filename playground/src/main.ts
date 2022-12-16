@@ -1,7 +1,7 @@
 import './assets/scss/main.scss'
 import type { Coordinate, Graphism, NodeInterface } from 'graphism'
 import { createGraphism } from 'graphism'
-import "graphism/dist/index.css"
+import 'graphism/dist/index.css'
 import { saveSvg } from '../../packages/graphism/src/utils'
 import { camelToSnakeCase, onClick, onSubmit } from './utils'
 import { createNotification } from './components/notification'
@@ -48,7 +48,7 @@ function graphismEventListeners(graphism: Graphism, canvas: HTMLDivElement) {
   onClick('generate-graph', generateGraphEvent.bind(null, graphism))
   onClick('create-new', createNewGraph)
   onClick('connectNode', connectNode.bind(null, graphism))
-  onClick('saveToImage', () => saveSvg(graphism.root, "graphism.png"))
+  onClick('saveToImage', () => saveSvg(graphism.root, 'graphism.png'))
   onClick('clear', () => graphism.clear())
 
   toggleModalFromSelector(document.querySelector('.modal-add'), document.getElementById('openAddModal'))
@@ -89,7 +89,7 @@ function addNode(graphism: Graphism) {
 
   graphism.setMode('creating')
   graphism.on('canvas:click', (coordinate: Coordinate) => {
-    console.log("canvas:click")
+    console.log('canvas:click')
     const nameVal = name ? name.value : ''
     graphism.createNode(nameVal, coordinate)
     createNotification('success', `Node ${nameVal} created`)
@@ -107,8 +107,8 @@ function connectNode(graphism: Graphism) {
   graphism.on('node:select', (node1: NodeInterface) => {
     // On node 1 selected
     graphism.on('node:select', (node2: NodeInterface) => {
-      console.log("connecting two node");
-      
+      console.log('connecting two node')
+
       // On node 2 selected
       // Show the poppover for user to input line text
       const poppoverEl = showPoppover('poppover-text', {

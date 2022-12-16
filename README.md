@@ -29,8 +29,8 @@ npm i graphism
 import { createGraphism } from 'graphism'
 
 const graphism = createGraphism({
-    el: '#canvas',
-    canvasBackground: '#eee'
+  el: '#canvas',
+  canvasBackground: '#eee'
 })
 
 // Generate an random graph
@@ -67,13 +67,13 @@ on: (event: string, callback: any, once: boolean = false) => void
 
 Example of event usage
 ```js
-graphism.on("node:select", (node1: NodeInterface) => {
-    console.log(`The node clicked contains value = ${node1.value}`)
+graphism.on('node:select', (node1: NodeInterface) => {
+  console.log(`The node clicked contains value = ${node1.value}`)
 })
 
 // If you want the event only trigger once, add `true` to the third param
-graphism.on("grab", () => {
-    console.log("You are grabbing the canvas, this will only run once")
+graphism.on('grab', () => {
+  console.log('You are grabbing the canvas, this will only run once')
 }, true)
 ```
 

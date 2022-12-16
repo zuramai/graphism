@@ -6,6 +6,6 @@ export abstract class Component implements ComponentInterface {
   isHovered = false
   isSelected = false
   moveFrom: Coordinate
-  
+
   abstract move(x?: number, y?: number): void
 }

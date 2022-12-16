@@ -1,15 +1,18 @@
 {
   "name": "graphism",
   "version": "0.2.1",
-  "description": "A website to create tree graph and run algorithms on top of it",
   "private": true,
-  "keywords": [],
+  "description": "A website to create tree graph and run algorithms on top of it",
+  "author": "zuramai <saugi.dev@gmail.com>",
   "license": "ISC",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zuramai/graph-algorithms.git"
   },
-  "author": "zuramai <saugi.dev@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/zuramai/graph-algorithms/issues"
+  },
+  "keywords": [],
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",
     "play:build": "pnpm -C playground run build",
@@ -22,9 +25,6 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "release": "bumpp package.json packages/*/package.json --tag --commit --push && pnpm -r publish --access public"
-  },
-  "bugs": {
-    "url": "https://github.com/zuramai/graph-algorithms/issues"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.30.1",
