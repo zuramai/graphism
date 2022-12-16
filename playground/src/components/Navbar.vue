@@ -1,10 +1,4 @@
 <script lang="ts" setup>
-// onSubmit('form-add-node', e => e.preventDefault())
-// onClick('node-add', addNode.bind(null, graphism))
-// onClick('generate-graph', generateGraphEvent.bind(null, graphism))
-// onClick('create-new', createNewGraph)
-// onClick('connectNode', connectNode.bind(null, graphism))
-// onClick('saveToImage', () => saveSvg(graphism.root, 'graphism.png'))
 
 import NavbarItem from './NavbarItem.vue';
 
@@ -13,7 +7,7 @@ defineEmits(['menuClick'])
 </script>
 <template>
     <ul class="menu">
-        <NavbarItem @click="modalAdd.show()" text="Add Node">
+        <NavbarItem @click="$emit('menuClick', 'add-node')" text="Add Node">
           <template #icon>
             <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +26,7 @@ defineEmits(['menuClick'])
             </svg>
           </template>
         </NavbarItem>
-        <NavbarItem text="Connect">
+        <NavbarItem  @click="$emit('menuClick', 'connect')" text="Connect">
           <template #icon>
             <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +43,7 @@ defineEmits(['menuClick'])
                 </svg>
           </template>
         </NavbarItem>
-        <NavbarItem text="Save" >
+        <NavbarItem  @click="$emit('menuClick', 'save')" text="Save" >
           <template #icon>
             <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +63,7 @@ defineEmits(['menuClick'])
                   </svg>
           </template>
         </NavbarItem>
-        <NavbarItem text="Run Algorithm" >
+        <NavbarItem  @click="$emit('menuClick', 'algorithm')" text="Run Algorithm" >
           <template #icon>
             <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -163,7 +157,7 @@ defineEmits(['menuClick'])
           </ul>
           </template>
         </NavbarItem>
-        <NavbarItem text="Clear">
+        <NavbarItem  @click="$emit('menuClick', 'clear')" text="Clear">
         <template #icon>
           <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -179,7 +173,7 @@ defineEmits(['menuClick'])
                 </svg>
         </template>
         </NavbarItem>
-        <NavbarItem class="ml-auto" href="https://github.com/zuramai/graphism">
+        <NavbarItem  @click="$emit('menuClick', 'github')" class="ml-auto" href="https://github.com/zuramai/graphism">
         <template #icon>
           <svg
                     xmlns="http://www.w3.org/2000/svg"

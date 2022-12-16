@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import type { Coordinate, Graphism, NodeInterface } from 'graphism'
+import { onMounted, ref } from 'vue'
+import { Coordinate, Graphism, NodeInterface } from 'graphism'
 import { createGraphism } from 'graphism'
 import { saveSvg } from '../../packages/graphism/src/utils'
 import { camelToSnakeCase } from './utils'
@@ -9,6 +9,8 @@ import { showPoppover, toggleModalFromSelector } from './ui'
 import usePoppover from './composables/usePoppover'
 import useModal from './composables/useModal'
 import Navbar from './components/Navbar.vue'
+import Poppover from './components/Poppover.vue'
+import Modal from './components/Modal.vue'
 
 const customizations = {
   fontSize: 22,
@@ -25,6 +27,26 @@ const customizations = {
 
 const poppoverText = usePoppover()
 const modalAdd = useModal()
+
+let graphism
+const root = ref()
+onMounted(() => {
+    graphism = new Graphism({
+        el: root.value
+    })
+})
+
+const navMenuClick = (menu: string) => {
+    if(menu == 'add-node')
+        addNode.bind(null, graphism)
+    else if(menu == 'connect')
+        connectNode.bind(null, graphism)
+    else if(menu == 'save')
+        saveSvg(graphism.root, 'graphism.png')
+    else if(menu == 'clear')
+        graphism.clear()
+    // onSubmit('form-add-node', e => e.preventDefault())
+}
 
 onMounted(() => {
   const el = document.querySelector<HTMLDivElement>('#graphism')
@@ -76,19 +98,18 @@ function graphismEventListeners(graphism: Graphism, canvas: HTMLDivElement) {
  * Execute create new node
  */
 function addNode(graphism: Graphism) {
-  const name = <HTMLFormElement>document.getElementById('name')
-  document.querySelector('.modal-add').classList.remove('modal-open')
+//   const name = <HTMLFormElement>document.getElementById('name')
+  modalAdd.show()
+//   showHelperText(`Click anywhere to create ${name.value} node`)
 
-  showHelperText(`Click anywhere to create ${name.value} node`)
-
-  graphism.setMode('creating')
-  graphism.on('canvas:click', (coordinate: Coordinate) => {
-    console.log('canvas:click')
-    const nameVal = name ? name.value : ''
-    graphism.createNode(nameVal, coordinate)
-    createNotification('success', `Node ${nameVal} created`)
-    hideHelperText()
-  }, true)
+//   graphism.setMode('creating')
+//   graphism.on('canvas:click', (coordinate: Coordinate) => {
+//     console.log('canvas:click')
+//     const nameVal = name ? name.value : ''
+//     graphism.createNode(nameVal, coordinate)
+//     createNotification('success', `Node ${nameVal} created`)
+//     hideHelperText()
+//   }, true)
 }
 
 /**
@@ -214,10 +235,10 @@ function customizationHandler<T extends object>(obj: T) {
             <!-- Start: Canvas Playground -->
             <div class="playground">
                 <!-- Start: Playground Menu -->
-                <Navbar></Navbar>
+                <Navbar @menu-click="navMenuClick"></Navbar>
                 <!-- End: Playground Menu -->
 
-                <div id="graphism"></div>
+                <div id="graphism" ref="root"></div>
 
                 <!-- Helper text -->
                 <div id="helper-text" class="blinking">This is helper text</div>
@@ -690,7 +711,7 @@ function customizationHandler<T extends object>(obj: T) {
         </div>
 
         <!-- Distance input poppover -->
-        <Poppover title="Text" :x="poppoverText.x" :y="poppoverText.y" v-show="poppoverText.show">
+        <Poppover title="Text" :x="poppoverText.x.value" :y="poppoverText.y.value" v-show="poppoverText.show">
             <form class="flex mt-3">
                 <input type="text" class="form-control" value="" id="distance-value" />
                 <button class="btn btn-primary ml-3">Submit</button>
@@ -698,7 +719,7 @@ function customizationHandler<T extends object>(obj: T) {
         </Poppover>
 
         <!-- Add node modal -->
-        <Modal class="modal-add" title="Add Node" v-model="modalAdd.isShow">
+        <Modal class="modal-add" title="Add Node" v-model="modalAdd.isShow.value">
             <form id="form-add-node">
                 <div class="modal-body">
                     <label for="name">Name</label>
