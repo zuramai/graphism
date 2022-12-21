@@ -4,8 +4,7 @@ import { Coordinate, Graphism, NodeInterface } from 'graphism'
 import { createGraphism } from 'graphism'
 import { saveSvg } from '../../packages/graphism/src/utils'
 import { camelToSnakeCase } from './utils'
-import { createNotification } from './components/notification'
-import { showPoppover, toggleModalFromSelector } from './ui'
+import { showPoppover} from './ui'
 import usePoppover from './composables/usePoppover'
 import useModal from './composables/useModal'
 import Navbar from './components/Navbar.vue'
@@ -26,6 +25,7 @@ const customizations = {
   hoverBackgroundColor: 'white',
 }
 
+const mode = ref('')
 const poppoverText = usePoppover()
 const modalAdd = useModal()
 
@@ -33,15 +33,11 @@ let graphism
 const root = ref()
 
 const navMenuClick = (menu: string) => {
-    if(menu == 'add-node')
-        addNode.bind(null, graphism)
-    else if(menu == 'connect')
-        connectNode.bind(null, graphism)
-    else if(menu == 'save')
-        saveSvg(graphism.root, 'graphism.png')
-    else if(menu == 'clear')
-        graphism.clear()
-    // onSubmit('form-add-node', e => e.preventDefault())
+  if(menu == 'add-node') modalAdd.show()
+  else if(menu == 'connect') connectNode(graphism)
+  else if(menu == 'save') saveSvg(graphism.root, 'graphism.png')
+  else if(menu == 'clear') graphism.clear()
+  // onSubmit('form-add-node', e => e.preventDefault())
 }
 
 onMounted(() => {
@@ -54,26 +50,13 @@ onMounted(() => {
   // customizationHandler(proxy)
 
   graphism.generateGraph()
-
-  graphismEventListeners(graphism, root.value)
+  window.addEventListener('resize', resizeCanvas.bind(null, canvas))
 })
 
-/**
- * Add listeners to improve playground functionality
- * @param graphism Graphism instance
- * @param canvas HTML canvas element
- */
-function graphismEventListeners(graphism: Graphism, canvas: HTMLDivElement) {
-  window.addEventListener('resize', resizeCanvas.bind(null, canvas))
-  
+const setMode = (toMode: string) => {
+  mode.value = toMode
 }
 
-/**
- * Execute create new node
- */
-function addNode(graphism: Graphism) {
-  modalAdd.show()
-}
 
 /**
  * Start connecting mode in canvas
@@ -211,7 +194,7 @@ function createProxy<T extends object>(graphism: Graphism, target: T): T {
 
         <!-- Add node modal -->
         <Modal class="modal-add" title="Add Node" v-model="modalAdd.isShow.value">
-            <form id="form-add-node">
+            <form @submit.prevent="setMode('puttingNode')" id="form-add-node">
                 <div class="modal-body">
                     <label for="name">Name</label>
                     <input
@@ -225,7 +208,7 @@ function createProxy<T extends object>(graphism: Graphism, target: T): T {
                     <button class="btn btn-primary" id="node-add">
                         Add and choose location
                     </button>
-                    <button class="btn btn-danger modal-close">Cancel</button>
+                    <button @click.prevent="modalAdd.hide()" class="btn btn-danger modal-close">Cancel</button>
                 </div>
             </form>
         </Modal>
