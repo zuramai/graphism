@@ -8,7 +8,7 @@ const props = defineProps<{
 
 <template>
   <div class="form-group">
-    <label :for="name">{{label}}</label>
+    <label :for="name">{{ label }}</label>
     <select id="custom-font-family" :name="name" class="form-input">
       <option v-for="(value, key) in data" :key="key" :value="key">
         {{ value }}

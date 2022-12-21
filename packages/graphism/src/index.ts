@@ -205,6 +205,7 @@ export class Graphism {
   ): NodeInterface {
     const node = new GraphNode(name, coordinate, config)
     this.nodes[node.id] = node
+
     this.drawNode(node)
     this._emitter.emit('node:created', node)
     this.setMode('normal')
