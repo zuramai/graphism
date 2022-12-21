@@ -37,6 +37,7 @@ a {
 }
 body {
     font-family: 'Lora';
+    overflow: hidden;
     color: rgb(49, 47, 47);
 }
 
@@ -47,6 +48,9 @@ main {
     width: clamp(320px, 90%, 1400px);
     padding: 0 1rem;
     margin: 0 auto;
+}
+#playground-container {
+    width: 100%
 }
 .page-title {
     text-align: center;

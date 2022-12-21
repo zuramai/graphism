@@ -149,7 +149,7 @@ export default class Line extends Component implements LineInterface {
   }
 
   unhover() {
-    if(!this.isSelected)
+    if (!this.isSelected)
       this.config.color = this.config.color
   }
 
