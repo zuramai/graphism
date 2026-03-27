@@ -1,11 +1,11 @@
 import type { LineInterface } from './line'
-import type { CanvasMode, ComponentInterface, Coordinate } from './index'
+import type { Mode, ComponentInterface, Coordinate } from './index'
 
 export interface NodeInterface extends ComponentInterface {
   id: number
   text: string
   neighbors?: NeighborInterface[]
-  mode: CanvasMode
+  mode: Mode
   position: Coordinate
   config: NodeConfig
   movable: boolean
@@ -31,6 +31,7 @@ export interface NeighborInterface {
   node: NodeInterface
   text: string
   line: LineInterface
+  distance: number
 }
 
 export interface NodeConfig {

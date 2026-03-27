@@ -1,2 +1,3 @@
-- playground
-- packages/*
+workspaces:
+  - playground
+  - packages/*

@@ -30,7 +30,7 @@ export default class DijkstraAlgorithm implements ShortestPathAlgorithm {
 
     let currentNode = this.startNode
     for (let i = 0; i < Object.keys(isVisited).length; i++) {
-      let shortestNeighborDistance: Number = Infinity
+      let shortestNeighborDistance: number = Infinity
       let shortestNeighbor: NeighborInterface = null
       currentNode.neighbors.forEach((neighbor) => {
         if (!isVisited[neighbor.node.id]

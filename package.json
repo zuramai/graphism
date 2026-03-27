@@ -1,5 +1,5 @@
 {
-  "name": "graphism",
+  "name": "graphism-monorepo",
   "version": "0.2.1",
   "description": "A website to create tree graph and run algorithms on top of it",
   "private": true,
@@ -13,8 +13,8 @@
   "scripts": {
     "play:dev": "pnpm -C playground run dev -- --open",
     "play:build": "pnpm -C playground run build",
-    "js:dev": "pnpm run -r --filter ./packages/* dev",
-    "js:build": "pnpm run -r --filter /packages/* build",
+    "js:dev": "pnpm run -C packages/graphism dev",
+    "js:build": "pnpm run -C packages/graphism build",
     "dev": "nr play:dev",
     "build": "nr js:build",
     "lint": "eslint .",
@@ -27,21 +27,21 @@
     "url": "https://github.com/zuramai/graph-algorithms/issues"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.30.1",
-    "@antfu/eslint-config-ts": "^0.30.1",
-    "@antfu/ni": "^0.18.8",
-    "@vitest/coverage-c8": "^0.25.7",
-    "bumpp": "^8.2.1",
-    "c8": "^7.12.0",
-    "canvas": "^2.10.2",
-    "eslint": "^8.29.0",
-    "jsdom": "^20.0.3",
-    "nanoevents": "^7.0.1",
-    "pnpm": "^7.18.1",
-    "sass": "^1.56.2",
-    "tsup": "^6.5.0",
-    "typescript": "^4.9.4",
-    "vite": "^4.0.0",
-    "vitest": "^0.25.7"
+    "@antfu/eslint-config": "^7.7.3",
+    "@antfu/eslint-config-ts": "^0.43.1",
+    "@antfu/ni": "^30.0.0",
+    "@vitest/coverage-c8": "^0.33.0",
+    "bumpp": "^11.0.1",
+    "c8": "^11.0.0",
+    "canvas": "^3.2.2",
+    "eslint": "^10.1.0",
+    "jsdom": "^29.0.1",
+    "nanoevents": "^9.1.0",
+    "pnpm": "^10.33.0",
+    "sass": "^1.98.0",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.3",
+    "vitest": "^4.1.2"
   }
 }

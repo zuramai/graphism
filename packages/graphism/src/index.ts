@@ -9,18 +9,16 @@ import type {
   GraphismOptions,
   LineConfig,
   LineInterface,
-  ComponentInterface,
 } from './types'
 import type { NodeConfig, NodeInterface } from './types/node'
 import Line from './components/line'
 import type { Component } from './components/abstract'
-import { getDistance, getMousePosition } from './utils'
+import { getMousePosition } from './utils'
 import { newAlgorithm } from './algorithms'
 import type { AvailableAlgorithms } from './algorithms'
 import { createBackground } from './components/background'
 import { createElementNS } from './utils/dom'
 import "./css/graphism.css"
-import { Position } from 'vitest'
 
 const defaultConfig: GraphismOptions = {
   lineColor: '#555',
@@ -39,13 +37,11 @@ export class Graphism {
   private selectedLines: Record<string, LineInterface> = {}
   private holdingNode: NodeInterface = null
   private background
-  private translate: Coordinate = { x: 0, y: 0}
 
   private dragFrom: Coordinate
   private isDirectedGraph = false
   private mode: Mode = 'normal'
 
-  private _hoveredElement: Component = null
   private _emitter = createNanoEvents<EventsMap>()
 
   private _runningBorderOffset = 0
@@ -167,9 +163,6 @@ export class Graphism {
 
   drawMode() {
     if (['creating', 'connecting'].includes(this.mode)) {
-      const g = createElementNS('g', { class: "nodes" })
-
-
       // Running border
       // this.ctx.save()
       // this.ctx.beginPath()
